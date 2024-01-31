@@ -1,13 +1,32 @@
 <template>
-  <v-app-bar flat>
-    <v-app-bar-title>
-      <v-icon icon="mdi-circle-slice-6" />
+  <v-app-bar elevation="0">
+    <v-row justify="space-between">
+      <v-col cols="3" class="ml-10">
+        <div class="d-inline-flex">
+          <v-img
+            height="50"
+            width="150"
+            src="@/assets/blackloco1.png"
+            class="ma-2"
+          />
 
-      Essentials Preset
-    </v-app-bar-title>
+          <v-img
+            height="30"
+            width="150"
+            src="@/assets/blackloco2.png"
+            class="ma-2 mt-4"
+          />
+        </div>
+      </v-col>
+      <v-spacer />
+      <v-col align="end" align-self="center" class="mr-15">
+        <v-btn class="mr-5" icon="mdi-magnify" size="35" color="#39150E" />
+        <v-btn class="mr-5" size="35" color="#39150E" rounded> EN</v-btn>
+        <v-btn class="" icon="mdi-account" size="35" color="#39150E" />
+      </v-col>
+    </v-row>
   </v-app-bar>
 </template>
 
-<script setup>
-//
-</script>
+<script setup></script>
+<style></style>
