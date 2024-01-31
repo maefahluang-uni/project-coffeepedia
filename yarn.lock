@@ -317,10 +317,10 @@
   dependencies:
     mime "^3.0.0"
 
-"@esbuild/linux-x64@0.19.12":
+"@esbuild/win32-x64@0.19.12":
   version "0.19.12"
-  resolved "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.19.12.tgz"
-  integrity sha512-B71g1QpxfwBvNrfyJdVDexenDIt1CiDN1TIXLbhOw0KhJzE78KIFGX6OJ9MrtC0oOqMWf+0xop4qEU8JrJTwCg==
+  resolved "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.19.12.tgz"
+  integrity sha512-T1QyPSDCyMXaO3pzBkF96E8xMkiRYbUEZADd29SyPGabqxMViNoii+NcK7eWJAEoU6RZyEm5lVSIjTmcdoB9HA==
 
 "@fastify/busboy@^2.0.0":
   version "2.1.0"
@@ -712,16 +712,6 @@
     vite-plugin-checker "^0.6.2"
     vue-bundle-renderer "^2.0.0"
 
-"@parcel/watcher-linux-x64-glibc@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/@parcel/watcher-linux-x64-glibc/-/watcher-linux-x64-glibc-2.4.0.tgz"
-  integrity sha512-KphV8awJmxU3q52JQvJot0QMu07CIyEjV+2Tb2ZtbucEgqyRcxOBDMsqp1JNq5nuDXtcCC0uHQICeiEz38dPBQ==
-
-"@parcel/watcher-linux-x64-musl@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.npmjs.org/@parcel/watcher-linux-x64-musl/-/watcher-linux-x64-musl-2.4.0.tgz"
-  integrity sha512-7jzcOonpXNWcSijPpKD5IbC6xC7yTibjJw9jviVzZostYLGxbz8LDJLUnLzLzhASPlPGgpeKLtFUMjAAzM+gSA==
-
 "@parcel/watcher-wasm@2.3.0":
   version "2.3.0"
   resolved "https://registry.npmjs.org/@parcel/watcher-wasm/-/watcher-wasm-2.3.0.tgz"
@@ -730,6 +720,11 @@
     is-glob "^4.0.3"
     micromatch "^4.0.5"
     napi-wasm "^1.1.0"
+
+"@parcel/watcher-win32-x64@2.4.0":
+  version "2.4.0"
+  resolved "https://registry.npmjs.org/@parcel/watcher-win32-x64/-/watcher-win32-x64-2.4.0.tgz"
+  integrity sha512-pAUyUVjfFjWaf/pShmJpJmNxZhbMvJASUpdes9jL6bTEJ+gDxPRSpXTIemNyNsb9AtbiGXs9XduP1reThmd+dA==
 
 "@parcel/watcher@^2.1.0", "@parcel/watcher@^2.3.0":
   version "2.4.0"
@@ -852,15 +847,10 @@
     estree-walker "^2.0.2"
     picomatch "^2.3.1"
 
-"@rollup/rollup-linux-x64-gnu@4.9.6":
+"@rollup/rollup-win32-x64-msvc@4.9.6":
   version "4.9.6"
-  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.9.6.tgz"
-  integrity sha512-HUNqM32dGzfBKuaDUBqFB7tP6VMN74eLZ33Q9Y1TBqRDn+qDonkAUyKWwF9BR9unV7QUzffLnz9GrnKvMqC/fw==
-
-"@rollup/rollup-linux-x64-musl@4.9.6":
-  version "4.9.6"
-  resolved "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.9.6.tgz"
-  integrity sha512-ch7M+9Tr5R4FK40FHQk8VnML0Szi2KRujUgHXd/HjuH9ifH72GUmw6lStZBo3c3GB82vHa0ZoUfjfcM7JiiMrQ==
+  resolved "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.9.6.tgz"
+  integrity sha512-jqzNLhNDvIZOrt69Ce4UjGRpXJBzhUBzawMwnaDAwyHriki3XollsewxWzOzz+4yOFDkuJHtTsZFwMxhYJWmLQ==
 
 "@sigstore/bundle@^2.1.1":
   version "2.1.1"
