@@ -3,7 +3,7 @@
 
   <v-card
     class="mx-auto my-8"
-    max-width="344"
+    max-width="500"
     elevation="16"
     
   >
@@ -16,9 +16,15 @@
 <div class="text-brown">
     <v-card-text >
        333 Moo1, Thasud, Muang Chiang Rai 57100
-Tel: +66 5391 6741-2
+    </v-card-text>
+    <v-card-text>
+      Tel: +66 5391 6741-2
+    </v-card-text>
+    <v-card-text>
 E-mail: sujita.arw@mfu.ac.th
     </v-card-text>
+
+
 </div>
    
   </v-card>
