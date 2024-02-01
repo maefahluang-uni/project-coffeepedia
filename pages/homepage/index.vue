@@ -11,8 +11,9 @@
   </v-card>
   <v-card flat>
     <v-window v-model="tab">
-      <v-window-item :value="1"> <home /> </v-window-item>
-      
+      <v-window-item :value="1"> 
+        <home /> 
+      </v-window-item>
     </v-window>
   </v-card>
 </template>
