@@ -12,11 +12,18 @@
   <v-card flat>
     <v-window v-model="tab">
       <v-window-item :value="1"> <home /> </v-window-item>
+      <v-window-item :value="2"><typepage />  </v-window-item>
+      <v-window-item :value="3"> <blog/> </v-window-item>
+      <v-window-item :value="4"> <news/> </v-window-item>
+      
       <v-window-item
         :value="5"
-        class="d-flex justify-center align-center contact-window"
+        
       >
+      <div class="d-flex justify-center align-center contact-window">
         <contact />
+      </div>
+        
       </v-window-item>
     </v-window>
   </v-card>
@@ -24,6 +31,9 @@
 
 <script>
 import home from "../components/home.vue";
+import typepage from "../components/type.vue";
+import news from "../components/news.vue";
+import blog from "../components/blog.vue";
 import contact from "../components/contact.vue";
 export default {
   data: () => ({
