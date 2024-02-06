@@ -1,6 +1,6 @@
 <template>
   <v-card max-width="344" max-height="190" elevation="16">
-    <div class="text-h5 text-brown mt-3 ml-4 text-center">
+    <div class="text-h5 text-brown mt-3 ml-4 mr-4 text-center">
       <h5>Integrated AgriTech Ecosystem Research(IATE)</h5>
     </div>
     <div class="text-brown">
