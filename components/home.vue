@@ -31,8 +31,8 @@
         </v-col>
 
         <v-col align-self="center">
-          <div class="justify-end ml-10">
-            <v-img width="300" src="@/assets/Map.png" />
+          <div class=" ml-10">
+            <v-img width="300" src="@/assets/Map-no-bg.png" />
           </div>
         </v-col>
       </v-row>
