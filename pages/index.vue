@@ -1,17 +1,18 @@
 <template>
-  <div class="content font-weight-bold bg text-h2">
-    <p>Database system's classification of roasted coffee bean</p>
-  </div>
-  <v-row justify="center">
+  <div class="content font-weight-bold bg text-h2 flex-column">
+    <p class="mb-5">Database system's classification of roasted coffee bean</p>
+    
     <v-btn
       to="/homepage"
       size="large"
-      class="my-btn font-weight-bold"
+      class="my-btn font-weight-bold mt-15 "
       rounded
       color="#38241d"
       >Enter site</v-btn
     >
-  </v-row>
+  
+  </div>
+
 </template>
 
 <script>
@@ -35,8 +36,7 @@ export default {};
 }
 .my-btn {
   opacity: 0.7;
-  position: absolute;
-  bottom: 200px;
+  
 }
 p {
   color: rgb(236, 236, 236);
