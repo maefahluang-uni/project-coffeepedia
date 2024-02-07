@@ -31,7 +31,7 @@
 
 <script>
 import home from "../components/home.vue";
-import typepage from "../components/type.vue";
+import typepage from "../components/typepage.vue";
 import news from "../components/news.vue";
 import blog from "../components/blog.vue";
 import contact from "../components/contact.vue";
