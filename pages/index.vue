@@ -20,6 +20,7 @@ export default {};
 </script>
 <style scoped>
 .bg {
+  /*need to change background image to coffee field*/
   background-image: url("../assets/welcomepic.jpg");
   height: 100%;
   background-position: center;
