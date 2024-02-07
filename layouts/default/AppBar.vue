@@ -52,7 +52,13 @@
 
       <div class="d-flex d-sm-none">
         <v-col align="end" align-self="center">
-          <v-btn class="mr-5" icon="mdi-menu" size="35" color="#39150E" />
+          <v-btn
+            class="mr-5"
+            icon="mdi-menu"
+            size="35"
+            color="#39150E"
+            @click.stop="drawer = !drawer"
+          />
         </v-col>
       </div>
     </v-row>
