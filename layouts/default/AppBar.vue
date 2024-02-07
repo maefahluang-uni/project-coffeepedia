@@ -26,16 +26,16 @@
           <div class="d-inline-flex">
             <v-img
               height="50"
-              width="150"
+              width="140"
               src="@/assets/blackloco1.png"
               class="mt-2 mb-2"
             />
 
             <v-img
               height="30"
-              width="150"
+              width="140"
               src="@/assets/blackloco2.png"
-              class="mt-4"
+              class="mt-4 ml-1"
             />
           </div>
           <v-spacer />
@@ -52,13 +52,7 @@
 
       <div class="d-flex d-sm-none">
         <v-col align="end" align-self="center">
-          <v-btn
-            class="mr-5"
-            icon="mdi-menu"
-            size="35"
-            color="#39150E"
-            @click.stop="drawer = !drawer"
-          />
+          <v-btn class="mr-5" icon="mdi-menu" size="35" color="#39150E" />
         </v-col>
       </div>
     </v-row>
