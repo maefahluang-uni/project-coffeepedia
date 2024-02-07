@@ -1,5 +1,5 @@
 <template>
-  <v-parallax src="@/assets/coffeeHome.jpg">
+  <div>
     <v-card class="mx-auto mb-15" color="rgba(200, 176, 153, 0.7)">
       <v-row>
         <v-col align-self="center">
@@ -29,12 +29,12 @@
             </div>
           </div>
         </v-col>
-
-        <v-col align-self="center">
-          <div class=" ml-10">
-            <v-img width="300" src="@/assets/Map-no-bg.png" />
-          </div>
-        </v-col>
+        <div class=" d-none d-sm-flex container-1">
+          <v-col >
+            <v-img src="@/assets/pin-no-bg.png" width="35" class="pin" />
+            <v-img width="300" src="@/assets/Map-no-bg.png" class="" />
+          </v-col>
+        </div>
       </v-row>
     </v-card>
 
@@ -144,9 +144,18 @@
         </v-row>
       </v-col>
     </div>
-  </v-parallax>
+  </div>
 </template>
 <style scoped>
+.container-1{
+  width: 45%;
+}
+.pin {
+  top: 30px;
+  left: 70px;
+  z-index: +1;
+  position: relative;
+}
 .divider-width {
   width: 100%;
 }
