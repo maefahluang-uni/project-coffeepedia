@@ -4,14 +4,14 @@
       <v-row>
         <v-col align-self="center">
           <!--Show on sm screen 	600px to 960px-->
-          <div class="d-flex d-sm-none justify-start mr-4 mt-5 mb-5">
-            <v-img height="50" src="@/assets/location-no-bg.gif" class="" />
+          <div class="d-flex d-sm-none justify-center mt-5 mb-5">
+            <img height="50" src="@/assets/location-no-bg.gif" />
             <div>
               <div class="text-h4">
                 <h4>Location</h4>
               </div>
 
-              <p class="ml-1 mb-10 mt-2">
+              <p class="mb-10 mt-2">
                 Coffee bean location in the north of Thailand
               </p>
               <v-btn
