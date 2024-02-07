@@ -22,24 +22,22 @@
       </div>
 
       <div class="d-flex d-sm-none">
-        <v-col cols="3">
-          <div class="d-inline-flex">
-            <v-img
-              height="50"
-              width="140"
-              src="@/assets/blackloco1.png"
-              class="mt-2 mb-2"
-            />
+        <div class="d-inline-flex">
+          <v-img
+            height="37"
+            width="120"
+            src="@/assets/blackloco1.png"
+            class="mt-2 mb-2"
+          />
 
-            <v-img
-              height="30"
-              width="140"
-              src="@/assets/blackloco2.png"
-              class="mt-4 ml-1"
-            />
-          </div>
-          <v-spacer />
-        </v-col>
+          <v-img
+            height="25"
+            width="110"
+            src="@/assets/blackloco2.png"
+            class="mt-3 ml-1"
+          />
+        </div>
+        <v-spacer />
       </div>
 
       <div class="d-none d-sm-flex">

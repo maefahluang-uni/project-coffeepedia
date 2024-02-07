@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <div class="bg-repeat">
     <v-card class="mx-auto mb-15" color="rgba(200, 176, 153, 0.7)">
       <v-row>
         <v-col align-self="center">
-          <!--Show on sm screen 	600px to 960px-->
+          <!--Show on sx screen 	600px-- -->
           <div class="d-flex d-sm-none justify-center mt-5 mb-5">
-            <img height="50" src="@/assets/location-no-bg.gif" />
             <div>
-              <div class="text-h4">
-                <h4>Location</h4>
+              <div
+                class="d-inline-flex justify-center align-center location ml-n10"
+              >
+                <img height="50" src="@/assets/location-no-bg.gif" />
+
+                <div class="text-h4">
+                  <h4>Location</h4>
+                </div>
               </div>
 
-              <p class="mb-10 mt-2">
+              <p class="mb-8 mt-2 text-center">
                 Coffee bean location in the north of Thailand
               </p>
               <v-btn
@@ -20,26 +25,57 @@
                 width="120"
                 variant="elevated"
                 rounded="xl"
+                class="viewbtn ml-n15"
                 >View All</v-btn
               >
             </div>
           </div>
-          <!--Show on screen bigger than sm 960px++ -->
-          <div class="justify-end d-none d-sm-flex">
+
+          <!--Show on md screen 	960px > < 1280px-->
+          <div
+            class="d-none d-sm-flex d-md-flex d-lg-none justify-center mt-5 mb-5"
+          >
+            <div>
+              <div
+                class="d-inline-flex justify-center align-center location ml-n15"
+              >
+                <img height="50" src="@/assets/location-no-bg.gif" />
+
+                <div class="text-h2">
+                  <h3 class="text-center">Location</h3>
+                </div>
+              </div>
+
+              <h4 class="mb-10 mt-2 text-h5 font-weight-bold text-center">
+                Coffee bean location in the north of Thailand
+              </h4>
+              <v-btn
+                color="rgb(140, 115, 70)"
+                height="25"
+                width="120"
+                variant="elevated"
+                rounded="xl"
+                class="viewbtn ml-n15"
+                >View All</v-btn
+              >
+            </div>
+          </div>
+
+          <!--Show on screen bigger than lg 1280px++ -->
+          <div class="justify-end d-none d-lg-flex">
             <v-img
               height="50"
               max-width="50"
               src="@/assets/location-no-bg.gif"
-              class=""
             />
             <div>
-              <div class="text-h3">
+              <div class="text-h2">
                 <h3>Location</h3>
               </div>
 
-              <p class="ml-1 mb-10 mt-2 font-weight-bold">
+              <h4 class="ml-1 mb-10 mt-2 text-h5 font-weight-bold">
                 Coffee bean location in the north of Thailand
-              </p>
+              </h4>
               <v-btn
                 color="rgb(140, 115, 70)"
                 height="25"
@@ -55,7 +91,12 @@
         <div class="d-none d-sm-flex container-1">
           <v-col>
             <v-img src="@/assets/pin-no-bg.png" width="35" class="pin" />
-            <v-img width="300" src="@/assets/Map-no-bg.png" class="" />
+            <v-img
+              width="300"
+              max-height="450"
+              src="@/assets/Map-no-bg.png"
+              class=""
+            />
           </v-col>
         </div>
       </v-row>
@@ -171,6 +212,19 @@
   </div>
 </template>
 <style scoped>
+.bg-repeat {
+  background-image: url("../assets/coffeeHome-30.png");
+  background-position: center;
+  background-repeat: repeat;
+  background-size: 400px;
+}
+.viewbtn {
+  left: 50%;
+}
+.location {
+  position: relative;
+  left: 25%;
+}
 .blog-head {
   position: relative;
   display: flex;
@@ -181,7 +235,7 @@
 }
 .pin {
   top: 30px;
-  left: 70px;
+  left: 75px;
   z-index: +1;
   position: relative;
 }
