@@ -4,19 +4,14 @@
       <v-row>
         <v-col align-self="center">
           <!--Show on sm screen 	600px to 960px-->
-          <div class="d-flex d-sm-none justify-end mr-3 mt-5 mb-5">
-            <v-img
-              height="50"
-              max-width="50"
-              src="@/assets/location-no-bg.gif"
-              class=""
-            />
+          <div class="d-flex d-sm-none justify-start mr-4 mt-5 mb-5">
+            <v-img height="50" src="@/assets/location-no-bg.gif" class="" />
             <div>
               <div class="text-h4">
-                <h3>Location</h3>
+                <h4>Location</h4>
               </div>
 
-              <p class="ml-1 mb-10 mt-2 font-weight-bold ">
+              <p class="ml-1 mb-10 mt-2">
                 Coffee bean location in the north of Thailand
               </p>
               <v-btn
@@ -29,7 +24,7 @@
               >
             </div>
           </div>
-       <!--Show on screen bigger than sm 960px++ -->
+          <!--Show on screen bigger than sm 960px++ -->
           <div class="justify-end d-none d-sm-flex">
             <v-img
               height="50"
@@ -57,8 +52,8 @@
           </div>
         </v-col>
 
-        <div class=" d-none d-sm-flex container-1">
-          <v-col >
+        <div class="d-none d-sm-flex container-1">
+          <v-col>
             <v-img src="@/assets/pin-no-bg.png" width="35" class="pin" />
             <v-img width="300" src="@/assets/Map-no-bg.png" class="" />
           </v-col>
@@ -67,9 +62,10 @@
     </v-card>
 
     <v-row class="justify-center mb-15 mt-5">
-      <v-divider color="brown"></v-divider>
-
-      <h1 class="text-black mt-n6">Our Blog</h1>
+      <v-card color="white" flat width="175">
+        <h1 class="text-black blog-head">Our Blog</h1>
+      </v-card>
+      <v-divider color="brown" class="mt-n6 divider"></v-divider>
     </v-row>
     <div>
       <v-col>
@@ -175,7 +171,12 @@
   </div>
 </template>
 <style scoped>
-.container-1{
+.blog-head {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+.container-1 {
   width: 45%;
 }
 .pin {
@@ -184,7 +185,7 @@
   z-index: +1;
   position: relative;
 }
-.divider-width {
-  width: 100%;
+.divider {
+  z-index: -1;
 }
 </style>
