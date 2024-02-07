@@ -3,7 +3,34 @@
     <v-card class="mx-auto mb-15" color="rgba(200, 176, 153, 0.7)">
       <v-row>
         <v-col align-self="center">
-          <div class="d-flex justify-end">
+          <!--Show on sm screen 	600px to 960px-->
+          <div class="d-flex d-sm-none justify-end mr-3 mt-5 mb-5">
+            <v-img
+              height="50"
+              max-width="50"
+              src="@/assets/location-no-bg.gif"
+              class=""
+            />
+            <div>
+              <div class="text-h4">
+                <h3>Location</h3>
+              </div>
+
+              <p class="ml-1 mb-10 mt-2 font-weight-bold ">
+                Coffee bean location in the north of Thailand
+              </p>
+              <v-btn
+                color="rgb(140, 115, 70)"
+                height="25"
+                width="120"
+                variant="elevated"
+                rounded="xl"
+                >View All</v-btn
+              >
+            </div>
+          </div>
+       <!--Show on screen bigger than sm 960px++ -->
+          <div class="justify-end d-none d-sm-flex">
             <v-img
               height="50"
               max-width="50"
@@ -29,6 +56,7 @@
             </div>
           </div>
         </v-col>
+
         <div class=" d-none d-sm-flex container-1">
           <v-col >
             <v-img src="@/assets/pin-no-bg.png" width="35" class="pin" />
