@@ -1,6 +1,7 @@
 <template>
-  <div class="content font-weight-bold bg text-h2 flex-column">
-    <p class="mb-5">Database system's classification of roasted coffee bean</p>
+  <div class="content bg  flex-column">
+    <p class="mb-5 text-h2 font-weight-bold d-none d-sm-flex">Database system's classification of roasted coffee bean</p>
+    <p class="mb-5 text-h4 font-weight-bold d-flex d-sm-none">Database system's classification of roasted coffee bean</p>
     
     <v-btn
       to="/homepage"
