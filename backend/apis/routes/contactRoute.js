@@ -3,6 +3,6 @@ const controller = require("../controllers/contactController");
 
 const router = express.Router();
 
-router.get("/contact/", controller.getContact);
+router.get("/", controller.getContact);
 
 module.exports = router;
