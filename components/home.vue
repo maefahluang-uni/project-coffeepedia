@@ -216,7 +216,7 @@
   background-image: url("../assets/coffeeHome-30.png");
   background-position: center;
   background-repeat: repeat;
-  background-size: 400px;
+  background-size: 500px;
 }
 .viewbtn {
   left: 50%;
