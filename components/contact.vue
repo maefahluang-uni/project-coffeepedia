@@ -5,11 +5,36 @@
     </div>
     <div class="text-brown">
       <v-card-text class="text-center">
-        333 Moo1, Thasud, Muang Chiang Rai, <br />
-        Chiang Rai 57100 <br />
-        Tel: +66 5391 6741-2 <br />
-        E-mail: sujita.arw@mfu.ac.th
+        {{ address }}
+        <br />
+        Tel: {{ phone }} <br />
+        E-mail: {{ email }}
       </v-card-text>
     </div>
   </v-card>
 </template>
+
+<script>
+import axios from "axios";
+const api = "http://localhost:5000/api";
+
+export default {
+  data() {
+    return {
+      address: "",
+      phone: "",
+      email: "",
+    };
+  },
+  async mounted() {
+    try {
+      const contactResponse = await axios.get(api + "/contact");
+      this.address = contactResponse.data.response[0].Address;
+      this.phone = contactResponse.data.response[0].Phone;
+      this.email = contactResponse.data.response[0].Email;
+    } catch (error) {
+      console.error("Error fetching contact:", error);
+    }
+  },
+};
+</script>
