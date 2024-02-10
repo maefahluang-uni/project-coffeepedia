@@ -1,9 +1,18 @@
 <template>
   <div>
     <v-container>
-      <v-row v-if="(types == null) & (frontImage == '')"> no types </v-row>
+      <div
+        v-if="(type == null) & (imageData == '')"
+        class="d-flex justify-center"
+      >
+        <span class="text-h2">No data</span>
+      </div>
       <div v-else>
-        <v-row class="justify-center">
+        <!-- Faster than v-window
+           <v-row class="justify-center align-center">
+          <v-btn v-show="index != 0" class="mr-10" @click="minusIndex()"
+            >left</v-btn
+          >
           <img
             :src="frontImage"
             alt="Front Image"
@@ -19,47 +28,71 @@
             max-height="100"
             contain
           />
-        </v-row>
+          <v-btn class="ml-10" @click="plusIndex()">right</v-btn>
+        </v-row>-->
+        <v-window v-model="window" show-arrows>
+          <v-window-item v-for="n in imageData.length" :key="n">
+            <v-card height="200px" class="d-flex justify-center align-center">
+              <img
+                :src="this.getImageUrl(imageData[n - 1].ImageDataFront.data)"
+                alt="Front Image"
+                width="150"
+                class="mr-10"
+                contain
+              />
+              <img
+                :src="this.getImageUrl(imageData[n - 1].ImageDataBack.data)"
+                alt="Front Image"
+                width="150"
+                contain
+              />
+            </v-card>
+          </v-window-item>
+        </v-window>
 
-        {{ types[0].ID }}
-        <br />{{ types[0].RoastName }} <br />{{ types[0].Tempurature }}
-        °C
-        <br />
-        <div v-if="types[0].CrackState == '1'">first crack</div>
-        <div v-else-if="types[0].CrackState == '2'">
-          between first and second crack
+        <div class="text-center">
+          {{ type[0].ID }}
+          <br />{{ type[0].RoastName }} <br />{{ type[0].Tempurature }}
+          °C
+          <br />
+          <div v-if="type[0].CrackState == '1'">first crack</div>
+          <div v-else-if="type[0].CrackState == '2'">
+            between first and second crack
+          </div>
+          <div v-else="type[0].CrackState == '3'">second crack</div>
+          {{ type[0].ProcessName }} <br />{{ type[0].Flavor }}
         </div>
-        <div v-else="types[0].CrackState == '3'">second crack</div>
-        {{ types[0].ProcessName }} <br />{{ types[0].Flavor }}
       </div>
     </v-container>
-    <v-btn @click="minusIndex()">left</v-btn>
-    <v-btn @click="plusIndex()">right</v-btn>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+const api = "http://localhost:5000/api";
 export default {
   data() {
     return {
       index: 0,
-      types: null, // Initialize types as null or an empty array/object
+      type: null, // Initialize types as null or an empty array/object
+      imageData: "",
       frontImage: "",
       backImage: "",
+      window: 0,
     };
   },
   async mounted() {
     try {
-      const res = await axios.get("http://localhost:5000/api/coffeetypes");
-      this.types = res.data.response; // Assign response data to types
+      const typeCoffeeResponse = await axios.get(api + "/coffeetype/" + 1);
+      this.type = typeCoffeeResponse.data.response; // Assign response data to types
     } catch (error) {
       console.error("Error fetching coffee types:", error);
     }
   },
   methods: {
+    /* Faster than v-window
     plusIndex() {
-      if (this.index < this.types.length - 1) {
+      if (this.index < this.imageData.length - 1) {
         this.index++;
       }
     },
@@ -67,7 +100,7 @@ export default {
       if (this.index > 0) {
         this.index--;
       }
-    },
+    },*/
     getImageUrl(buffer) {
       if (!buffer) return ""; // Return empty string if buffer is null or undefined
       const uint8Array = new Uint8Array(buffer);
@@ -76,34 +109,51 @@ export default {
     },
   },
   watch: {
-    types(val) {
-      this.types = val;
+    async type(val) {
+      this.type = val;
       try {
-        this.frontImage = this.getImageUrl(
-          this.types[this.index].ImageDataFront.data
-        );
-        this.backImage = this.getImageUrl(
-          this.types[this.index].ImageDataBack.data
-        );
+        const imagesResponse = await axios.get(api + "/coffeetype/images/" + 1);
+
+        this.imageData = imagesResponse.data.response;
+        console.log(this.imageData);
       } catch (error) {
-        console.log("There is error on watch:", error);
+        console.error("There is error on fetching image:", error);
       }
-    },
+    } /* Faster than v-window
     frontImage(val) {
       this.frontImage = val;
     },
     backImage(val) {
       this.backImage = val;
     },
+    imageData(val) {
+      this.frontImage = this.getImageUrl(val[this.index].ImageDataFront.data);
+      this.backImage = this.getImageUrl(val[this.index].ImageDataBack.data);
+    },  
     index(val) {
       this.index = val;
-      this.frontImage = this.getImageUrl(
-        this.types[this.index].ImageDataFront.data
-      );
-      this.backImage = this.getImageUrl(
-        this.types[this.index].ImageDataBack.data
-      );
-    },
+      console.log(this.index);
+      try {
+        if (this.frontImage != "") {
+          this.frontImage = this.getImageUrl(
+            // this.type[this.index].ImageDataFront.data
+            this.imageData[this.index].ImageDataFront.data
+          );
+        } else {
+          this.frontImage = "";
+        }
+        if (this.backImage != "") {
+          this.backImage = this.getImageUrl(
+            //  this.type[this.index].ImageDataBack.data
+            this.imageData[this.index].ImageDataBack.data
+          );
+        } else {
+          this.backImage = "";
+        }
+      } catch (error) {
+        console.log("There is error changing image:", error);
+      }
+    },*/,
   },
 };
 </script>

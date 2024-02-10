@@ -1,5 +1,7 @@
 const config = require("../config");
 const mysql = require(`mysql-await`);
+const typeCoffeeQueries = require("./sqlQueries/typeCoffeeQueries");
+
 //create database connection
 const conn = mysql.createConnection({
   connectionLimit: 10,
@@ -18,24 +20,14 @@ conn.connect((error) => {
   console.log("Mysql Connected...");
 });
 
-const getAllTypeCoffee = async () => {
+const getTypeCoffee = async (TypeID) => {
   try {
-    /*"SELECT type_coffee.ID, roast_level.RoastName, 
-    coffee_process.ProcessName, type_coffee.Tempurature, 
-    type_coffee.CrackState, type_coffee.Flavor, type_coffee.MoreDetail,
-    type_coffee_image.ImageDataFront,type_coffee_image.ImageDataBack 
-    FROM `type_coffee` 
-    JOIN roast_level ON type_coffee.RoastLevelID = roast_level.ID 
-    JOIN coffee_process ON type_coffee.CoffeeProcessID = coffee_process.ID 
-    JOIN type_coffee_image ON type_coffee_image.TypeID = type_coffee.ID 
-    WHERE roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1;" */
-    let sql =
-      "SELECT type_coffee.ID, roast_level.RoastName, coffee_process.ProcessName, type_coffee.Tempurature, type_coffee.CrackState, type_coffee.Flavor, type_coffee.MoreDetail,type_coffee_image.ImageDataFront,type_coffee_image.ImageDataBack FROM `type_coffee` JOIN roast_level ON type_coffee.RoastLevelID = roast_level.ID JOIN coffee_process ON type_coffee.CoffeeProcessID = coffee_process.ID JOIN type_coffee_image ON type_coffee_image.TypeID = type_coffee.ID WHERE roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1;";
-    let results = await conn.awaitQuery(sql);
+    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_BY_ID;
+    let results = await conn.awaitQuery(sql, TypeID);
 
     return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
-    console.error("Error in getAllTypeCoffee function:", err);
+    console.error("Error in getTypeCoffee function:", err);
     return JSON.stringify({
       status: 500,
       error: "Internal Server Error",
@@ -44,4 +36,20 @@ const getAllTypeCoffee = async () => {
   }
 };
 
-module.exports = { getAllTypeCoffee };
+const getTypeCoffeeImages = async (TypeID) => {
+  try {
+    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_IMAGE_BY_TYPE_ID;
+    let results = await conn.awaitQuery(sql, TypeID);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getTypeCoffeeImages function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
+module.exports = { getTypeCoffee, getTypeCoffeeImages };
