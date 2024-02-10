@@ -1,5 +1,6 @@
 const config = require("../config");
 const mysql = require(`mysql-await`);
+const contactQueries = require("./sqlQueries/contactQueries");
 //create database connection
 const conn = mysql.createConnection({
   connectionLimit: 10,
@@ -20,7 +21,7 @@ conn.connect((error) => {
 
 const getContact = async () => {
   try {
-    let sql = "SELECT * FROM `contact_info` WHERE ID = 1";
+    let sql = contactQueries.GET_CONTACT_INFO;
     let results = await conn.awaitQuery(sql);
     return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
