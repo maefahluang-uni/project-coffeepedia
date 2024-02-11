@@ -108,106 +108,97 @@
     </v-card>
     <v-divider color="brown" class="mt-n6 divider"></v-divider>
   </v-row>
-  <div>
-    <v-col>
+
+  <div class="d-flex mb-5">
+    <v-container>
       <v-row>
-        <v-card class="mx-auto" max-width="344" color="rgb(240, 240, 240)">
-          <v-img src="@/assets/blog1.jpg" height="200px" cover></v-img>
-          <div>
-            <v-row class="mt-5 ml-3">
-              <v-icon icon="mdi-calendar" color="grey"></v-icon>
-              <p class="ml-2 text-grey">Nov 12 , 2023</p>
-              <v-icon class="ml-3" icon="mdi-comment" color="grey"></v-icon>
-              <p class="ml-2 text-grey">6</p>
-              <v-icon class="ml-3" icon="mdi-eye" color="grey"></v-icon>
-              <p class="ml-2 text-grey">76</p>
-            </v-row>
-          </div>
-          <v-card-title>
-            <b
-              >The difference between Arabica and Robusta coffee
-            </b></v-card-title
-          >
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="rgb(140, 115, 70)"
-              width="120"
-              height="25"
-              rounded="xl"
-              variant="elevated"
-              class="mb-3 mt-3"
-            >
-              Read More
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-card class="mx-auto" max-width="344" color="rgb(240, 240, 240)">
-          <v-img src="@/assets/blog2.jpg" height="200px" cover></v-img>
-          <div>
-            <v-row class="mt-5 ml-3">
-              <v-icon icon="mdi-calendar" color="grey"></v-icon>
-              <p class="ml-2 text-grey">June 20 , 2023</p>
-              <v-icon class="ml-3" icon="mdi-comment" color="grey"></v-icon>
-              <p class="ml-2 text-grey">9</p>
-              <v-icon class="ml-3" icon="mdi-eye" color="grey"></v-icon>
-              <p class="ml-2 text-grey">29</p>
-            </v-row>
-          </div>
-          <v-card-title>
-            <b
-              >What types of coffee beans are grown in each region of Thailand?
-            </b></v-card-title
-          >
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="rgb(140, 115, 70)"
-              width="120"
-              height="25"
-              rounded="xl"
-              variant="elevated"
-              class="mb-3 mt-3"
-            >
-              Read More
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-        <v-card class="mx-auto" max-width="344" color="rgb(240, 240, 240)">
-          <v-img src="@/assets/blog3.jpg" height="200px" cover></v-img>
-          <div>
-            <v-row class="mt-5 ml-3">
-              <v-icon icon="mdi-calendar" color="grey"></v-icon>
-              <p class="ml-2 text-grey">Sep 11 , 2022</p>
-              <v-icon class="ml-3" icon="mdi-comment" color="grey"></v-icon>
-              <p class="ml-2 text-grey">1</p>
-              <v-icon class="ml-3" icon="mdi-eye" color="grey"></v-icon>
-              <p class="ml-2 text-grey">11</p>
-            </v-row>
-          </div>
-          <v-card-title>
-            <b
-              >Get to know "Arabica", the ultimate in delicious coffee varieties
-            </b></v-card-title
-          >
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn
-              color="rgb(140, 115, 70)"
-              width="120"
-              height="25"
-              rounded="xl"
-              variant="elevated"
-              class="mb-3 mt-3"
-            >
-              Read More
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <v-col
+          v-for="(blog, index) in blogs"
+          :key="index"
+          cols="12"
+          sm="6"
+          md="4"
+        >
+          <v-card class="mx-auto" max-width="344" color="rgb(240, 240, 240)">
+            <v-img src="/assets/blog1.jpg" height="200px" cover></v-img>
+            <div>
+              <v-row class="mt-3 ml-3">
+                <v-col cols="auto">
+                  <v-icon icon="mdi-calendar" color="grey"></v-icon>
+                  <span class="text-caption ml-1">{{ blog.date }}</span>
+                </v-col>
+                <v-col cols="auto">
+                  <v-icon icon="mdi-comment" color="grey"></v-icon>
+                  <span class="text-caption ml-1">{{ blog.comments }}</span>
+                </v-col>
+                <v-col cols="auto">
+                  <v-icon icon="mdi-eye" color="grey"></v-icon>
+                  <span class="text-caption ml-1">{{ blog.views }}</span>
+                </v-col>
+              </v-row>
+            </div>
+            <div class="mt-3 ml-3 mr-3">
+              <b class="text-h6 font-weight-bold">{{ blog.title }}</b>
+            </div>
+
+            <v-card-actions>
+              <v-btn
+                color="rgb(140, 115, 70)"
+                width="120"
+                height="25"
+                rounded="xl"
+                variant="elevated"
+                class="mb-3 mt-3"
+                @click=""
+              >
+                Read More
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
       </v-row>
-    </v-col>
+    </v-container>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      blogs: [
+        {
+          id: 1,
+          image: "/assets/blog1.jpg",
+          date: "Nov 12, 2023",
+          comments: "6",
+          views: "76",
+          title: "The difference between Arabica and Robusta coffee",
+          href: "",
+        },
+        {
+          id: 2,
+          image: "/assets/blog2.jpg",
+          date: "June 20, 2023",
+          comments: "9",
+          views: "29",
+          title:
+            "What types of coffee beans are grown in each region of Thailand?",
+          href: "",
+        },
+        {
+          id: 3,
+          image: "/assets/blog3.jpg",
+          date: "Sep 11, 2022",
+          comments: 1,
+          views: 11,
+          title:
+            "Get to know 'Arabica', the ultimate in delicious coffee varieties",
+          href: "",
+        },
+      ],
+    };
+  },
+};
+</script>
 <style scoped>
 .bg-repeat {
   background-image: url("../assets/coffeeHome-30.png");
