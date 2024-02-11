@@ -41,7 +41,7 @@
       </div>
 
       <div class="d-none d-sm-flex">
-        <v-col align="end" align-self="center" class="mr-15">
+        <v-col align="end" align-self="center" class="mr-10">
           <v-btn class="mr-5" icon="mdi-magnify" size="35" color="#39150E" />
           <v-btn class="mr-5" size="35" color="#39150E" rounded> EN</v-btn>
           <v-btn class="" icon="mdi-account" size="35" color="#39150E" />
