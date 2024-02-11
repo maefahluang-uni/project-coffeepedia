@@ -1,5 +1,13 @@
 <template>
-  <v-card max-width="344" max-height="190" elevation="16">
+  <v-card
+    v-if="(address == '') & (phone == '') & (email == '')"
+    width="344"
+    elevation="16"
+  >
+    <v-skeleton-loader type="list-item-two-line"></v-skeleton-loader>
+  </v-card>
+
+  <v-card v-else max-width="344" max-height="190" elevation="16">
     <div class="text-h5 text-brown mt-3 ml-4 mr-4 text-center">
       <h5>Integrated AgriTech Ecosystem Research(IATE)</h5>
     </div>
@@ -35,6 +43,17 @@ export default {
     } catch (error) {
       console.error("Error fetching contact:", error);
     }
+  },
+  watch: {
+    address(val) {
+      this.address = val;
+    },
+    phone(val) {
+      this.phone = val;
+    },
+    email(val) {
+      this.email = val;
+    },
   },
 };
 </script>

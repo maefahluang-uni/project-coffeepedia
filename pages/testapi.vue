@@ -8,28 +8,6 @@
         <span class="text-h2">No data</span>
       </div>
       <div v-else>
-        <!-- Faster than v-window
-           <v-row class="justify-center align-center">
-          <v-btn v-show="index != 0" class="mr-10" @click="minusIndex()"
-            >left</v-btn
-          >
-          <img
-            :src="frontImage"
-            alt="Front Image"
-            width="150"
-            max-height="100"
-            class="mr-10"
-            contain
-          />
-          <img
-            :src="backImage"
-            alt="Front Image"
-            width="150"
-            max-height="100"
-            contain
-          />
-          <v-btn class="ml-10" @click="plusIndex()">right</v-btn>
-        </v-row>-->
         <v-window v-model="window" show-arrows>
           <v-window-item v-for="n in imageData.length" :key="n">
             <v-card height="200px" class="d-flex justify-center align-center">
@@ -90,17 +68,6 @@ export default {
     }
   },
   methods: {
-    /* Faster than v-window
-    plusIndex() {
-      if (this.index < this.imageData.length - 1) {
-        this.index++;
-      }
-    },
-    minusIndex() {
-      if (this.index > 0) {
-        this.index--;
-      }
-    },*/
     getImageUrl(buffer) {
       if (!buffer) return ""; // Return empty string if buffer is null or undefined
       const uint8Array = new Uint8Array(buffer);
@@ -119,41 +86,7 @@ export default {
       } catch (error) {
         console.error("There is error on fetching image:", error);
       }
-    } /* Faster than v-window
-    frontImage(val) {
-      this.frontImage = val;
     },
-    backImage(val) {
-      this.backImage = val;
-    },
-    imageData(val) {
-      this.frontImage = this.getImageUrl(val[this.index].ImageDataFront.data);
-      this.backImage = this.getImageUrl(val[this.index].ImageDataBack.data);
-    },  
-    index(val) {
-      this.index = val;
-      console.log(this.index);
-      try {
-        if (this.frontImage != "") {
-          this.frontImage = this.getImageUrl(
-            // this.type[this.index].ImageDataFront.data
-            this.imageData[this.index].ImageDataFront.data
-          );
-        } else {
-          this.frontImage = "";
-        }
-        if (this.backImage != "") {
-          this.backImage = this.getImageUrl(
-            //  this.type[this.index].ImageDataBack.data
-            this.imageData[this.index].ImageDataBack.data
-          );
-        } else {
-          this.backImage = "";
-        }
-      } catch (error) {
-        console.log("There is error changing image:", error);
-      }
-    },*/,
   },
 };
 </script>
