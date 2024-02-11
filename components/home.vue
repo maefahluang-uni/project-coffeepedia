@@ -122,18 +122,18 @@
           <v-card class="mx-auto" max-width="344" color="rgb(240, 240, 240)">
             <v-img src="/assets/blog1.jpg" height="200px" cover></v-img>
             <div>
-              <v-row class="mt-3 ml-3">
-                <v-col cols="auto">
-                  <v-icon icon="mdi-calendar" color="grey"></v-icon>
-                  <span class="text-caption ml-1">{{ blog.date }}</span>
-                </v-col>
+              <v-row class="mt-1 ml-1">
                 <v-col cols="auto">
                   <v-icon icon="mdi-comment" color="grey"></v-icon>
                   <span class="text-caption ml-1">{{ blog.comments }}</span>
                 </v-col>
                 <v-col cols="auto">
                   <v-icon icon="mdi-eye" color="grey"></v-icon>
-                  <span class="text-caption ml-1">{{ blog.views }}</span>
+                  <span class="text-caption ml-1">{{
+                    blog.views
+                  }}</span> </v-col
+                ><v-col cols="auto">
+                  <span class="text-caption ml-1">{{ blog.date }}</span>
                 </v-col>
               </v-row>
             </div>
