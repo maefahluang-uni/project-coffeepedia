@@ -42,6 +42,7 @@ export default {};
   opacity: 0.7;
 }
 p {
-  color: rgb(236, 236, 236);
+  color: rgb(224, 224, 224);
+  text-shadow: 2px 2px #000000;
 }
 </style>

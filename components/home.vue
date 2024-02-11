@@ -137,7 +137,7 @@
                 </v-col>
               </v-row>
             </div>
-            <div class="mt-3 ml-3 mr-3">
+            <div class="mt-3 ml-4 mr-3">
               <b class="text-h6 font-weight-bold">{{ blog.title }}</b>
             </div>
 
@@ -148,7 +148,7 @@
                 height="25"
                 rounded="xl"
                 variant="elevated"
-                class="mb-3 mt-3"
+                class="mb-3 mt-3 ml-2"
                 @click=""
               >
                 Read More
