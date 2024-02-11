@@ -2,7 +2,7 @@
   <v-app-bar elevation="0">
     <v-row justify="space-between">
       <div class="d-none d-sm-flex">
-        <v-col cols="3" class="ml-10">
+        <v-col cols="3" class="ml-5">
           <div class="d-inline-flex">
             <v-img
               height="50"
