@@ -20,7 +20,7 @@
           <h5>Integrated AgriTech Ecosystem Research(IATE)</h5>
         </div>
 
-        <div class="text-brown d-flex d-sm-none">
+        <div class="text-brown d-flex d-sm-none justify-center">
           <div class="ma-2">
             {{ address }}
             <br />
