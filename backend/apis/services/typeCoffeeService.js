@@ -20,6 +20,21 @@ conn.connect((error) => {
   console.log("Mysql Connected...");
 });
 
+const getTypesCoffee = async () => {
+  try {
+    let sql = typeCoffeeQueries.GET_TYPES_COFFEE;
+    let results = await conn.awaitQuery(sql);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getTypesCoffee function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
 const getTypeCoffee = async (TypeID) => {
   try {
     let sql = typeCoffeeQueries.GET_TYPE_COFFEE_BY_ID;
@@ -52,4 +67,4 @@ const getTypeCoffeeImages = async (TypeID) => {
   }
 };
 
-module.exports = { getTypeCoffee, getTypeCoffeeImages };
+module.exports = { getTypesCoffee, getTypeCoffee, getTypeCoffeeImages };

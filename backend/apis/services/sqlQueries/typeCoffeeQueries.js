@@ -28,8 +28,26 @@ WHERE
 type_coffee_image.TypeID = ?;
 `;
 
+const GET_TYPES_COFFEE = `
+SELECT 
+type_coffee.ID,
+roast_level.RoastName,
+coffee_process.ProcessName,
+type_coffee.ImageDataFront
+FROM 
+type_coffee
+JOIN
+roast_level ON type_coffee.RoastLevelID = roast_level.ID 
+JOIN
+coffee_process ON type_coffee.CoffeeProcessID = coffee_process.ID
+WHERE
+roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1;
+
+`;
+
 // Export the SQL queries
 module.exports = {
   GET_TYPE_COFFEE_BY_ID,
   GET_TYPE_COFFEE_IMAGE_BY_TYPE_ID,
+  GET_TYPES_COFFEE,
 };

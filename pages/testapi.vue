@@ -61,10 +61,12 @@ export default {
   },
   async mounted() {
     try {
-      const typeCoffeeResponse = await axios.get(api + "/coffeetype/" + 1);
+      const typeCoffeeResponse = await axios.get(
+        api + "/coffeetypes/type/" + 1
+      );
       this.type = typeCoffeeResponse.data.response; // Assign response data to types
     } catch (error) {
-      console.error("Error fetching coffee types:", error);
+      console.error("Error fetching coffee type:", error);
     }
   },
   methods: {

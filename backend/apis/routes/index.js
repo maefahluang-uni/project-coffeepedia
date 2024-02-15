@@ -5,6 +5,6 @@ const typeCoffeeRouter = require("./typeCoffeeRoute");
 const router = express.Router();
 
 router.use("/contact", contactRoute);
-router.use("/coffeetype", typeCoffeeRouter);
+router.use("/coffeetypes", typeCoffeeRouter);
 
 module.exports = router;

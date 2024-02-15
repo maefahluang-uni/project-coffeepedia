@@ -1,63 +1,119 @@
 <template>
-  <div>
-    <v-divider></v-divider>
+  <div class="justify-center d-flex mt-5 mb-5">
+    <v-btn-toggle v-model="select" class="" mandatory>
+      <v-btn
+        color="rgb(140, 115, 70)"
+        value=""
+        class="ml-3 mr-3 my-2"
+        rounded="xl"
+        text="All"
+      >
+      </v-btn>
+      <v-btn
+        color="rgb(140, 115, 70)"
+        value="wet"
+        class="ml-3 mr-3 my-2"
+        rounded="xl"
+        text="Wet process"
+      >
+      </v-btn>
+      <v-btn
+        color="rgb(140, 115, 70)"
+        value="dry"
+        class="ml-3 mr-3 my-2"
+        rounded="xl"
+        text="Dry process"
+      >
+      </v-btn>
+      <v-btn
+        color="rgb(140, 115, 70)"
+        value="honey"
+        class="ml-3 mr-3"
+        rounded="xl"
+        text="Honey process"
+      >
+      </v-btn>
+    </v-btn-toggle>
   </div>
-  <div>
-    <v-layout style="height: 56px">
-      <v-bottom-navigation v-model="value" color="teal">
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>All</h4>
-        </v-btn>
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>Wet process</h4>
-        </v-btn>
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>Dry process</h4>
-        </v-btn>
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>Honey process</h4>
-        </v-btn>
-      </v-bottom-navigation>
-    </v-layout>
-  </div>
-  <div class="justify-space-between mb-6">
-    <v-row>
-      <p class="mt-10 ml-10">Showing All {{ types.length }} Results</p>
-    </v-row>
-  </div>
-
-  <v-card
-    variant="outlined"
-    rounded="xl"
-    class="mx-auto mt-10"
-    color="rgba(185, 160, 130)"
-    width="200"
-    height="300"
-  >
-    <v-card
-      rounded="xl"
-      class="mx-auto"
-      color="rgba(185, 160, 130, 0.5)"
-      width="200"
-      height="300"
-    >
-      <v-img v-if="frontImage == ''" contain src="@/assets/wet_light.png">
-      </v-img>
-      <v-img
-        v-else
-        contain
-        :src="getImageUrl(imageData[0].ImageDataFront.data)"
-      />
-      <v-card-text class="pt-6">
-        <div class="text-h5 font-weight-drak text-brown mb-2">Dry Process</div>
-
-        <div class="font-weight-light text-black mb-2">Light Roasted</div>
-      </v-card-text>
-    </v-card>
-  </v-card>
-
   <v-card>
-    <v-data-iterator> </v-data-iterator>
+    <v-data-iterator
+      :items="types"
+      :items-per-page="itemsPerPage"
+      :search="search"
+    >
+      <template v-slot:header>
+        <v-toolbar class="px-10 d-flex mt-5" color="white">
+          <p class="flex-grow-1">Showing All {{ types.length }} Results</p>
+          <v-text-field
+            v-model="search"
+            density="comfortable"
+            hide-details
+            placeholder="Search"
+            prepend-inner-icon="mdi-magnify"
+            style="max-width: 300px"
+            variant="solo"
+          ></v-text-field>
+          <!--<div class="d-flex align-center">
+            <v-btn class="me-8" variant="text" @click="onClickSeeAll">
+              <span class="text-decoration-underline text-none">See all</span>
+            </v-btn>
+
+            <div class="d-inline-flex">
+              <v-btn
+                :disabled="page === 1"
+                icon="mdi-arrow-left"
+                size="small"
+                variant="tonal"
+                class="me-2"
+                @click="prevPage"
+              ></v-btn>
+
+              <v-btn
+                :disabled="page === pageCount"
+                icon="mdi-arrow-right"
+                size="small"
+                variant="tonal"
+                @click="nextPage"
+              ></v-btn>
+            </div>
+          </div>-->
+        </v-toolbar>
+      </template>
+      <template v-slot:default="{ items }">
+        <!--<div v-for="(item, index) in items" :key="index" class="d-flex">
+          <v-card>
+            {{ item.raw.RoastName }} roasted {{ item.raw.ProcessName }} process
+          </v-card>
+        </div>-->
+
+        <v-row class="my-2">
+          <v-col
+            v-for="(item, index) in items"
+            :key="index"
+            class="d-flex justify-center"
+            cols="12"
+            sm="4"
+          >
+            <v-card variant="outlined" rounded="xl" color="rgba(185, 160, 130)">
+              <div class="cardbgcolor text-center pb-2">
+                <v-img
+                  :src="getImageUrl(item.raw.ImageDataFront.data)"
+                  width="200"
+                />
+                <div>
+                  <v-card-title class="font-weight-bold text-brown">
+                    {{ item.raw.RoastName + " roasted" }}
+                  </v-card-title>
+                  <v-card-subtitle class="text-brown">
+                    {{ item.raw.ProcessName + " process" }}
+                  </v-card-subtitle>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+      </template>
+    </v-data-iterator>
   </v-card>
 </template>
 
@@ -67,32 +123,32 @@ const api = "http://localhost:5000/api";
 
 export default {
   data: () => ({
-    value: 0,
+    itemsPerPage: 3,
+    loading: true,
+    select: "",
     search: "",
+    value: 0,
     imageData: "",
     frontImage: "",
-    types: [
-      {
-        id: "1",
-        image: "../assets/dry_light.png",
-        process: "",
-        roasting: "",
-      },
-      {
-        id: "2",
-        image: "",
-        process: "",
-        roasting: "",
-      },
-    ],
+    types: [],
   }),
   async mounted() {
     try {
-      const imagesResponse = await axios.get(api + "/coffeetype/images/" + 1);
+      const typesResponse = await axios.get(api + "/coffeetypes");
 
-      this.imageData = imagesResponse.data.response;
+      if (Array.isArray(typesResponse.data.response)) {
+        // Append each element of the response data to the types array
+        typesResponse.data.response.forEach((element) => {
+          this.types.push(element);
+        });
+      } else {
+        console.error(
+          "Invalid response data format:",
+          typesResponse.data.response
+        );
+      }
     } catch (error) {
-      console.error("There is error on fetching image:", error);
+      console.error("Error fetching coffee types:", error);
     }
   },
   methods: {
@@ -102,6 +158,9 @@ export default {
       const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
       return `data:image/jpeg;base64,${base64Image}`;
     },
+    onClickSeeAll() {
+      this.itemsPerPage = this.itemsPerPage === 3 ? this.types.length : 3;
+    },
   },
   watch: {
     imageData(val) {
@@ -110,6 +169,12 @@ export default {
     },
     frontImage(val) {
       this.frontImage = val;
+    },
+    search(val) {
+      this.search = val;
+    },
+    select(val) {
+      this.select = val;
     },
   },
 };
@@ -122,5 +187,8 @@ export default {
   opacity: 0.9;
   position: absolute;
   width: 100%;
+}
+.cardbgcolor {
+  background-color: rgba(185, 160, 130, 0.5);
 }
 </style>
