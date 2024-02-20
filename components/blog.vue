@@ -1,3 +1,3 @@
 <template>
-    blog
+    blog hello
 </template>
