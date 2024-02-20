@@ -43,19 +43,67 @@
       <div class="d-none d-sm-flex">
         <v-col align="end" align-self="center" class="mr-10">
           <v-btn class="mr-5" icon="mdi-magnify" size="35" color="#39150E" />
-          <v-btn class="mr-5" size="35" color="#39150E" rounded> EN</v-btn>
+          <v-btn
+            class="mr-5"
+            size="35"
+            color="#39150E"
+            rounded
+            @click="changeLanguage()"
+          >
+            {{ language }}</v-btn
+          >
           <v-btn class="" icon="mdi-account" size="35" color="#39150E" />
         </v-col>
       </div>
 
       <div class="d-flex d-sm-none">
         <v-col align="end" align-self="center">
-          <v-btn class="mr-5" icon="mdi-menu" size="35" color="#39150E" />
+          <v-btn
+            class="mr-5"
+            icon="mdi-menu"
+            size="35"
+            color="#39150E"
+            @click="overlay = !overlay"
+          />
         </v-col>
       </div>
     </v-row>
   </v-app-bar>
+  <v-navigation-drawer v-model="overlay" location="right" temporary>
+    <v-list>
+      <v-list-item
+        prepend-icon="mdi-magnify"
+        title="Search"
+        value="search"
+      ></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-account"
+        title="Admin account"
+        value="account"
+      ></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-translate"
+        :title="language"
+        value="language"
+        @click="changeLanguage()"
+      ></v-list-item>
+    </v-list>
+  </v-navigation-drawer>
 </template>
 
-<script></script>
+<script>
+export default {
+  data: () => ({
+    overlay: false,
+    language: "EN",
+  }),
+  methods: {
+    changeLanguage() {
+      this.language = this.language === "EN" ? "TH" : "EN";
+    },
+  },
+
+  watch: {},
+};
+</script>
 <style></style>

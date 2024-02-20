@@ -41,8 +41,8 @@ roast_level ON type_coffee.RoastLevelID = roast_level.ID
 JOIN
 coffee_process ON type_coffee.CoffeeProcessID = coffee_process.ID
 WHERE
-roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1;
-
+roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1  
+ORDER BY coffee_process.ProcessName ASC
 `;
 
 // Export the SQL queries
