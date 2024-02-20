@@ -3,12 +3,11 @@ const mysql = require(`mysql-await`);
 const contactQueries = require("./sqlQueries/contactQueries");
 //create database connection
 const conn = mysql.createConnection({
-  connectionLimit: 10,
-  host: config.MYSQL_DB_URI,
-  user: config.MYSQL_DB_USER,
-  password: config.MYSQL_DB_PASSWORD,
-  database: config.MYSQL_DB,
-  port: config.MYSQL_DB_PORT,
+  host: config.CLOUD_MYSQL_DB_URI,
+  user: config.CLOUD_MYSQL_DB_USER,
+  password: config.CLOUD_MYSQL_DB_PASSWORD,
+  database: config.CLOUD_MYSQL_DB,
+  port: config.CLOUD_MYSQL_DB_PORT,
 });
 //connect to database
 conn.connect((error) => {
