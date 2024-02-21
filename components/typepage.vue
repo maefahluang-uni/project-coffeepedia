@@ -247,27 +247,82 @@
                     No drink suggestion
                   </div>
                   <div v-else>
-                    <div class="d-none d-sm-flex justify-space-between px-10">
-                      <v-card class="ma-5">
-                        <v-icon size="80">mdi-{{ icon }}</v-icon>
+                    <div
+                      class="d-none d-sm-flex justify-space-between px-10 text-center"
+                    >
+                      <v-card
+                        class="ma-5 rounded-xl"
+                        variant="outlined"
+                        color="rgb(140, 115, 70)"
+                      >
+                        <div class="d-flex justify-center mt-3">
+                          <v-icon size="80" color="black"
+                            >mdi-{{ icon[0] }}</v-icon
+                          >
+                        </div>
+
+                        <div class="text-h6 font-weight-bold pa-3">
+                          Espresso
+                        </div>
                       </v-card>
-                      <v-card class="ma-5">
-                        <v-icon :size="80">mdi-{{ icon }}</v-icon>
+                      <v-card
+                        class="ma-5 rounded-xl"
+                        variant="outlined"
+                        color="rgb(140, 115, 70)"
+                      >
+                        <div class="d-flex justify-center mt-3">
+                          <v-icon size="80" color="black"
+                            >mdi-{{ icon[1] }}</v-icon
+                          >
+                        </div>
+
+                        <div class="text-h6 font-weight-bold pa-3">
+                          Americano
+                        </div>
                       </v-card>
-                      <v-card class="ma-5">
-                        <v-icon size="80">mdi-{{ icon }}</v-icon>
+                      <v-card
+                        class="ma-5 rounded-xl"
+                        variant="outlined"
+                        color="rgb(140, 115, 70)"
+                        width="100"
+                      >
+                        <div class="d-flex justify-center mt-3">
+                          <v-icon size="80" color="black"
+                            >mdi-{{ icon[2] }}</v-icon
+                          >
+                        </div>
+
+                        <div class="text-h6 font-weight-bold pa-3">Drip</div>
                       </v-card>
                     </div>
 
                     <div class="d-flex d-sm-none justify-space-between pa-3">
-                      <v-card class="elevation-3">
-                        <v-icon size="50">mdi-{{ icon }}</v-icon>
+                      <v-card
+                        class="elevation-3"
+                        variant="outlined"
+                        color="rgb(140, 115, 70)"
+                      >
+                        <v-icon size="50" color="black"
+                          >mdi-{{ icon[0] }}</v-icon
+                        >
                       </v-card>
-                      <v-card class="elevation-3">
-                        <v-icon size="50">mdi-{{ icon }}</v-icon>
+                      <v-card
+                        class="elevation-3"
+                        variant="outlined"
+                        color="rgb(140, 115, 70)"
+                      >
+                        <v-icon size="50" color="black"
+                          >mdi-{{ icon[1] }}</v-icon
+                        >
                       </v-card>
-                      <v-card class="elevation-3">
-                        <v-icon size="50">mdi-{{ icon }}</v-icon>
+                      <v-card
+                        class="elevation-3"
+                        variant="outlined"
+                        color="rgb(140, 115, 70)"
+                      >
+                        <v-icon size="50" color="black"
+                          >mdi-{{ icon[2] }}</v-icon
+                        >
                       </v-card>
                     </div>
                   </div>
@@ -301,6 +356,7 @@ export default {
     selectedIndex: "",
     types: [],
 
+    class: "",
     typeDetail: "",
     gasStates: "",
     detailImageLength: 0,
@@ -309,7 +365,7 @@ export default {
     frontImage: "",
     backImage: "",
     drinkSuggest: "",
-    icon: "coffee-maker-outline",
+    icon: ["coffee-maker", "coffee", "kettle-pour-over"],
     window: 0,
   }),
   async mounted() {
