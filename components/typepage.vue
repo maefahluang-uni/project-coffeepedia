@@ -56,7 +56,7 @@
         </v-toolbar>
       </template>
       <template v-slot:default="{ items }">
-        <v-row class="">
+        <v-row class="px-2">
           <v-col
             v-for="(item, index) in items"
             :key="index"
@@ -99,19 +99,15 @@
           </v-col>
         </v-row>
         <!--Provide coffee detail on this overlay-->
-        <v-overlay
-          v-model="overlay"
-          class="align-top justify-center pt-10"
-          width="700"
-        >
-          <v-card>
+        <v-overlay v-model="overlay" class="align-top justify-center pt-10">
+          <v-card class="overflow-auto cardheightflex cardwidthflex">
             <v-container>
               <div v-if="typeDetail == ''">
                 <span class="text-h3">No type data</span>
               </div>
               <div v-else>
                 <div class="d-flex justify-center text-center mt-5">
-                  <v-card max-width="250" flat="">
+                  <v-card max-width="250" flat>
                     <div class="font-weight-bold text-brown text-h4">
                       {{
                         types[selectedIndex].ProcessName.charAt(
@@ -136,43 +132,66 @@
                 </div>
 
                 <div
-                  v-if="detailImageData == ''"
+                  v-if="detailImageLength == 0"
                   class="d-flex justify-center align-center py-5"
                 >
                   <v-icon size="50">mdi-image-multiple</v-icon>
                   <div>No roasted coffee images</div>
                 </div>
-                <v-window v-else v-model="window" show-arrows class="py-5">
-                  <v-window-item v-for="n in detailImageData.length" :key="n">
-                    <v-card
-                      height="200px"
-                      class="d-flex justify-center align-center"
-                      flat
-                    >
-                      <img
-                        :src="
-                          this.getImageUrl(
-                            detailImageData[n - 1].ImageDataFront.data
-                          )
-                        "
-                        alt="Front Image"
-                        width="150"
-                        class="mr-10"
-                        contain
-                      />
-                      <img
-                        :src="
-                          this.getImageUrl(
-                            detailImageData[n - 1].ImageDataBack.data
-                          )
-                        "
-                        alt="Front Image"
-                        width="150"
-                        contain
-                      />
-                    </v-card>
-                  </v-window-item>
-                </v-window>
+                <div v-else class="">
+                  <div>
+                    <v-window v-model="window" show-arrows>
+                      <v-window-item v-for="n in detailImageLength" :key="n">
+                        <v-card
+                          height="200px"
+                          class="d-none d-sm-flex justify-center align-center"
+                          flat
+                        >
+                          <img
+                            :src="detailImagesFront[n - 1]"
+                            alt="Front Image"
+                            width="150"
+                            class="mr-10"
+                            contain
+                          />
+                          <img
+                            :src="detailImagesBack[n - 1]"
+                            alt="Front Image"
+                            width="150"
+                            contain
+                          />
+                        </v-card>
+                      </v-window-item>
+                    </v-window>
+                  </div>
+
+                  <div class="py-5 d-flex d-sm-none justify-center">
+                    <v-window v-model="window">
+                      <v-window-item v-for="n in detailImageLength" :key="n">
+                        <v-card
+                          height="100px"
+                          class="d-flex justify-center align-center"
+                          flat
+                        >
+                          <img
+                            :src="detailImagesFront[n - 1]"
+                            alt="Front Image"
+                            width="100"
+                            class="mr-5"
+                            contain
+                          />
+                          <img
+                            :src="detailImagesBack[n - 1]"
+                            alt="Front Image"
+                            width="100"
+                            contain
+                          />
+                        </v-card>
+                      </v-window-item>
+                    </v-window>
+                  </div>
+                </div>
+
                 <div class="d-flex justify-center mb-5">
                   <v-card
                     width="500"
@@ -223,14 +242,34 @@
                     class="border-opacity-75 my-3"
                     color="brown"
                   ></v-divider>
-                  <div
-                    v-if="drinkSuggest != ''"
-                    v-for="(drink, index) in drinkSuggest"
-                    :key="index"
-                  >
-                    Drink {{ index }}
+                  <div v-if="drinkSuggest == ''" class="text-center">
+                    No drink suggestion
                   </div>
-                  <div v-else>No drink suggestion</div>
+                  <div v-else>
+                    <div class="d-none d-sm-flex justify-space-between px-10">
+                      <v-card class="ma-5">
+                        <v-icon size="80">mdi-{{ icon }}</v-icon>
+                      </v-card>
+                      <v-card class="ma-5">
+                        <v-icon :size="80">mdi-{{ icon }}</v-icon>
+                      </v-card>
+                      <v-card class="ma-5">
+                        <v-icon size="80">mdi-{{ icon }}</v-icon>
+                      </v-card>
+                    </div>
+
+                    <div class="d-flex d-sm-none justify-space-between pa-3">
+                      <v-card class="elevation-3">
+                        <v-icon size="50">mdi-{{ icon }}</v-icon>
+                      </v-card>
+                      <v-card class="elevation-3">
+                        <v-icon size="50">mdi-{{ icon }}</v-icon>
+                      </v-card>
+                      <v-card class="elevation-3">
+                        <v-icon size="50">mdi-{{ icon }}</v-icon>
+                      </v-card>
+                    </div>
+                  </div>
                 </v-card>
               </div>
             </v-container>
@@ -249,6 +288,9 @@ export default {
   data: () => ({
     overlay: false,
     itemsPerPage: 9,
+    length: 3,
+    onboarding: 1,
+    showarrow: true,
 
     filterPocess: "",
     search: "",
@@ -260,10 +302,13 @@ export default {
 
     typeDetail: "",
     gasStates: "",
-    detailImageData: "",
+    detailImageLength: 0,
+    detailImagesFront: [],
+    detailImagesBack: [],
     frontImage: "",
     backImage: "",
     drinkSuggest: "",
+    icon: "coffee-maker-outline",
     window: 0,
   }),
   async mounted() {
@@ -285,6 +330,7 @@ export default {
       console.error("Error fetching coffee types:", error);
     }
   },
+  computed: {},
   methods: {
     getImageUrl(buffer) {
       if (!buffer) return ""; // Return empty string if buffer is null or undefined
@@ -300,6 +346,7 @@ export default {
         try {
           this.getTypeDetail(ID);
           this.getDetailImages(ID);
+
           this.getTypeGasStates(ID);
         } catch (error) {
           console.error("Error fetching coffee type:", error);
@@ -312,7 +359,16 @@ export default {
           api + "/coffeetypes/images/" + ID
         );
 
-        this.detailImageData = imagesResponse.data.response;
+        this.detailImageLength = imagesResponse.data.response.length;
+
+        imagesResponse.data.response.forEach((element) => {
+          this.detailImagesFront.push(
+            this.getImageUrl(element.ImageDataFront.data)
+          );
+          this.detailImagesBack.push(
+            this.getImageUrl(element.ImageDataBack.data)
+          );
+        });
       } catch (error) {
         console.error("There is error on fetching image:", error);
       }
@@ -322,7 +378,7 @@ export default {
         const typeCoffeeResponse = await axios.get(
           api + "/coffeetypes/type/" + ID
         );
-        this.typeDetail = typeCoffeeResponse.data.response; // Assign response data to types
+        this.typeDetail = typeCoffeeResponse.data.response;
       } catch (error) {
         console.error("Error fetching coffee type:", error);
       }
@@ -332,7 +388,7 @@ export default {
         const gasStatesResponse = await axios.get(
           api + "/coffeetypes/type/gasstates/" + ID
         );
-        this.gasStates = gasStatesResponse.data.response; // Assign response data to types
+        this.gasStates = gasStatesResponse.data.response;
       } catch (error) {
         console.error("Error fetching coffee type gas states:", error);
       }
@@ -378,5 +434,12 @@ export default {
 }
 .whitebg {
   background-color: white;
+}
+.cardheightflex {
+  height: 85dvh;
+}
+.cardwidthflex {
+  width: 85dvw;
+  max-width: 700px;
 }
 </style>
