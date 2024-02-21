@@ -1,63 +1,243 @@
 <template>
-  <div>
-    <v-divider></v-divider>
-  </div>
-  <div>
-    <v-layout style="height: 56px">
-      <v-bottom-navigation v-model="value" color="teal">
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>All</h4>
-        </v-btn>
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>Wet process</h4>
-        </v-btn>
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>Dry process</h4>
-        </v-btn>
-        <v-btn rounded="xl" color="rgb(140, 115, 70)" height="30" class="mt-5">
-          <h4>Honey process</h4>
-        </v-btn>
-      </v-bottom-navigation>
-    </v-layout>
-  </div>
-  <div class="justify-space-between mb-6">
-    <v-row>
-      <p class="mt-10 ml-10">Showing All {{ types.length }} Results</p>
-    </v-row>
-  </div>
-
-  <v-card
-    variant="outlined"
-    rounded="xl"
-    class="mx-auto mt-10"
-    color="rgba(185, 160, 130)"
-    width="200"
-    height="300"
-  >
-    <v-card
-      rounded="xl"
-      class="mx-auto"
-      color="rgba(185, 160, 130, 0.5)"
-      width="200"
-      height="300"
-    >
-      <v-img v-if="frontImage == ''" contain src="@/assets/wet_light.png">
-      </v-img>
-      <v-img
-        v-else
-        contain
-        :src="getImageUrl(imageData[0].ImageDataFront.data)"
-      />
-      <v-card-text class="pt-6">
-        <div class="text-h5 font-weight-drak text-brown mb-2">Dry Process</div>
-
-        <div class="font-weight-light text-black mb-2">Light Roasted</div>
-      </v-card-text>
-    </v-card>
-  </v-card>
-
   <v-card>
-    <v-data-iterator> </v-data-iterator>
+    <div class="justify-center d-flex mt-5 mb-5">
+      <v-btn-toggle v-model="filterPocess" class="" mandatory>
+        <v-btn
+          color="rgb(140, 115, 70)"
+          value=""
+          class="ml-3 mr-3 my-2"
+          rounded="xl"
+          text="All"
+        >
+        </v-btn>
+        <v-btn
+          color="rgb(140, 115, 70)"
+          value="wet"
+          class="ml-3 mr-3 my-2"
+          rounded="xl"
+          text="Wet process"
+        >
+        </v-btn>
+        <v-btn
+          color="rgb(140, 115, 70)"
+          value="dry"
+          class="ml-3 mr-3 my-2"
+          rounded="xl"
+          text="Dry process"
+        >
+        </v-btn>
+        <v-btn
+          color="rgb(140, 115, 70)"
+          value="honey"
+          class="ml-3 mr-3 my-2"
+          rounded="xl"
+          text="Honey process"
+        >
+        </v-btn>
+      </v-btn-toggle>
+    </div>
+    <v-data-iterator
+      :items="types"
+      :items-per-page="itemsPerPage"
+      :search="search"
+    >
+      <template v-slot:header>
+        <v-toolbar class="px-10 d-flex mt-5" color="white">
+          <p class="flex-grow-1">Showing All {{ types.length }} Results</p>
+          <!-- <v-text-field
+            v-model="search"
+            density="comfortable"
+            hide-details
+            placeholder="Search"
+            prepend-inner-icon="mdi-magnify"
+            style="max-width: 300px"
+            variant="solo"
+          ></v-text-field>-->
+        </v-toolbar>
+      </template>
+      <template v-slot:default="{ items }">
+        <v-row class="">
+          <v-col
+            v-for="(item, index) in items"
+            :key="index"
+            class="d-flex justify-center my-5"
+            cols="12"
+            sm="4"
+          >
+            <v-card
+              variant="outlined"
+              rounded="xl"
+              color="rgba(185, 160, 130)"
+              @click="clickTypeCard(item.raw.ID, index)"
+            >
+              <div class="cardbgcolor text-center pb-2">
+                <div class="whitebg">
+                  <img
+                    :src="getImageUrl(item.raw.ImageDataFront.data)"
+                    width="200"
+                    class="pa-5"
+                  />
+                </div>
+                <div>
+                  <v-card-title class="font-weight-bold text-brown">
+                    {{
+                      item.raw.ProcessName.charAt(0).toUpperCase() +
+                      item.raw.ProcessName.slice(1) +
+                      " process"
+                    }}
+                  </v-card-title>
+                  <v-card-subtitle class="font-weight-bold text-black">
+                    {{
+                      item.raw.RoastName.charAt(0).toUpperCase() +
+                      item.raw.RoastName.slice(1) +
+                      " roasted"
+                    }}
+                  </v-card-subtitle>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row>
+        <!--Provide coffee detail on this overlay-->
+        <v-overlay
+          v-model="overlay"
+          class="align-top justify-center pt-10"
+          width="700"
+        >
+          <v-card>
+            <v-container>
+              <div v-if="typeDetail == ''">
+                <span class="text-h3">No type data</span>
+              </div>
+              <div v-else>
+                <div class="d-flex justify-center text-center mt-5">
+                  <v-card max-width="250" flat="">
+                    <div class="font-weight-bold text-brown text-h4">
+                      {{
+                        types[selectedIndex].ProcessName.charAt(
+                          0
+                        ).toUpperCase() +
+                        types[selectedIndex].ProcessName.slice(1) +
+                        " process"
+                      }}
+                    </div>
+                    <v-divider
+                      class="border-opacity-75 my-3"
+                      color="brown"
+                    ></v-divider>
+                    <div class="font-weight-bold text-black">
+                      {{
+                        types[selectedIndex].RoastName.charAt(0).toUpperCase() +
+                        types[selectedIndex].RoastName.slice(1) +
+                        " roasted"
+                      }}
+                    </div>
+                  </v-card>
+                </div>
+
+                <div
+                  v-if="detailImageData == ''"
+                  class="d-flex justify-center align-center py-5"
+                >
+                  <v-icon size="50">mdi-image-multiple</v-icon>
+                  <div>No roasted coffee images</div>
+                </div>
+                <v-window v-else v-model="window" show-arrows class="py-5">
+                  <v-window-item v-for="n in detailImageData.length" :key="n">
+                    <v-card
+                      height="200px"
+                      class="d-flex justify-center align-center"
+                      flat
+                    >
+                      <img
+                        :src="
+                          this.getImageUrl(
+                            detailImageData[n - 1].ImageDataFront.data
+                          )
+                        "
+                        alt="Front Image"
+                        width="150"
+                        class="mr-10"
+                        contain
+                      />
+                      <img
+                        :src="
+                          this.getImageUrl(
+                            detailImageData[n - 1].ImageDataBack.data
+                          )
+                        "
+                        alt="Front Image"
+                        width="150"
+                        contain
+                      />
+                    </v-card>
+                  </v-window-item>
+                </v-window>
+                <div class="d-flex justify-center mb-5">
+                  <v-card
+                    width="500"
+                    class="pa-5"
+                    variant="outlined"
+                    rounded="xl"
+                    color="rgb(140, 115, 70)"
+                  >
+                    <div class="text-black">
+                      <div>
+                        &#x2022;
+                        {{
+                          typeDetail[0].RoastName.charAt(0).toUpperCase() +
+                          typeDetail[0].RoastName.slice(1)
+                        }}
+                        ({{ typeDetail[0].CommonName }})
+                      </div>
+                      <div>&#x2022; {{ typeDetail[0].Tempurature }}°C</div>
+                      <div
+                        v-if="gasStates != ''"
+                        v-for="(item, index) in gasStates"
+                        :key="index"
+                      >
+                        &#x2022; Gas {{ gasStates[index].Gas }} when
+                        {{ gasStates[index].WhenTempurature }} °C
+                      </div>
+                      <div v-else>&#x2022; No gas detail</div>
+                      <div v-if="typeDetail[0].CrackState == '1'">
+                        &#x2022; First crack
+                      </div>
+                      <div v-else-if="typeDetail[0].CrackState == '2'">
+                        &#x2022; Between first and second crack
+                      </div>
+                      <div v-else="typeDetail[0].CrackState == '3'">
+                        &#x2022; Second crack
+                      </div>
+                      <div>&#x2022; {{ typeDetail[0].Flavor }}</div>
+                      <div>&#x2022; {{ typeDetail[0].MoreDetail }}</div>
+                    </div>
+                  </v-card>
+                </div>
+
+                <v-card class="mx-5" flat>
+                  <div class="font-weight-bold text-brown text-h5">
+                    Coffee drink suggestion
+                  </div>
+                  <v-divider
+                    class="border-opacity-75 my-3"
+                    color="brown"
+                  ></v-divider>
+                  <div
+                    v-if="drinkSuggest != ''"
+                    v-for="(drink, index) in drinkSuggest"
+                    :key="index"
+                  >
+                    Drink {{ index }}
+                  </div>
+                  <div v-else>No drink suggestion</div>
+                </v-card>
+              </div>
+            </v-container>
+          </v-card>
+        </v-overlay>
+      </template>
+    </v-data-iterator>
   </v-card>
 </template>
 
@@ -67,32 +247,42 @@ const api = "http://localhost:5000/api";
 
 export default {
   data: () => ({
-    value: 0,
+    overlay: false,
+    itemsPerPage: 9,
+
+    filterPocess: "",
     search: "",
     imageData: "",
+    cardImage: "",
+    selectedTypeID: "",
+    selectedIndex: "",
+    types: [],
+
+    typeDetail: "",
+    gasStates: "",
+    detailImageData: "",
     frontImage: "",
-    types: [
-      {
-        id: "1",
-        image: "../assets/dry_light.png",
-        process: "",
-        roasting: "",
-      },
-      {
-        id: "2",
-        image: "",
-        process: "",
-        roasting: "",
-      },
-    ],
+    backImage: "",
+    drinkSuggest: "",
+    window: 0,
   }),
   async mounted() {
     try {
-      const imagesResponse = await axios.get(api + "/coffeetype/images/" + 1);
+      const typesResponse = await axios.get(api + "/coffeetypes");
 
-      this.imageData = imagesResponse.data.response;
+      if (Array.isArray(typesResponse.data.response)) {
+        // Append each element of the response data to the types array
+        typesResponse.data.response.forEach((element) => {
+          this.types.push(element);
+        });
+      } else {
+        console.error(
+          "Invalid response data format:",
+          typesResponse.data.response
+        );
+      }
     } catch (error) {
-      console.error("There is error on fetching image:", error);
+      console.error("Error fetching coffee types:", error);
     }
   },
   methods: {
@@ -102,14 +292,74 @@ export default {
       const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
       return `data:image/jpeg;base64,${base64Image}`;
     },
+    async clickTypeCard(ID, index) {
+      this.overlay = !this.overlay;
+      this.selectedIndex = index;
+      if (ID != this.selectedTypeID) {
+        this.selectedTypeID = ID;
+        try {
+          this.getTypeDetail(ID);
+          this.getDetailImages(ID);
+          this.getTypeGasStates(ID);
+        } catch (error) {
+          console.error("Error fetching coffee type:", error);
+        }
+      }
+    },
+    async getDetailImages(ID) {
+      try {
+        const imagesResponse = await axios.get(
+          api + "/coffeetypes/images/" + ID
+        );
+
+        this.detailImageData = imagesResponse.data.response;
+      } catch (error) {
+        console.error("There is error on fetching image:", error);
+      }
+    },
+    async getTypeDetail(ID) {
+      try {
+        const typeCoffeeResponse = await axios.get(
+          api + "/coffeetypes/type/" + ID
+        );
+        this.typeDetail = typeCoffeeResponse.data.response; // Assign response data to types
+      } catch (error) {
+        console.error("Error fetching coffee type:", error);
+      }
+    },
+    async getTypeGasStates(ID) {
+      try {
+        const gasStatesResponse = await axios.get(
+          api + "/coffeetypes/type/gasstates/" + ID
+        );
+        this.gasStates = gasStatesResponse.data.response; // Assign response data to types
+      } catch (error) {
+        console.error("Error fetching coffee type gas states:", error);
+      }
+    },
   },
   watch: {
     imageData(val) {
       this.imageData = val;
-      this.frontImage = this.getImageUrl(val[0].ImageDataFront.data);
+
+      this.cardImage = this.getImageUrl(val[0].ImageDataFront.data);
     },
-    frontImage(val) {
-      this.frontImage = val;
+    cardImage(val) {
+      this.cardImage = val;
+    },
+    search(val) {
+      this.search = val;
+    },
+    select(val) {
+      this.select = val;
+    },
+    selectedTypeID(val) {
+      this.selectedTypeID = val;
+    },
+    overlay(val) {
+      if (val == true) {
+        this.window = 0;
+      }
     },
   },
 };
@@ -122,5 +372,11 @@ export default {
   opacity: 0.9;
   position: absolute;
   width: 100%;
+}
+.cardbgcolor {
+  background-color: rgba(185, 160, 130, 0.5);
+}
+.whitebg {
+  background-color: white;
 }
 </style>
