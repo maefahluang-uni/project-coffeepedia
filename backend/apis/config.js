@@ -14,7 +14,7 @@ const CLOUD_MYSQL_DB_PORT = env.env("CLOUD_MYSQL_DB_HOST", "23068");
 const CLOUD_MYSQL_DB_USER = env.env("CLOUD_MYSQL_DB_USER", "avnadmin");
 const CLOUD_MYSQL_DB_PASSWORD = env.env(
   "CLOUD_MYSQL_DB_PASSWORD",
-  "AVNS_D6rC6flqDOoSM2k9b1k"
+  "AVNS_5K4ToQoZu-RbcRZYa_f"
 );
 const CLOUD_MYSQL_DB = env.env("CLOUD_MYSQL_DB", "dbcoffee_db");
 

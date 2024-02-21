@@ -2,24 +2,28 @@
   <div>
     <v-container>
       <div
-        v-if="(type == null) & (imageData == '')"
+        v-if="(type == null) & (detailImageData == '')"
         class="d-flex justify-center"
       >
         <span class="text-h2">No data</span>
       </div>
       <div v-else>
         <v-window v-model="window" show-arrows>
-          <v-window-item v-for="n in imageData.length" :key="n">
+          <v-window-item v-for="n in detailImageData.length" :key="n">
             <v-card height="200px" class="d-flex justify-center align-center">
               <img
-                :src="this.getImageUrl(imageData[n - 1].ImageDataFront.data)"
+                :src="
+                  this.getImageUrl(detailImageData[n - 1].ImageDataFront.data)
+                "
                 alt="Front Image"
                 width="150"
                 class="mr-10"
                 contain
               />
               <img
-                :src="this.getImageUrl(imageData[n - 1].ImageDataBack.data)"
+                :src="
+                  this.getImageUrl(detailImageData[n - 1].ImageDataBack.data)
+                "
                 alt="Front Image"
                 width="150"
                 contain
@@ -53,7 +57,7 @@ export default {
     return {
       index: 0,
       type: null, // Initialize types as null or an empty array/object
-      imageData: "",
+      detailImageData: "",
       frontImage: "",
       backImage: "",
       window: 0,
@@ -81,10 +85,12 @@ export default {
     async type(val) {
       this.type = val;
       try {
-        const imagesResponse = await axios.get(api + "/coffeetype/images/" + 1);
+        const imagesResponse = await axios.get(
+          api + "/coffeetypes/images/" + 1
+        );
 
-        this.imageData = imagesResponse.data.response;
-        console.log(this.imageData);
+        this.detailImageData = imagesResponse.data.response;
+        console.log(this.detailImageData);
       } catch (error) {
         console.error("There is error on fetching image:", error);
       }

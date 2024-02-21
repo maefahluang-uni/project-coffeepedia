@@ -8,8 +8,19 @@ const getTypeCoffee = async (req, res) => {
   const type = await service.getTypeCoffee(req.params.id);
   res.send(type);
 };
+
+const getTypeCoffeeGasStates = async (req, res) => {
+  const gasStates = await service.getTypeCoffeeGasStates(req.params.id);
+  res.send(gasStates);
+};
+
 const getTypeCoffeeImages = async (req, res) => {
   const images = await service.getTypeCoffeeImages(req.params.id);
   res.send(images);
 };
-module.exports = { getTypesCoffee, getTypeCoffee, getTypeCoffeeImages };
+module.exports = {
+  getTypesCoffee,
+  getTypeCoffee,
+  getTypeCoffeeGasStates,
+  getTypeCoffeeImages,
+};
