@@ -8,6 +8,8 @@ const conn = mysql.createConnection({
   password: config.CLOUD_MYSQL_DB_PASSWORD,
   database: config.CLOUD_MYSQL_DB,
   port: config.CLOUD_MYSQL_DB_PORT,
+  connectTimeout: 20000, // Set the connection timeout to 20 seconds (in milliseconds)
+  acquireTimeout: 20000,
 });
 //connect to database
 conn.connect((error) => {
