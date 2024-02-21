@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <div class="justify-center d-flex mt-5 mb-5">
-      <v-btn-toggle v-model="filterPocess" class="" mandatory>
+      <v-btn-toggle v-model="filterPocess" class="d-none d-sm-flex" mandatory>
         <v-btn
           color="rgb(140, 115, 70)"
           value=""
@@ -35,6 +35,7 @@
         >
         </v-btn>
       </v-btn-toggle>
+      <div class="d-flex d-sm-none">{Process dropdown list}</div>
     </div>
     <v-data-iterator
       :items="types"
