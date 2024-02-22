@@ -57,10 +57,24 @@ WHERE
 type_coffee_image.TypeID = ?;
 `;
 
+const GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID = `
+SELECT 
+drink_suggest.DrinkName, 
+drink_suggest.icon 
+FROM 
+drink_suggest
+JOIN
+type_coffee ON drink_suggest.TypeID = type_coffee.ID
+WHERE
+type_coffee.ID = ?  
+ORDER BY drink_suggest.DrinkName ASC;
+`;
+
 // Export the SQL queries
 module.exports = {
   GET_TYPE_COFFEE_BY_ID,
   GET_TYPE_COFFEE_GAS_STATES,
   GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID,
   GET_TYPES_COFFEE,
+  GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID,
 };

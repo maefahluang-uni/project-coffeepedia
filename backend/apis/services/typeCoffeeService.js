@@ -94,9 +94,26 @@ const getTypeCoffeeImages = async (TypeID) => {
   }
 };
 
+const getTypeCoffeeDrinkSuggestion = async (TypeID) => {
+  try {
+    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID;
+    let results = await conn.awaitQuery(sql, TypeID);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getTypeCoffeeImages function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
 module.exports = {
   getTypesCoffee,
   getTypeCoffee,
   getTypeCoffeeGasStates,
   getTypeCoffeeImages,
+  getTypeCoffeeDrinkSuggestion,
 };

@@ -72,6 +72,7 @@
 <script>
 import axios from "axios";
 const api = "http://localhost:5000/api";
+//const api = "https://5ea0-202-28-45-143.ngrok-free.app/api";
 
 export default {
   data() {

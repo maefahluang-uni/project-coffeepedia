@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 21, 2024 at 05:13 PM
+-- Generation Time: Feb 22, 2024 at 04:32 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.0.1
 
@@ -71,8 +71,18 @@ INSERT INTO `contact_info` (`ID`, `Address`, `Phone`, `Email`) VALUES
 CREATE TABLE `drink_suggest` (
   `ID` int(11) NOT NULL,
   `TypeID` int(11) NOT NULL,
-  `DrinkName` varchar(40) NOT NULL
+  `DrinkName` varchar(40) NOT NULL,
+  `icon` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `drink_suggest`
+--
+
+INSERT INTO `drink_suggest` (`ID`, `TypeID`, `DrinkName`, `icon`) VALUES
+(1, 1, 'Espresso', 'coffee-maker'),
+(2, 1, 'Americano', 'coffee'),
+(3, 1, 'Drip', 'kettle-pour-over');
 
 -- --------------------------------------------------------
 
@@ -249,7 +259,7 @@ ALTER TABLE `contact_info`
 -- AUTO_INCREMENT for table `drink_suggest`
 --
 ALTER TABLE `drink_suggest`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `gas_state`

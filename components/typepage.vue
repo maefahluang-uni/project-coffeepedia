@@ -248,82 +248,29 @@
                   </div>
                   <div v-else>
                     <div
-                      class="d-none d-sm-flex justify-space-between px-10 text-center"
+                      class="d-flex"
+                      v-for="(drink, index) in drinkSuggest"
+                      :key="index"
+                      cols="12"
+                      sm="4"
                     >
-                      <v-card
-                        class="ma-5 rounded-xl"
-                        variant="outlined"
-                        color="rgb(140, 115, 70)"
-                      >
-                        <div class="d-flex justify-center mt-3">
-                          <v-icon size="80" color="black"
-                            >mdi-{{ icon[0] }}</v-icon
-                          >
-                        </div>
-
-                        <div class="text-h6 font-weight-bold pa-3">
-                          Espresso
-                        </div>
-                      </v-card>
-                      <v-card
-                        class="ma-5 rounded-xl"
-                        variant="outlined"
-                        color="rgb(140, 115, 70)"
-                      >
-                        <div class="d-flex justify-center mt-3">
-                          <v-icon size="80" color="black"
-                            >mdi-{{ icon[1] }}</v-icon
-                          >
-                        </div>
-
-                        <div class="text-h6 font-weight-bold pa-3">
-                          Americano
-                        </div>
-                      </v-card>
-                      <v-card
-                        class="ma-5 rounded-xl"
-                        variant="outlined"
-                        color="rgb(140, 115, 70)"
-                        width="100"
-                      >
-                        <div class="d-flex justify-center mt-3">
-                          <v-icon size="80" color="black"
-                            >mdi-{{ icon[2] }}</v-icon
-                          >
-                        </div>
-
-                        <div class="text-h6 font-weight-bold pa-3">Drip</div>
-                      </v-card>
-                    </div>
-
-                    <div class="d-flex d-sm-none justify-space-between pa-3">
-                      <v-card
-                        class="elevation-3"
-                        variant="outlined"
-                        color="rgb(140, 115, 70)"
-                      >
-                        <v-icon size="50" color="black"
-                          >mdi-{{ icon[0] }}</v-icon
+                      <v-col>
+                        <v-card
+                          class="rounded-xl"
+                          variant="outlined"
+                          color="rgb(140, 115, 70)"
                         >
-                      </v-card>
-                      <v-card
-                        class="elevation-3"
-                        variant="outlined"
-                        color="rgb(140, 115, 70)"
-                      >
-                        <v-icon size="50" color="black"
-                          >mdi-{{ icon[1] }}</v-icon
-                        >
-                      </v-card>
-                      <v-card
-                        class="elevation-3"
-                        variant="outlined"
-                        color="rgb(140, 115, 70)"
-                      >
-                        <v-icon size="50" color="black"
-                          >mdi-{{ icon[2] }}</v-icon
-                        >
-                      </v-card>
+                          <div class="d-flex justify-center mt-3">
+                            <v-icon size="40" color="black"
+                              >mdi-{{ drinkSuggest[index].icon }}</v-icon
+                            >
+                          </div>
+
+                          <div class="font-weight-bold text-center pa-3">
+                            {{ drinkSuggest[index].DrinkName }}
+                          </div>
+                        </v-card>
+                      </v-col>
                     </div>
                   </div>
                 </v-card>
@@ -338,6 +285,8 @@
 
 <script>
 import axios from "axios";
+//https://5ea0-202-28-45-143.ngrok-free.app/
+//const api = "http://localhost:5000/api";
 const api = "http://localhost:5000/api";
 
 export default {
@@ -365,7 +314,6 @@ export default {
     frontImage: "",
     backImage: "",
     drinkSuggest: "",
-    icon: ["coffee-maker", "coffee", "kettle-pour-over"],
     window: 0,
   }),
   async mounted() {
@@ -405,6 +353,7 @@ export default {
           this.getDetailImages(ID);
 
           this.getTypeGasStates(ID);
+          this.getTypeDrinkSuggestion(ID);
         } catch (error) {
           console.error("Error fetching coffee type:", error);
         }
@@ -446,6 +395,17 @@ export default {
           api + "/coffeetypes/type/gasstates/" + ID
         );
         this.gasStates = gasStatesResponse.data.response;
+      } catch (error) {
+        console.error("Error fetching coffee type gas states:", error);
+      }
+    },
+    async getTypeDrinkSuggestion(ID) {
+      try {
+        const drinksResponse = await axios.get(
+          api + "/coffeetypes/type/drinks/" + ID
+        );
+        this.drinkSuggest = drinksResponse.data.response;
+        //console.log(drinksResponse.data.response[1].DrinkName);
       } catch (error) {
         console.error("Error fetching coffee type gas states:", error);
       }
