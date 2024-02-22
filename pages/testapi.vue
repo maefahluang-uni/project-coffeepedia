@@ -1,99 +1,235 @@
 <template>
-  <div>
-    <v-container>
-      <div
-        v-if="(type == null) & (detailImageData == '')"
-        class="d-flex justify-center"
-      >
-        <span class="text-h2">No data</span>
-      </div>
-      <div v-else>
-        <v-window v-model="window" show-arrows>
-          <v-window-item v-for="n in detailImageData.length" :key="n">
-            <v-card height="200px" class="d-flex justify-center align-center">
-              <img
-                :src="
-                  this.getImageUrl(detailImageData[n - 1].ImageDataFront.data)
-                "
-                alt="Front Image"
-                width="150"
-                class="mr-10"
-                contain
-              />
-              <img
-                :src="
-                  this.getImageUrl(detailImageData[n - 1].ImageDataBack.data)
-                "
-                alt="Front Image"
-                width="150"
-                contain
-              />
-            </v-card>
-          </v-window-item>
-        </v-window>
+  <v-data-table
+    :headers="headers"
+    :items="desserts"
+    :sort-by="[{ key: 'calories', order: 'asc' }]"
+    class="pa-5"
+  >
+    <template v-slot:top>
+      <v-toolbar flat>
+        <v-toolbar-title>Types of Roasted Coffee Bean</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-dialog v-model="dialog" max-width="500px">
+          <template v-slot:activator="{ props }">
+            <v-btn class="" v-bind="props" color="success">
+              <v-card class="mr-3" flat variant="outlined">
+                <v-icon size="20">mdi-plus</v-icon>
+              </v-card>
 
-        <div class="text-center">
-          {{ type[0].ID }}
-          <br />{{ type[0].RoastName }} <br />{{ type[0].Tempurature }}
-          °C
-          <br />
-          <div v-if="type[0].CrackState == '1'">first crack</div>
-          <div v-else-if="type[0].CrackState == '2'">
-            between first and second crack
-          </div>
-          <div v-else="type[0].CrackState == '3'">second crack</div>
-          {{ type[0].ProcessName }} <br />{{ type[0].Flavor }}
-        </div>
-      </div>
-    </v-container>
-  </div>
+              <div>Add type</div>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="text-h5">{{ formTitle }}</span>
+            </v-card-title>
+
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.name"
+                      label="Dessert name"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.calories"
+                      label="Calories"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.fat"
+                      label="Fat (g)"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.carbs"
+                      label="Carbs (g)"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.protein"
+                      label="Protein (g)"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue-darken-1" variant="text" @click="close">
+                Cancel
+              </v-btn>
+              <v-btn color="blue-darken-1" variant="text" @click="save">
+                Save
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+        <v-dialog v-model="dialogDelete" max-width="500px">
+          <v-card>
+            <v-card-title class="text-h5"
+              >Are you sure you want to delete this item?</v-card-title
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
+                >Cancel</v-btn
+              >
+              <v-btn
+                color="blue-darken-1"
+                variant="text"
+                @click="deleteItemConfirm"
+                >OK</v-btn
+              >
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-toolbar>
+    </template>
+    <template v-slot:item.actions="{ item }">
+      <v-icon size="small" class="me-2" @click="editItem(item)">
+        mdi-pencil
+      </v-icon>
+      <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+    </template>
+    <template v-slot:no-data>
+      <v-btn color="primary" @click="initialize"> Reset </v-btn>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
 import axios from "axios";
 const api = "http://localhost:5000/api";
 export default {
-  data() {
-    return {
-      index: 0,
-      type: null, // Initialize types as null or an empty array/object
-      detailImageData: "",
-      frontImage: "",
-      backImage: "",
-      window: 0,
-    };
-  },
-  async mounted() {
-    try {
-      const typeCoffeeResponse = await axios.get(
-        api + "/coffeetypes/type/" + 1
-      );
-      this.type = typeCoffeeResponse.data.response; // Assign response data to types
-    } catch (error) {
-      console.error("Error fetching coffee type:", error);
-    }
-  },
-  methods: {
-    getImageUrl(buffer) {
-      if (!buffer) return ""; // Return empty string if buffer is null or undefined
-      const uint8Array = new Uint8Array(buffer);
-      const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
-      return `data:image/jpeg;base64,${base64Image}`;
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    headers: [
+      {
+        title: "Dessert (100g serving)",
+        align: "start",
+        sortable: false,
+        key: "name",
+      },
+      { title: "Calories", key: "calories" },
+      { title: "Fat (g)", key: "fat" },
+      { title: "Carbs (g)", key: "carbs" },
+      { title: "Protein (g)", key: "protein" },
+      { title: "Actions", key: "actions", sortable: false },
+    ],
+    desserts: [],
+    editedIndex: -1,
+    editedItem: {
+      name: "",
+      calories: 0,
+      fat: 0,
+      carbs: 0,
+      protein: 0,
+    },
+    defaultItem: {
+      name: "",
+      calories: 0,
+      fat: 0,
+      carbs: 0,
+      protein: 0,
+    },
+  }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
   },
-  watch: {
-    async type(val) {
-      this.type = val;
-      try {
-        const imagesResponse = await axios.get(
-          api + "/coffeetypes/images/" + 1
-        );
 
-        this.detailImageData = imagesResponse.data.response;
-        console.log(this.detailImageData);
-      } catch (error) {
-        console.error("There is error on fetching image:", error);
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+
+  created() {
+    this.initialize();
+  },
+
+  methods: {
+    initialize() {
+      this.desserts = [
+        {
+          name: "Frozen Yogurt",
+          calories: 159,
+          fat: 6.0,
+          carbs: 24,
+          protein: 4.0,
+        },
+        {
+          name: "Ice cream sandwich",
+          calories: 237,
+          fat: 9.0,
+          carbs: 37,
+          protein: 4.3,
+        },
+        {
+          name: "Eclair",
+          calories: 262,
+          fat: 16.0,
+          carbs: 23,
+          protein: 6.0,
+        },
+      ];
+    },
+
+    editItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialog = true;
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.desserts.indexOf(item);
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1);
+      this.closeDelete();
+    },
+
+    close() {
+      this.dialog = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    closeDelete() {
+      this.dialogDelete = false;
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem);
+        this.editedIndex = -1;
+      });
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+      } else {
+        this.desserts.push(this.editedItem);
       }
+      this.close();
     },
   },
 };
