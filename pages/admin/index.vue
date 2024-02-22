@@ -38,3 +38,5 @@ export default {
   height: 80vh;
 }
 </style>
+    
+</template>

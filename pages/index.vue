@@ -1,19 +1,21 @@
 <template>
-  <div class="content bg  flex-column">
-    <p class="mb-5 text-h2 font-weight-bold d-none d-sm-flex">Database system's classification of roasted coffee bean</p>
-    <p class="mb-5 text-h4 font-weight-bold d-flex d-sm-none">Database system's classification of roasted coffee bean</p>
-    
+  <div class="content bg flex-column">
+    <p class="mb-5 text-h2 font-weight-bold d-none d-sm-flex">
+      Database system's classification of roasted coffee bean
+    </p>
+    <p class="mb-5 text-h4 font-weight-bold d-flex d-sm-none">
+      Database system's classification of roasted coffee bean
+    </p>
+
     <v-btn
       to="/homepage"
       size="large"
-      class="my-btn font-weight-bold mt-15 "
+      class="font-weight-bold mt-15"
       rounded
       color="#38241d"
       >Enter site</v-btn
     >
-  
   </div>
-
 </template>
 
 <script>
@@ -22,7 +24,7 @@ export default {};
 <style scoped>
 .bg {
   /*need to change background image to coffee field*/
-  background-image: url("../assets/welcomepic.jpg");
+  background-image: url("../assets/welcomepic2.jpg");
   height: 100%;
   background-position: center;
   background-repeat: no-repeat;
@@ -38,9 +40,9 @@ export default {};
 }
 .my-btn {
   opacity: 0.7;
-  
 }
 p {
-  color: rgb(236, 236, 236);
+  color: rgb(224, 224, 224);
+  text-shadow: 2px 2px #000000;
 }
 </style>
