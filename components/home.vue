@@ -1,24 +1,26 @@
 <template>
   <div class="bg-repeat">
-    <v-card class="mx-auto mb-15" color="rgba(200, 176, 153, 0.7)">
+    <v-card class="mx-auto mb-15 blur" color="rgba(200, 176, 153, 0.6)">
       <v-row>
         <v-col align-self="center">
-          <!--Show on sx screen 	600px-- -->
+          <!--Show on xs screen 	600px-- -->
           <div class="d-flex d-sm-none justify-center mt-5 mb-5">
             <div>
-              <div
-                class="d-inline-flex justify-center align-center location ml-n10"
-              >
-                <img height="50" src="@/assets/location-no-bg.gif" />
+              <div class="mb-8">
+                <div
+                  class="d-inline-flex justify-center align-center location ml-n10"
+                >
+                  <img height="50" src="@/assets/location-no-bg.gif" />
 
-                <div class="text-h4">
-                  <h4>Location</h4>
+                  <div class="text-h4">
+                    <h4>Location</h4>
+                  </div>
                 </div>
-              </div>
 
-              <p class="mb-8 mt-2 text-center">
-                Coffee bean location in the north of Thailand
-              </p>
+                <p class="mt-2 text-center font-weight-bold text-black">
+                  Coffee bean location in the north of Thailand
+                </p>
+              </div>
               <v-btn
                 color="rgb(140, 115, 70)"
                 height="25"
@@ -201,10 +203,10 @@ export default {
 </script>
 <style scoped>
 .bg-repeat {
-  background-image: url("../assets/coffeeHome-30.png");
+  background-image: url("../assets/welcomepic2.jpg");
   background-position: center;
-  background-repeat: repeat;
-  background-size: 500px;
+
+  background-size: cover;
 }
 .viewbtn {
   left: 50%;
@@ -229,5 +231,8 @@ export default {
 }
 .divider {
   z-index: -1;
+}
+.blur {
+  backdrop-filter: blur(4px);
 }
 </style>

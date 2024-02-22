@@ -1,48 +1,44 @@
 <template>
-  <div class="content bg flex-column">
-    <p class="mb-5 text-h2 font-weight-bold d-none d-sm-flex">
-      Database system's classification of roasted coffee bean
-    </p>
-    <p class="mb-5 text-h4 font-weight-bold d-flex d-sm-none">
-      Database system's classification of roasted coffee bean
-    </p>
+  <v-divider color="brown"> </v-divider>
+  <v-card flat>
+    <v-tabs v-model="tab" color="rgb(240, 200, 165)" align-tabs="center">
+      <v-tab :value="1" class="font-weight-bold">Home</v-tab>
+      <v-tab :value="2" class="font-weight-bold">Type coffee beans</v-tab>
+      <v-tab :value="3" class="font-weight-bold">Blog</v-tab>
+      <v-tab :value="4" class="font-weight-bold">News</v-tab>
+      <v-tab :value="5" class="font-weight-bold">Contact</v-tab>
+    </v-tabs>
+  </v-card>
+  <v-card flat>
+    <v-window v-model="tab">
+      <v-window-item :value="1"> <home /> </v-window-item>
+      <v-window-item :value="2"><typepage /> </v-window-item>
+      <v-window-item :value="3"> <blog /> </v-window-item>
+      <v-window-item :value="4"> <news /> </v-window-item>
 
-    <v-btn
-      to="/homepage"
-      size="large"
-      class="font-weight-bold mt-15"
-      rounded
-      color="#38241d"
-      >Enter site</v-btn
-    >
-  </div>
+      <v-window-item :value="5">
+        <div class="d-flex justify-center align-center contact-window">
+          <contact />
+        </div>
+      </v-window-item>
+    </v-window>
+  </v-card>
 </template>
 
 <script>
-export default {};
+import home from "../components/home.vue";
+import typepage from "../components/typepage.vue";
+import news from "../components/news.vue";
+import blog from "../components/blog.vue";
+import contact from "../components/contact.vue";
+export default {
+  data: () => ({
+    tab: 1,
+  }),
+};
 </script>
-<style scoped>
-.bg {
-  /*need to change background image to coffee field*/
-  background-image: url("../assets/welcomepic2.jpg");
-  height: 100%;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-.content {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  position: relative;
-}
-.my-btn {
-  opacity: 0.7;
-}
-p {
-  color: rgb(224, 224, 224);
-  text-shadow: 2px 2px #000000;
+<style>
+.contact-window {
+  height: 80vh;
 }
 </style>

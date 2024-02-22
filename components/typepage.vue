@@ -103,7 +103,15 @@
         <v-overlay v-model="overlay" class="align-top justify-center pt-10">
           <v-card class="overflow-auto cardheightflex cardwidthflex">
             <v-container>
-              <div v-if="typeDetail == ''">
+              <div
+                v-if="
+                  (typeDetail == '') &
+                  (gasStates == '') &
+                  (drinkSuggest == '') &
+                  (detailImageLength == 0) &
+                  (drinkSuggest == '')
+                "
+              >
                 <span class="text-h3">No type data</span>
               </div>
               <div v-else>
@@ -292,6 +300,7 @@ const api = "http://localhost:5000/api";
 export default {
   data: () => ({
     overlay: false,
+    loading: true,
     itemsPerPage: 9,
     length: 3,
     onboarding: 1,
@@ -348,12 +357,18 @@ export default {
       this.selectedIndex = index;
       if (ID != this.selectedTypeID) {
         this.selectedTypeID = ID;
+
+        this.typeDetail = "";
+        this.gasStates = "";
+        this.drinkSuggest = "";
+        this.detailImageLength = 0;
+        this.drinkSuggest = "";
         try {
           this.getTypeDetail(ID);
           this.getDetailImages(ID);
-
           this.getTypeGasStates(ID);
           this.getTypeDrinkSuggestion(ID);
+          this.loading = false;
         } catch (error) {
           console.error("Error fetching coffee type:", error);
         }
@@ -433,6 +448,21 @@ export default {
       if (val == true) {
         this.window = 0;
       }
+    },
+    typeDetail(val) {
+      this.typeDetail = val;
+    },
+    gasStates(val) {
+      this.gasStates = val;
+    },
+    drinkSuggest(val) {
+      this.drinkSuggest = val;
+    },
+    detailImageLength(val) {
+      this.detailImageLength = val;
+    },
+    drinkSuggest(val) {
+      this.drinkSuggest = val;
     },
   },
 };
