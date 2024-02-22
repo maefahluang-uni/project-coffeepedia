@@ -1,10 +1,5 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="desserts"
-    :sort-by="[{ key: 'calories', order: 'asc' }]"
-    class="pa-5"
-  >
+  <v-data-table :headers="headers" :items="types" class="pa-5">
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Types of Roasted Coffee Bean</v-toolbar-title>
@@ -126,7 +121,7 @@ export default {
       { title: "Protein (g)", key: "protein" },
       { title: "Actions", key: "actions", sortable: false },
     ],
-    desserts: [],
+    types: [],
     editedIndex: -1,
     editedItem: {
       name: "",
@@ -165,45 +160,23 @@ export default {
 
   methods: {
     initialize() {
-      this.desserts = [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-        },
-      ];
+      this.types = [];
     },
 
     editItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.desserts.indexOf(item);
+      this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1);
+      this.types.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
@@ -225,9 +198,9 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem);
+        Object.assign(this.types[this.editedIndex], this.editedItem);
       } else {
-        this.desserts.push(this.editedItem);
+        this.types.push(this.editedItem);
       }
       this.close();
     },
