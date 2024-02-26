@@ -121,12 +121,18 @@
         </v-row>
         <!--Provide coffee detail on this overlay-->
         <v-overlay v-model="overlay" class="align-top justify-center pt-10">
-          <v-card class="overflow-auto cardheightflex cardwidthflex">
-            <v-container>
-              <div v-if="typeDetail == ''">
-                <span class="text-h3">No type data</span>
-              </div>
-              <div v-else>
+          <v-card
+            class="overflow-auto cardheightflex cardwidthflex d-flex justify-center"
+          >
+            <div v-if="typeDetail == ''" class="d-flex align-center">
+              <v-progress-circular
+                :size="70"
+                :width="7"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+            <v-container v-else>
+              <div>
                 <div class="d-flex justify-center text-center mt-5">
                   <v-card max-width="250" flat>
                     <div class="font-weight-bold text-brown text-h4">
@@ -156,10 +162,14 @@
                   v-if="detailImageLength == 0"
                   class="d-flex justify-center align-center py-5"
                 >
-                  <v-icon size="50">mdi-image-multiple</v-icon>
-                  <div>No roasted coffee images</div>
+                  <v-progress-circular
+                    :size="30"
+                    :width="2"
+                    indeterminate
+                  ></v-progress-circular>
+                  <div class="pl-2">Loading sample images..</div>
                 </div>
-                <div v-else class="">
+                <div v-else>
                   <div>
                     <v-window v-model="window" show-arrows>
                       <v-window-item v-for="n in detailImageLength" :key="n">
@@ -187,29 +197,54 @@
                   </div>
 
                   <div class="py-5 d-flex d-sm-none justify-center">
-                    <v-window v-model="window">
-                      <v-window-item v-for="n in detailImageLength" :key="n">
-                        <v-card
-                          height="100px"
-                          class="d-flex justify-center align-center"
-                          flat
+                    <div>
+                      <v-window v-model="window">
+                        <v-window-item v-for="n in detailImageLength" :key="n">
+                          <v-card
+                            height="100px"
+                            class="d-flex justify-center align-center"
+                            flat
+                          >
+                            <img
+                              :src="detailImagesFront[n - 1]"
+                              alt="Front Image"
+                              width="100"
+                              class="mr-5"
+                              contain
+                            />
+                            <img
+                              :src="detailImagesBack[n - 1]"
+                              alt="Front Image"
+                              width="100"
+                              contain
+                            />
+                          </v-card>
+                        </v-window-item>
+                      </v-window>
+                      <v-item-group
+                        v-model="window"
+                        class="text-center"
+                        mandatory
+                      >
+                        <v-item
+                          v-for="n in detailImageLength"
+                          :key="`btn-${n}`"
+                          v-slot="{ isSelected, toggle }"
+                          :value="n - 1"
                         >
-                          <img
-                            :src="detailImagesFront[n - 1]"
-                            alt="Front Image"
-                            width="100"
-                            class="mr-5"
-                            contain
-                          />
-                          <img
-                            :src="detailImagesBack[n - 1]"
-                            alt="Front Image"
-                            width="100"
-                            contain
-                          />
-                        </v-card>
-                      </v-window-item>
-                    </v-window>
+                          <v-icon
+                            size="15"
+                            :color="
+                              isSelected
+                                ? 'rgba(000, 000, 000, 0.5)'
+                                : 'rgba(000, 000, 000, 0.2)'
+                            "
+                            @click="toggle"
+                            >mdi-record</v-icon
+                          >
+                        </v-item>
+                      </v-item-group>
+                    </div>
                   </div>
                 </div>
 
@@ -254,46 +289,85 @@
                     </div>
                   </v-card>
                 </div>
-
-                <v-card class="mx-5" flat>
-                  <div class="font-weight-bold text-brown text-h5">
-                    Coffee drink suggestion
-                  </div>
-                  <v-divider
-                    class="border-opacity-75 my-3"
-                    color="brown"
-                  ></v-divider>
-                  <div v-if="drinkSuggest == ''" class="text-center">
-                    No drink suggestion
-                  </div>
-                  <div v-else>
-                    <div
-                      class="d-flex"
-                      v-for="(drink, index) in drinkSuggest"
-                      :key="index"
-                      cols="12"
-                      sm="4"
-                    >
-                      <v-col>
-                        <v-card
-                          class="rounded-xl"
-                          variant="outlined"
-                          color="rgb(140, 115, 70)"
-                        >
-                          <div class="d-flex justify-center mt-3">
-                            <v-icon size="40" color="black"
-                              >mdi-{{ drinkSuggest[index].icon }}</v-icon
-                            >
-                          </div>
-
-                          <div class="font-weight-bold text-center pa-3">
-                            {{ drinkSuggest[index].DrinkName }}
-                          </div>
-                        </v-card>
-                      </v-col>
+                <div>
+                  <v-card class="mx-5" flat>
+                    <div class="font-weight-bold text-brown text-h5">
+                      Coffee drink suggestion
                     </div>
-                  </div>
-                </v-card>
+                    <v-divider
+                      class="border-opacity-75 my-3"
+                      color="brown"
+                    ></v-divider>
+
+                    <div
+                      v-if="loadingSuggest"
+                      class="d-flex align-center justify-center"
+                    >
+                      <v-progress-circular
+                        :size="30"
+                        :width="2"
+                        indeterminate
+                      ></v-progress-circular>
+                      <div class="pl-2">Loading sugestion..</div>
+                    </div>
+                    <div v-else-if="drinkSuggest == ''" class="text-center">
+                      No drink suggestion
+                    </div>
+                    <div v-else class="mb-4">
+                      <div class="d-none d-sm-flex justify-space-between px-4">
+                        <div
+                          v-for="(drink, index) in drinkSuggest"
+                          :key="index"
+                        >
+                          <div>
+                            <v-card
+                              width="150"
+                              class="rounded-xl"
+                              variant="outlined"
+                              color="rgb(140, 115, 70)"
+                            >
+                              <div class="d-flex justify-center mt-3">
+                                <v-icon size="40" color="black"
+                                  >mdi-{{ drink.icon }}</v-icon
+                                >
+                              </div>
+
+                              <div class="font-weight-bold text-center pa-3">
+                                {{ drink.DrinkName }}
+                              </div>
+                            </v-card>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="d-flex d-sm-none justify-center">
+                        <div>
+                          <div
+                            v-for="(drink, index) in drinkSuggest"
+                            :key="index"
+                            class="py-2"
+                          >
+                            <v-card
+                              width="200"
+                              class="rounded-xl"
+                              variant="outlined"
+                              color="rgb(140, 115, 70)"
+                            >
+                              <div class="d-flex justify-center mt-3">
+                                <v-icon size="40" color="black"
+                                  >mdi-{{ drink.icon }}</v-icon
+                                >
+                              </div>
+
+                              <div class="font-weight-bold text-center pa-3">
+                                {{ drink.DrinkName }}
+                              </div>
+                            </v-card>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </v-card>
+                </div>
               </div>
             </v-container>
           </v-card>
@@ -305,13 +379,13 @@
 
 <script>
 import axios from "axios";
-//https://5ea0-202-28-45-143.ngrok-free.app/
-//const api = "http://localhost:5000/api";
 const api = "http://localhost:5000/api";
+//const api = "http://0.tcp.ap.ngrok.io:10783/api";
 
 export default {
   data: () => ({
     overlay: false,
+    loading: true,
     itemsPerPage: 9,
     length: 3,
     onboarding: 1,
@@ -335,6 +409,7 @@ export default {
     frontImage: "",
     backImage: "",
     drinkSuggest: "",
+    loadingSuggest: true,
     window: 0,
   }),
   async mounted() {
@@ -369,12 +444,19 @@ export default {
       this.selectedIndex = index;
       if (ID != this.selectedTypeID) {
         this.selectedTypeID = ID;
+
+        this.typeDetail = "";
+        this.gasStates = "";
+        this.drinkSuggest = "";
+        this.detailImageLength = 0;
+        this.drinkSuggest = "";
+        this.loadingSuggest = true;
         try {
           this.getTypeDetail(ID);
           this.getDetailImages(ID);
-
           this.getTypeGasStates(ID);
           this.getTypeDrinkSuggestion(ID);
+          this.loading = false;
         } catch (error) {
           console.error("Error fetching coffee type:", error);
         }
@@ -425,7 +507,14 @@ export default {
         const drinksResponse = await axios.get(
           api + "/coffeetypes/type/drinks/" + ID
         );
-        this.drinkSuggest = drinksResponse.data.response;
+        if (drinksResponse.data.response != null) {
+          this.loadingSuggest = false;
+          this.drinkSuggest = drinksResponse.data.response;
+        } else {
+          this.loadingSuggest = false;
+          this.drinkSuggest = "";
+        }
+
         //console.log(drinksResponse.data.response[1].DrinkName);
       } catch (error) {
         console.error("Error fetching coffee type gas states:", error);
@@ -454,6 +543,21 @@ export default {
       if (val == true) {
         this.window = 0;
       }
+    },
+    typeDetail(val) {
+      this.typeDetail = val;
+    },
+    gasStates(val) {
+      this.gasStates = val;
+    },
+    drinkSuggest(val) {
+      this.drinkSuggest = val;
+    },
+    detailImageLength(val) {
+      this.detailImageLength = val;
+    },
+    drinkSuggest(val) {
+      this.drinkSuggest = val;
     },
   },
 };

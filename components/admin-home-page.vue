@@ -1,5 +1,4 @@
 <template>
-  <div><v-divider> </v-divider></div>
   <div class="d-flex justify-center mt-15">
     <h1>A database system's</h1>
     <h1 class="ml-2 text-brown">classification of</h1>
@@ -91,8 +90,8 @@
 
     <v-divider vertical class="mx-10 border-opacity-100"></v-divider>
     <div class="align-start d-flex">
-            <h1>Today</h1>
-        </div>
+      <h1>Today</h1>
+    </div>
     <div class="align-center d-flex">
       <div>
         <div>
