@@ -132,7 +132,7 @@
               ></v-progress-circular>
             </div>
             <v-container v-else>
-              <div>
+              <div class="pb-5 align-center">
                 <div class="d-flex justify-center text-center mt-5">
                   <v-card max-width="250" flat>
                     <div class="font-weight-bold text-brown text-h4">
@@ -289,7 +289,7 @@
                     </div>
                   </v-card>
                 </div>
-                <div>
+                <div class="mt-10">
                   <v-card class="mx-5" flat>
                     <div class="font-weight-bold text-brown text-h5">
                       Coffee drink suggestion
@@ -298,73 +298,65 @@
                       class="border-opacity-75 my-3"
                       color="brown"
                     ></v-divider>
+                  </v-card>
+                </div>
 
-                    <div
-                      v-if="loadingSuggest"
-                      class="d-flex align-center justify-center"
+                <div
+                  v-if="loadingSuggest"
+                  class="d-flex align-center justify-center"
+                >
+                  <v-progress-circular
+                    :size="30"
+                    :width="2"
+                    indeterminate
+                  ></v-progress-circular>
+                  <div class="pl-2">Loading sugestion..</div>
+                </div>
+                <div v-else-if="drinkSuggest == ''" class="text-center">
+                  No drink suggestion
+                </div>
+                <div v-else>
+                  <div class="d-none d-sm-flex justify-space-between">
+                    <v-card
+                      v-for="(drink, index) in drinkSuggest"
+                      :key="index"
+                      width="150"
+                      class="rounded-xl mx-5"
+                      variant="outlined"
+                      color="rgb(140, 115, 70)"
                     >
-                      <v-progress-circular
-                        :size="30"
-                        :width="2"
-                        indeterminate
-                      ></v-progress-circular>
-                      <div class="pl-2">Loading sugestion..</div>
-                    </div>
-                    <div v-else-if="drinkSuggest == ''" class="text-center">
-                      No drink suggestion
-                    </div>
-                    <div v-else class="mb-4">
-                      <div class="d-none d-sm-flex justify-space-between px-4">
-                        <div
-                          v-for="(drink, index) in drinkSuggest"
-                          :key="index"
+                      <div class="d-flex justify-center mt-3">
+                        <v-icon size="40" color="black"
+                          >mdi-{{ drink.icon }}</v-icon
                         >
-                          <div>
-                            <v-card
-                              width="150"
-                              class="rounded-xl"
-                              variant="outlined"
-                              color="rgb(140, 115, 70)"
-                            >
-                              <div class="d-flex justify-center mt-3">
-                                <v-icon size="40" color="black"
-                                  >mdi-{{ drink.icon }}</v-icon
-                                >
-                              </div>
-
-                              <div class="font-weight-bold text-center pa-3">
-                                {{ drink.DrinkName }}
-                              </div>
-                            </v-card>
-                          </div>
-                        </div>
                       </div>
-                      <div class="d-flex d-sm-none justify-center">
-                        <div>
-                          <div
-                            v-for="(drink, index) in drinkSuggest"
-                            :key="index"
-                            class="py-2"
-                          >
-                            <v-card
-                              width="200"
-                              class="rounded-xl"
-                              variant="outlined"
-                              color="rgb(140, 115, 70)"
-                            >
-                              <div class="d-flex justify-center mt-3">
-                                <v-icon size="40" color="black"
-                                  >mdi-{{ drink.icon }}</v-icon
-                                >
-                              </div>
 
-                              <div class="font-weight-bold text-center pa-3">
-                                {{ drink.DrinkName }}
-                              </div>
-                            </v-card>
-                          </div>
-                        </div>
+                      <div class="font-weight-bold text-center pa-3">
+                        {{ drink.DrinkName }}
                       </div>
+                    </v-card>
+                  </div>
+                </div>
+
+                <div
+                  v-for="(drink, index) in drinkSuggest"
+                  :key="index"
+                  class="d-flex d-sm-none justify-center mx-5 mb-5"
+                >
+                  <v-card
+                    width="500"
+                    class="rounded-xl"
+                    variant="outlined"
+                    color="rgb(140, 115, 70)"
+                  >
+                    <div class="d-flex justify-center mt-3">
+                      <v-icon size="40" color="black"
+                        >mdi-{{ drink.icon }}</v-icon
+                      >
+                    </div>
+
+                    <div class="font-weight-bold text-center pa-3">
+                      {{ drink.DrinkName }}
                     </div>
                   </v-card>
                 </div>
