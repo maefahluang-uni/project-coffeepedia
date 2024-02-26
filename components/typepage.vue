@@ -45,9 +45,23 @@
       <template v-slot:header="{ items }">
         <div class="d-none d-sm-flex">
           <v-toolbar class="px-10 d-flex my-5" color="white">
-            <p v-if="types.length == 0" class="flex-grow-1">
-              Loading type coffee beans...
-            </p>
+            <div v-if="loadingTypes" class="d-flex align-center flex-grow-1">
+              <v-progress-circular
+                :size="30"
+                :width="2"
+                indeterminate
+              ></v-progress-circular>
+              <div class="pl-2">Loading types coffee bean..</div>
+            </div>
+            <div
+              v-else-if="types.length == 0"
+              class="flex-grow-1 d-flex align-center"
+            >
+              <div class="mr-3">Cannot get types coffee bean</div>
+              <v-btn variant="outlined" @click="getTypes()" color="error"
+                >Retry</v-btn
+              >
+            </div>
             <p v-else class="flex-grow-1">
               Showing All {{ items.length }} Results
             </p>
@@ -72,7 +86,23 @@
             variant="solo"
             class="mb-5"
           ></v-text-field>
-          <p v-if="types.length == 0">Loading type coffee beans...</p>
+          <div v-if="loadingTypes" class="d-flex align-center">
+            <v-progress-circular
+              :size="30"
+              :width="2"
+              indeterminate
+            ></v-progress-circular>
+            <div class="pl-2">Loading types coffee bean..</div>
+          </div>
+          <div
+            v-else-if="types.length == 0"
+            class="flex-grow-1 d-flex align-center"
+          >
+            <div class="mr-3">Cannot get types coffee bean</div>
+            <v-btn variant="outlined" @click="getTypes()" color="error"
+              >Retry</v-btn
+            >
+          </div>
           <p v-else>Showing All {{ items.length }} Results</p>
         </div>
       </template>
@@ -174,8 +204,7 @@
                     <v-window v-model="window" show-arrows>
                       <v-window-item v-for="n in detailImageLength" :key="n">
                         <v-card
-                          height="200px"
-                          class="d-none d-sm-flex justify-center align-center"
+                          class="d-none d-sm-flex justify-center align-center my-5"
                           flat
                         >
                           <img
@@ -201,21 +230,20 @@
                       <v-window v-model="window">
                         <v-window-item v-for="n in detailImageLength" :key="n">
                           <v-card
-                            height="100px"
-                            class="d-flex justify-center align-center"
+                            class="d-flex justify-center align-center my-5"
                             flat
                           >
                             <img
                               :src="detailImagesFront[n - 1]"
                               alt="Front Image"
-                              width="100"
+                              width="125"
                               class="mr-5"
                               contain
                             />
                             <img
                               :src="detailImagesBack[n - 1]"
                               alt="Front Image"
-                              width="100"
+                              width="125"
                               contain
                             />
                           </v-card>
@@ -371,8 +399,8 @@
 
 <script>
 import axios from "axios";
-const api = "http://localhost:5000/api";
-//const api = "http://0.tcp.ap.ngrok.io:10783/api";
+//const api = "http://localhost:5000/api";
+const api = "https://77a5-101-51-61-123.ngrok-free.app/api";
 
 export default {
   data: () => ({
@@ -401,27 +429,12 @@ export default {
     frontImage: "",
     backImage: "",
     drinkSuggest: "",
+    loadingTypes: true,
     loadingSuggest: true,
     window: 0,
   }),
-  async mounted() {
-    try {
-      const typesResponse = await axios.get(api + "/coffeetypes");
-
-      if (Array.isArray(typesResponse.data.response)) {
-        // Append each element of the response data to the types array
-        typesResponse.data.response.forEach((element) => {
-          this.types.push(element);
-        });
-      } else {
-        console.error(
-          "Invalid response data format:",
-          typesResponse.data.response
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching coffee types:", error);
-    }
+  mounted() {
+    this.getTypes();
   },
   computed: {},
   methods: {
@@ -430,6 +443,37 @@ export default {
       const uint8Array = new Uint8Array(buffer);
       const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
       return `data:image/jpeg;base64,${base64Image}`;
+    },
+    async getTypes() {
+      this.loadingTypes = true;
+      try {
+        const typesResponse = await axios.get(api + "/coffeetypes", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+
+        if (typesResponse.data.response != null) {
+          if (Array.isArray(typesResponse.data.response)) {
+            // Append each element of the response data to the types array
+            typesResponse.data.response.forEach((element) => {
+              this.types.push(element);
+            });
+            this.loadingTypes = false;
+          } else {
+            this.loadingTypes = false;
+            this.types = [];
+            console.error(
+              "Invalid response data format:",
+              typesResponse.data.response
+            );
+          }
+        }
+      } catch (error) {
+        this.loadingTypes = false;
+        this.types = [];
+        console.error("Error fetching coffee types:", error);
+      }
     },
     async clickTypeCard(ID, index) {
       this.overlay = !this.overlay;
@@ -457,7 +501,12 @@ export default {
     async getDetailImages(ID) {
       try {
         const imagesResponse = await axios.get(
-          api + "/coffeetypes/images/" + ID
+          api + "/coffeetypes/images/" + ID,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
 
         this.detailImageLength = imagesResponse.data.response.length;
@@ -477,7 +526,12 @@ export default {
     async getTypeDetail(ID) {
       try {
         const typeCoffeeResponse = await axios.get(
-          api + "/coffeetypes/type/" + ID
+          api + "/coffeetypes/type/" + ID,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
         this.typeDetail = typeCoffeeResponse.data.response;
       } catch (error) {
@@ -487,7 +541,12 @@ export default {
     async getTypeGasStates(ID) {
       try {
         const gasStatesResponse = await axios.get(
-          api + "/coffeetypes/type/gasstates/" + ID
+          api + "/coffeetypes/type/gasstates/" + ID,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
         this.gasStates = gasStatesResponse.data.response;
       } catch (error) {
@@ -497,7 +556,12 @@ export default {
     async getTypeDrinkSuggestion(ID) {
       try {
         const drinksResponse = await axios.get(
-          api + "/coffeetypes/type/drinks/" + ID
+          api + "/coffeetypes/type/drinks/" + ID,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
         );
         if (drinksResponse.data.response != null) {
           this.loadingSuggest = false;
@@ -506,8 +570,6 @@ export default {
           this.loadingSuggest = false;
           this.drinkSuggest = "";
         }
-
-        //console.log(drinksResponse.data.response[1].DrinkName);
       } catch (error) {
         console.error("Error fetching coffee type gas states:", error);
       }
@@ -518,6 +580,9 @@ export default {
       this.imageData = val;
 
       this.cardImage = this.getImageUrl(val[0].ImageDataFront.data);
+    },
+    types(val) {
+      this.types = val;
     },
     cardImage(val) {
       this.cardImage = val;
