@@ -2,8 +2,8 @@
   <div class="bg-repeat">
     <v-card class="mx-auto mb-15 blur" color="rgba(200, 176, 153, 0.6)">
       <v-row>
-        <v-col align-self="center">
-          <!--Show on xs screen 	600px-- -->
+        <v-col align-self="center" class="my-4">
+          <!--Show on sx screen 	600px-- -->
           <div class="d-flex d-sm-none justify-center mt-5 mb-5">
             <div>
               <div class="mb-8">
@@ -64,7 +64,7 @@
           </div>
 
           <!--Show on screen bigger than lg 1280px++ -->
-          <div class="justify-end d-none d-lg-flex">
+          <div class="justify-end d-none d-lg-flex mt-5 mb-5">
             <v-img
               height="50"
               max-width="50"

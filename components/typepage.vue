@@ -1,11 +1,11 @@
 <template>
   <v-card>
-    <div class="justify-center d-flex mt-5 mb-5">
-      <v-btn-toggle v-model="filterPocess" class="d-none d-sm-flex" mandatory>
+    <div class="justify-center d-none d-sm-flex mt-5 mb-5">
+      <v-btn-toggle v-model="filterProcess" mandatory>
         <v-btn
           color="rgb(140, 115, 70)"
           value=""
-          class="ml-3 mr-3 my-2"
+          class="mx-3 my-2"
           rounded="xl"
           text="All"
         >
@@ -13,7 +13,7 @@
         <v-btn
           color="rgb(140, 115, 70)"
           value="wet"
-          class="ml-3 mr-3 my-2"
+          class="mx-3 my-2"
           rounded="xl"
           text="Wet process"
         >
@@ -21,7 +21,7 @@
         <v-btn
           color="rgb(140, 115, 70)"
           value="dry"
-          class="ml-3 mr-3 my-2"
+          class="mx-3 my-2"
           rounded="xl"
           text="Dry process"
         >
@@ -29,39 +29,59 @@
         <v-btn
           color="rgb(140, 115, 70)"
           value="honey"
-          class="ml-3 mr-3 my-2"
+          class="mx-3 my-2"
           rounded="xl"
           text="Honey process"
         >
         </v-btn>
       </v-btn-toggle>
-      <div class="d-flex d-sm-none">{Process dropdown list}</div>
     </div>
+
     <v-data-iterator
       :items="types"
       :items-per-page="itemsPerPage"
-      :search="search"
+      :search="search || filterProcess"
     >
-      <template v-slot:header>
-        <v-toolbar class="px-10 d-flex mt-5" color="white">
-          <p class="flex-grow-1">Showing All {{ types.length }} Results</p>
-          <!-- <v-text-field
+      <template v-slot:header="{ items }">
+        <div class="d-none d-sm-flex">
+          <v-toolbar class="px-10 d-flex my-5" color="white">
+            <p v-if="types.length == 0" class="flex-grow-1">
+              Loading type coffee beans...
+            </p>
+            <p v-else class="flex-grow-1">
+              Showing All {{ items.length }} Results
+            </p>
+            <v-text-field
+              v-model="search"
+              density="comfortable"
+              hide-details
+              placeholder="Search"
+              prepend-inner-icon="mdi-magnify"
+              style="max-width: 300px"
+              variant="solo"
+            ></v-text-field>
+          </v-toolbar>
+        </div>
+        <div class="d-flex-column d-sm-none px-10 my-5">
+          <v-text-field
             v-model="search"
             density="comfortable"
             hide-details
             placeholder="Search"
             prepend-inner-icon="mdi-magnify"
-            style="max-width: 300px"
             variant="solo"
-          ></v-text-field>-->
-        </v-toolbar>
+            class="mb-5"
+          ></v-text-field>
+          <p v-if="types.length == 0">Loading type coffee beans...</p>
+          <p v-else>Showing All {{ items.length }} Results</p>
+        </div>
       </template>
       <template v-slot:default="{ items }">
-        <v-row class="px-2">
+        <v-row class="px-2 mb-2">
           <v-col
             v-for="(item, index) in items"
             :key="index"
-            class="d-flex justify-center my-5"
+            class="d-flex justify-center"
             cols="12"
             sm="4"
           >
@@ -72,7 +92,7 @@
               @click="clickTypeCard(item.raw.ID, index)"
             >
               <div class="cardbgcolor text-center pb-2">
-                <div class="whitebg">
+                <div class="whitebg d-flex justify-center">
                   <img
                     :src="getImageUrl(item.raw.ImageDataFront.data)"
                     width="200"
@@ -91,7 +111,7 @@
                     {{
                       item.raw.RoastName.charAt(0).toUpperCase() +
                       item.raw.RoastName.slice(1) +
-                      " roasted"
+                      " roast"
                     }}
                   </v-card-subtitle>
                 </div>
@@ -371,13 +391,14 @@ export default {
     onboarding: 1,
     showarrow: true,
 
-    filterPocess: "",
+    filterProcess: "",
     search: "",
     imageData: "",
     cardImage: "",
     selectedTypeID: "",
     selectedIndex: "",
     types: [],
+    storedSelectedType: [],
 
     class: "",
     typeDetail: "",

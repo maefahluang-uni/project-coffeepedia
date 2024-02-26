@@ -20,7 +20,7 @@ const cloudConnection = mysql.createConnection({
   acquireTimeout: 20000,
 });
 
-const conn = cloudConnection;
+const conn = localConnection;
 
 //connect to database
 conn.connect((error) => {
