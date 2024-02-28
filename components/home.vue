@@ -141,7 +141,6 @@ export default {
           comments: "6",
           views: "76",
           title: "The difference between Arabica and Robusta coffee",
-          href: "",
         },
         {
           id: 2,
@@ -151,7 +150,6 @@ export default {
           views: "29",
           title:
             "What types of coffee beans are grown in each region of Thailand?",
-          href: "",
         },
         {
           id: 3,
@@ -161,7 +159,6 @@ export default {
           views: 11,
           title:
             "Get to know 'Arabica', the ultimate in delicious coffee varieties",
-          href: "",
         },
       ],
     };
