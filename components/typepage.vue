@@ -485,7 +485,6 @@ export default {
         this.gasStates = "";
         this.drinkSuggest = "";
         this.detailImageLength = 0;
-        this.drinkSuggest = "";
         this.loadingSuggest = true;
         try {
           this.getTypeDetail(ID);
@@ -612,9 +611,6 @@ export default {
     },
     detailImageLength(val) {
       this.detailImageLength = val;
-    },
-    drinkSuggest(val) {
-      this.drinkSuggest = val;
     },
   },
 };
