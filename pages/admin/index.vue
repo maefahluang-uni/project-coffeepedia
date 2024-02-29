@@ -12,10 +12,9 @@
   <v-card flat>
     <v-window v-model="tab">
       <v-window-item :value="1"> <admin-home-page /> </v-window-item>
-      <v-window-item :value="2"><typepage /> </v-window-item>
+      <v-window-item :value="2"><admin-coffeetypes-page /> </v-window-item>
       <v-window-item :value="3"> <blog /> </v-window-item>
-      <v-window-item :value="4"> <news /> </v-window-item>
-
+      <v-window-item :value="4"> <admin-news-page /> </v-window-item>
       <v-window-item :value="5">
         <div class="d-flex justify-center align-center contact-window">
           <contact />

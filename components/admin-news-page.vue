@@ -1,19 +1,5 @@
 <template>
-  <v-img :height="490" aspect-ratio="16/9" cover src="@/assets/news_main.jpg">
-    <!--<div
-      class="d-flex flex-column fill-height justify-end align-start text-white ml-10"
-    >
-      <h1 class="mb-4">
-        News
-      </h1>
-    </div>-->
-  </v-img>
-
-  <div class="d-flex flex-column align-start mt-10 ml-16">
-    <h1 class="text-brown">Lastest</h1>
-  </div>
-  <div class="mx-16 mt-5 mb-5"><v-divider></v-divider></div>
-
+  <div><v-divider></v-divider></div>
   <v-row class="d-flex justify-space-evenly">
     <div>
       <v-card
@@ -33,12 +19,13 @@
             </div>
           </v-card-text>
         </v-card-item>
-        <div>
-          <a
-            href="https://www.thairath.co.th/lifestyle/life/2709619"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
+        <div class="d-flex justify-end">
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-pencil" color="black"></v-icon>
+          </v-btn>
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-delete" color="black"></v-icon>
+          </v-btn>
         </div>
       </v-card>
     </div>
@@ -60,12 +47,13 @@
             </div>
           </v-card-text>
         </v-card-item>
-        <div>
-          <a
-            href="https://www.dailynews.co.th/news/2053626/"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
+        <div class="d-flex justify-end">
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-pencil" color="black"></v-icon>
+          </v-btn>
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-delete" color="black"></v-icon>
+          </v-btn>
         </div>
       </v-card>
     </div>
@@ -89,12 +77,13 @@
           </v-card-text>
         </v-card-item>
         <v-spacer></v-spacer>
-        <div>
-          <a
-            href="https://today.line.me/th/v2/article/kEZqkG1"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
+        <div class="d-flex justify-end">
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-pencil" color="black"></v-icon>
+          </v-btn>
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-delete" color="black"></v-icon>
+          </v-btn>
         </div>
       </v-card>
     </div>
@@ -115,12 +104,13 @@
             </div>
           </v-card-text>
         </v-card-item>
-        <div>
-          <a
-            href="https://www.thairath.co.th/lifestyle/life/2290026"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
+        <div class="d-flex justify-end">
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-pencil" color="black"></v-icon>
+          </v-btn>
+          <v-btn variant="plain" size="large">
+            <v-icon icon="mdi-delete" color="black"></v-icon>
+          </v-btn>
         </div>
       </v-card>
     </div>
