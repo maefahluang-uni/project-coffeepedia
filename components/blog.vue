@@ -11,7 +11,7 @@
           <v-card color="rgba(60, 60, 60, 0.7)">
             <div class="text-white">
               <h2 class="mx-5 mt-2">
-                A drink made from dark roasted coffee beans
+                {{ blogs[0].title }}
               </h2>
               <v-row class="d-flex mx-5 my-2 align-center">
                 <div class="d-flex">
@@ -20,15 +20,15 @@
                     icon="mdi-calendar"
                     color="grey"
                   ></v-icon>
-                  <p class="text-grey mr-2">Nov 5 , 2023</p>
+                  <p class="text-grey mr-2">{{ blogs[0].date }}</p>
                 </div>
                 <div class="d-flex">
                   <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
-                  <p class="text-grey mr-2">15</p>
+                  <p class="text-grey mr-2">{{ blogs[0].commentCount }}</p>
                 </div>
                 <div class="d-flex">
                   <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
-                  <p class="text-grey">107</p>
+                  <p class="text-grey">{{ blogs[0].viewCount }}</p>
                 </div>
               </v-row>
             </div>
@@ -251,9 +251,45 @@
     </v-card>
     <v-divider color="black" class="mt-n6 divider"></v-divider>
   </v-row>
+
+  
 </template>
 <script>
 export default {
+  data() {
+    return {
+      blogs: [
+        {
+          ID: "1",
+          blogImage: "@/assets/picblog3.jpg",
+          title: "A drink made from dark roasted coffee beans",
+          blogContent: "",
+          date: "Nov 5 , 2023",
+          viewCount: "107",
+          commentCount: "15",
+        },
+        {
+          ID: "2",
+          blogImage: "@/assets/picblog2.jpg",
+          title: "The most popular types of coffee beans that people drink",
+          blogContent: "",
+          date: "Nov 9 , 2023",
+          viewCount: "89",
+          commentCount: "7",
+        },
+        {
+          ID: "3",
+          blogImage: "@/assets/picblog1.png",
+          title:
+            "5 coffee farms that are most worth visiting in the northern region",
+          blogContent: "",
+          date: "Nov 12 , 2023",
+          viewCount: "76",
+          commentCount: "6",
+        },
+      ],
+    };
+  },
   methods: {
     log(num) {
       console.log("click blog " + num);
