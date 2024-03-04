@@ -25,7 +25,6 @@
 </template>
 
 <script>
-
 export default {
   data: () => ({
     tab: 1,
@@ -37,4 +36,3 @@ export default {
   height: 80vh;
 }
 </style>
-
