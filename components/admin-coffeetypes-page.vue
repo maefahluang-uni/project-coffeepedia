@@ -55,6 +55,8 @@
                   </v-col>
                   <v-col cols="12">
                     <v-file-input
+                      v-slot:item.image="{ item }"
+                      v-model="editedItem.picture"
                       accept="image/*"
                       label="Picture"
                     ></v-file-input>

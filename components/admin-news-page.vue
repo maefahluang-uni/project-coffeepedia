@@ -1,8 +1,8 @@
-<template>
+<template >
   <div><v-divider></v-divider></div>
   <v-row class="d-flex justify-space-evenly">
     <div>
-      <v-card
+      <v-card 
         class="my-12"
         max-width="300"
         max-height="600"
@@ -21,7 +21,7 @@
         </v-card-item>
         <div class="d-flex justify-end">
           <v-btn variant="plain" size="large">
-            <v-icon icon="mdi-pencil" color="black"></v-icon>
+            <v-icon icon="mdi-pencil" color="black" ></v-icon>
           </v-btn>
           <v-btn variant="plain" size="large">
             <v-icon icon="mdi-delete" color="black"></v-icon>
@@ -31,7 +31,8 @@
     </div>
 
     <div>
-      <v-card
+      <v-card 
+      
         class="mx-auto my-12"
         max-width="300"
         color="rgba(60, 60, 60, 0.2)"
@@ -49,7 +50,7 @@
         </v-card-item>
         <div class="d-flex justify-end">
           <v-btn variant="plain" size="large">
-            <v-icon icon="mdi-pencil" color="black"></v-icon>
+            <v-icon icon="mdi-pencil" color="black" ></v-icon>
           </v-btn>
           <v-btn variant="plain" size="large">
             <v-icon icon="mdi-delete" color="black"></v-icon>
