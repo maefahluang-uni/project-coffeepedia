@@ -1,8 +1,7 @@
 const config = require("../config");
 const mysql = require(`mysql-await`);
-const typeCoffeeQueries = require("./sqlQueries/typeCoffeeQueries");
+const blogQueries = require("./sqlQueries/blogQueries");
 
-//create database connection
 const localConnection = mysql.createConnection({
   host: config.LOCAL_MYSQL_DB_URI,
   user: config.LOCAL_MYSQL_DB_USER,
@@ -31,13 +30,13 @@ conn.connect((error) => {
   console.log("Mysql Connected...");
 });
 
-const getTypesCoffee = async () => {
+const getBlogs = async () => {
   try {
-    let sql = typeCoffeeQueries.GET_TYPES_COFFEE;
+    let sql = blogQueries.GET_ALL_BLOGS;
     let results = await conn.awaitQuery(sql);
     return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
-    console.error("Error in getTypesCoffee function:", err);
+    console.error("Error in getBlogs function:", err);
     return JSON.stringify({
       status: 500,
       error: "Internal Server Error",
@@ -45,15 +44,13 @@ const getTypesCoffee = async () => {
     });
   }
 };
-
-const getTypeCoffee = async (TypeID) => {
+const getTop3Blogs = async () => {
   try {
-    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_BY_ID;
-    let results = await conn.awaitQuery(sql, TypeID);
-
+    let sql = blogQueries.GET_TOP3_BLOGS;
+    let results = await conn.awaitQuery(sql);
     return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
-    console.error("Error in getTypeCoffee function:", err);
+    console.error("Error in getTop3Blogs function:", err);
     return JSON.stringify({
       status: 500,
       error: "Internal Server Error",
@@ -61,15 +58,13 @@ const getTypeCoffee = async (TypeID) => {
     });
   }
 };
-
-const getTypeCoffeeGasStates = async (TypeID) => {
+const getBlogCommentsByID = async (BlogID) => {
   try {
-    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_GAS_STATES;
-    let results = await conn.awaitQuery(sql, TypeID);
-
+    let sql = blogQueries.GET_BLOG_COMMENTS_BY_ID;
+    let results = await conn.awaitQuery(sql, BlogID);
     return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
-    console.error("Error in getTypeCoffeeGasStates function:", err);
+    console.error("Error in getBlogCommentsByID function:", err);
     return JSON.stringify({
       status: 500,
       error: "Internal Server Error",
@@ -77,31 +72,28 @@ const getTypeCoffeeGasStates = async (TypeID) => {
     });
   }
 };
-
-const getTypeCoffeeImages = async (TypeID) => {
+const insertCommentIntoBlog = async (data) => {
+  const timestamp = new Date(data.timestamp)
+    .toISOString()
+    .slice(0, 19)
+    .replace("T", " ");
   try {
-    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID;
-    let results = await conn.awaitQuery(sql, TypeID);
-
-    return JSON.stringify({ status: 200, error: null, response: results });
-  } catch (err) {
-    console.error("Error in getTypeCoffeeImages function:", err);
+    let sql1 = blogQueries.INSERT_COMMENT_INTO_BLOG;
+    let sql2 = blogQueries.UPDATE_COMMENT_COUNT;
+    let results1 = await conn.awaitQuery(sql1, [
+      data.BlogID,
+      data.comment,
+      timestamp,
+    ]);
+    let results2 = await conn.awaitQuery(sql2, data.BlogID);
     return JSON.stringify({
-      status: 500,
-      error: "Internal Server Error",
-      response: null,
+      status: 200,
+      error: null,
+      response1: results1,
+      response2: results2,
     });
-  }
-};
-
-const getTypeCoffeeDrinkSuggestion = async (TypeID) => {
-  try {
-    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID;
-    let results = await conn.awaitQuery(sql, TypeID);
-
-    return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
-    console.error("Error in getTypeCoffeeImages function:", err);
+    console.error("Error in getBlogCommentsByID function:", err);
     return JSON.stringify({
       status: 500,
       error: "Internal Server Error",
@@ -111,9 +103,8 @@ const getTypeCoffeeDrinkSuggestion = async (TypeID) => {
 };
 
 module.exports = {
-  getTypesCoffee,
-  getTypeCoffee,
-  getTypeCoffeeGasStates,
-  getTypeCoffeeImages,
-  getTypeCoffeeDrinkSuggestion,
+  getBlogs,
+  getTop3Blogs,
+  getBlogCommentsByID,
+  insertCommentIntoBlog,
 };

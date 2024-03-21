@@ -64,69 +64,46 @@
       </v-row>
     </v-card>
   </div>
-  <v-row class="justify-center mb-12 mt-5 d-flex d-sm-none">
-    <v-card color="white" flat width="125">
-      <h2 class="text-black blog-head">Our Blog</h2>
+  <v-row class="justify-center mb-5 mt-5 d-flex blog-line">
+    <v-card flat class="px-2">
+      <h1 class="text-brown blog-head">Our Blog</h1>
     </v-card>
-    <v-divider color="brown" class="mt-n5 divider"></v-divider>
+    <v-divider color="black" class="divider"></v-divider>
   </v-row>
 
-  <v-row class="justify-center mb-12 mt-5 d-none d-sm-flex">
-    <v-card color="white" flat width="175">
-      <h1 class="text-black blog-head">Our Blog</h1>
-    </v-card>
-    <v-divider color="brown" class="mt-n6 divider"></v-divider>
-  </v-row>
-
-  <div class="d-flex mb-5">
-    <v-container>
-      <v-row>
-        <v-col
-          v-for="(blog, index) in blogs"
-          :key="index"
-          cols="12"
-          sm="6"
-          md="4"
-        >
-          <v-card class="mx-auto" max-width="344" color="rgb(240, 240, 240)">
-            <v-img src="/assets/blog1.jpg" height="200px" cover></v-img>
-            <div>
-              <v-row class="mt-1 ml-1">
-                <v-col cols="auto">
-                  <v-icon icon="mdi-comment" color="grey"></v-icon>
-                  <span class="text-caption ml-1">{{ blog.comments }}</span>
-                </v-col>
-                <v-col cols="auto">
-                  <v-icon icon="mdi-eye" color="grey"></v-icon>
-                  <span class="text-caption ml-1">{{
-                    blog.views
-                  }}</span> </v-col
-                ><v-col cols="auto">
-                  <span class="text-caption ml-1">{{ blog.date }}</span>
-                </v-col>
-              </v-row>
+  <div class="d-flex justify-center">
+    <div>
+      <v-card
+        v-for="(blog, index) in blogs"
+        class="mb-7 d-flex elevation-5"
+        height="150"
+        max-width="700"
+      >
+        <v-img
+          class="d-flex"
+          max-width="170"
+          min-width="170"
+          cover
+          src="@/assets/picblog2.jpg"
+        />
+        <div>
+          <p class="blog-title mt-2">
+            {{ blog.title }}
+          </p>
+          <v-row class="d-flex mx-5 mt-1 align-center blog-subtitle">
+            <p class="text-grey mr-2">{{ blog.date }}</p>
+            <div class="mr-2 d-flex">
+              <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
+              <p class="text-grey">{{ blog.commentCount }}</p>
             </div>
-            <div class="mt-3 ml-4 mr-3">
-              <b class="text-h6 font-weight-bold">{{ blog.title }}</b>
+            <div class="d-flex">
+              <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
+              <p class="text-grey">{{ blog.viewCount }}</p>
             </div>
-
-            <v-card-actions>
-              <v-btn
-                color="rgb(140, 115, 70)"
-                width="120"
-                height="25"
-                rounded="xl"
-                variant="elevated"
-                class="mb-3 mt-3 ml-2"
-                @click=""
-              >
-                Read More
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+          </v-row>
+        </div>
+      </v-card>
+    </div>
   </div>
 </template>
 <script>
@@ -135,30 +112,32 @@ export default {
     return {
       blogs: [
         {
-          id: 1,
-          image: "/assets/blog1.jpg",
-          date: "Nov 12, 2023",
-          comments: "6",
-          views: "76",
-          title: "The difference between Arabica and Robusta coffee",
+          ID: "1",
+          blogImage: "@/assets/picblog3.jpg",
+          title: "A drink made from dark roasted coffee beans",
+          blogContent: "",
+          date: "Nov 5 , 2023",
+          viewCount: "107",
+          commentCount: "15",
         },
         {
-          id: 2,
-          image: "/assets/blog2.jpg",
-          date: "June 20, 2023",
-          comments: "9",
-          views: "29",
-          title:
-            "What types of coffee beans are grown in each region of Thailand?",
+          ID: "2",
+          blogImage: "@/assets/picblog2.jpg",
+          title: "The most popular types of coffee beans that people drink",
+          blogContent: "",
+          date: "Nov 9 , 2023",
+          viewCount: "89",
+          commentCount: "7",
         },
         {
-          id: 3,
-          image: "/assets/blog3.jpg",
-          date: "Sep 11, 2022",
-          comments: 1,
-          views: 11,
+          ID: "3",
+          blogImage: "@/assets/picblog1.png",
           title:
-            "Get to know 'Arabica', the ultimate in delicious coffee varieties",
+            "5 coffee farms that are most worth visiting in the northern region",
+          blogContent: "",
+          date: "Nov 12 , 2023",
+          viewCount: "76",
+          commentCount: "6",
         },
       ],
     };
