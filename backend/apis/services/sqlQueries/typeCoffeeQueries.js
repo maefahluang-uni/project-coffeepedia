@@ -79,6 +79,26 @@ FROM
 type_coffee;
 `;
 
+const GET_PROCESS = `
+SELECT * 
+FROM 
+coffee_process;
+`;
+
+const GET_ROAST = `
+SELECT * 
+FROM 
+roast_level;
+`;
+
+const INSERT_NEW_PROCESS = `
+INSERT 
+INTO 
+roast_level 
+(RoastName) 
+VALUES 
+(?)`;
+
 // Export the SQL queries
 module.exports = {
   GET_TYPE_COFFEE_BY_ID,
@@ -87,4 +107,7 @@ module.exports = {
   GET_TYPES_COFFEE,
   GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID,
   COUNT_TYPES,
+  GET_PROCESS,
+  GET_ROAST,
+  INSERT_NEW_PROCESS,
 };

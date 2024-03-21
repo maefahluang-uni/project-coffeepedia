@@ -23,10 +23,18 @@ const getTypeCoffeeDrinkSuggestion = async (req, res) => {
   const drinks = await service.getTypeCoffeeDrinkSuggestion(req.params.id);
   res.send(drinks);
 };
-const countTypes = async (req,res)=>{
+const countTypes = async (req, res) => {
   const counttypes = await service.countTypes();
   res.send(counttypes);
-}
+};
+const getAllRoastAndProcess = async (req, res) => {
+  const roastandprocess = await service.getAllRoastAndProcess();
+  res.send(roastandprocess);
+};
+const insertNewProcess = async (req, res) => {
+  const insertedprocess = await service.insertNewProcess(req.body);
+  res.send(insertedprocess);
+};
 
 module.exports = {
   getTypesCoffee,
@@ -35,4 +43,6 @@ module.exports = {
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
   countTypes,
+  getAllRoastAndProcess,
+  insertNewProcess,
 };

@@ -52,7 +52,13 @@
           >
             {{ language }}</v-btn
           >
-          <v-btn class="" icon="mdi-account" size="35" color="#39150E" />
+          <v-btn
+            @click="navigateToTargetPage"
+            class=""
+            icon="mdi-account"
+            size="35"
+            color="#39150E"
+          />
         </v-col>
       </div>
 
@@ -77,6 +83,7 @@
         value="search"
       ></v-list-item>
       <v-list-item
+        @click="navigateToTargetPage"
         prepend-icon="mdi-account"
         title="Admin account"
         value="account"
@@ -100,6 +107,10 @@ export default {
   methods: {
     changeLanguage() {
       this.language = this.language === "EN" ? "TH" : "EN";
+    },
+    navigateToTargetPage() {
+      // Navigate to the target page programmatically
+      this.$router.push("/admin"); // Replace '/target-page' with your actual target page path
     },
   },
 

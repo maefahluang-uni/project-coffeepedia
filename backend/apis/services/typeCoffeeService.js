@@ -124,6 +124,47 @@ const countTypes = async () => {
     });
   }
 };
+const getAllRoastAndProcess = async () => {
+  try {
+    let sql1 = typeCoffeeQueries.GET_PROCESS;
+    let sql2 = typeCoffeeQueries.GET_ROAST;
+    let results1 = await conn.awaitQuery(sql1);
+    let results2 = await conn.awaitQuery(sql2);
+
+    return JSON.stringify({
+      status: 200,
+      error: null,
+      response1: results1,
+      response2: results2,
+    });
+  } catch (err) {
+    console.error("Error in getAllRoastAndProcess function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
+const insertNewProcess = async (data) => {
+  try {
+    let sql = typeCoffeeQueries.INSERT_NEW_PROCESS;
+    let results = await conn.awaitQuery(sql, [data.RoastName]);
+    return JSON.stringify({
+      status: 200,
+      error: null,
+      response: results,
+    });
+  } catch {
+    console.error("Error in insertNewProcess function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
 
 module.exports = {
   getTypesCoffee,
@@ -132,4 +173,6 @@ module.exports = {
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
   countTypes,
+  getAllRoastAndProcess,
+  insertNewProcess,
 };

@@ -8,5 +8,7 @@ router.get("/type/gasstates/:id", controller.getTypeCoffeeGasStates);
 router.get("/type/drinks/:id", controller.getTypeCoffeeDrinkSuggestion);
 router.get("/images/:id", controller.getTypeCoffeeImages);
 router.get("/count", controller.countTypes);
+router.get("/roastandprocess", controller.getAllRoastAndProcess);
+router.post("/process", controller.insertNewProcess);
 
 module.exports = router;
