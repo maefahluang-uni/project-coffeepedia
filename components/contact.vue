@@ -74,6 +74,7 @@ import axios from "axios";
 import config from "../config.js";
 const api = config.LOCAL_API_URL;
 
+
 export default {
   data() {
     return {
