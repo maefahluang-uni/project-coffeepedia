@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Feb 22, 2024 at 04:32 AM
+-- Generation Time: Feb 29, 2024 at 12:53 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.0.1
 
@@ -20,6 +20,22 @@ SET time_zone = "+00:00";
 --
 -- Database: `dbcoffee_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `blog`
+--
+
+CREATE TABLE `blog` (
+  `ID` int(11) NOT NULL,
+  `blogImage` mediumblob NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `blogContent` mediumtext NOT NULL,
+  `date` date NOT NULL,
+  `viewCount` int(11) NOT NULL,
+  `commentCount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -104,6 +120,30 @@ CREATE TABLE `gas_state` (
 INSERT INTO `gas_state` (`ID`, `TypeCoffeeID`, `Gas`, `WhenTempurature`) VALUES
 (1, 1, 10, 180),
 (2, 1, 5, 195);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `news`
+--
+
+CREATE TABLE `news` (
+  `ID` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `href` varchar(255) NOT NULL,
+  `newsImageUrl` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `news`
+--
+
+INSERT INTO `news` (`ID`, `title`, `date`, `href`, `newsImageUrl`) VALUES
+(1, 'Point out the direction in which the Thai coffee industry can develop and be sustainable', '2023-07-15', 'https://www.thairath.co.th/lifestyle/life/2709619', 'https://static.thairath.co.th/media/B6FtNKtgSqRqbnNsbKFBXFUXBM6DULRK7KmbFUuOa7j2y5DL2jbIzyhiM7JuWC3nIfNAM.webp'),
+(2, ' Thai people consume 70,000 tons of coffee per year, pushing the market value to reach 60 billion', '2023-07-11', 'https://www.dailynews.co.th/news/2053626/', 'https://www.dailynews.co.th/wp-content/uploads/2023/03/6E751148-1C5B-4E35-BB0C-78EA92237581.jpeg'),
+(3, 'Revealing the reason why Thai people drink expensive \'coffee\'', '2023-01-15', 'https://today.line.me/th/v2/article/kEZqkG1', 'https://obs.line-scdn.net/0hWVlXJOM4CHlRIRqwT8h3Lml3BAhiRxJwc04XSnFzVEt8DRt7bRJbGiRyBFUsEEl7cUVHGiNzBEt5Q0oraA/w1200'),
+(4, 'Get to know espresso A menu that is more than just black coffee.', '2022-12-10', 'https://www.thairath.co.th/lifestyle/life/2290026', 'https://static.thairath.co.th/media/dFQROr7oWzulq5Fa3yX2tkhJUhUU50GI7ybNTZLESJ7K0lBIdkJOzHbKdWiCfAngoch.webp');
 
 -- --------------------------------------------------------
 
@@ -193,6 +233,12 @@ INSERT INTO `type_coffee_image` (`ID`, `TypeID`, `ImageDataFront`, `ImageDataBac
 --
 
 --
+-- Indexes for table `blog`
+--
+ALTER TABLE `blog`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `coffee_process`
 --
 ALTER TABLE `coffee_process`
@@ -217,6 +263,12 @@ ALTER TABLE `drink_suggest`
 ALTER TABLE `gas_state`
   ADD PRIMARY KEY (`ID`),
   ADD KEY `FK_GasStateTypeCoffeeID` (`TypeCoffeeID`);
+
+--
+-- Indexes for table `news`
+--
+ALTER TABLE `news`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `roast_level`
@@ -244,6 +296,12 @@ ALTER TABLE `type_coffee_image`
 --
 
 --
+-- AUTO_INCREMENT for table `blog`
+--
+ALTER TABLE `blog`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `coffee_process`
 --
 ALTER TABLE `coffee_process`
@@ -268,6 +326,12 @@ ALTER TABLE `gas_state`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `news`
+--
+ALTER TABLE `news`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `roast_level`
 --
 ALTER TABLE `roast_level`
@@ -277,7 +341,7 @@ ALTER TABLE `roast_level`
 -- AUTO_INCREMENT for table `type_coffee`
 --
 ALTER TABLE `type_coffee`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `type_coffee_image`

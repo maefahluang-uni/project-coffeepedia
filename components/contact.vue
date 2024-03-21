@@ -71,8 +71,9 @@
 
 <script>
 import axios from "axios";
-const api = "http://localhost:5001/api";
-//const api = "https://5ea0-202-28-45-143.ngrok-free.app/api";
+import config from "../config.js";
+const api = config.LOCAL_API_URL;
+
 
 export default {
   data() {
@@ -82,15 +83,24 @@ export default {
       email: "",
     };
   },
-  async mounted() {
-    try {
-      const contactResponse = await axios.get(api + "/contact");
-      this.address = contactResponse.data.response[0].Address;
-      this.phone = contactResponse.data.response[0].Phone;
-      this.email = contactResponse.data.response[0].Email;
-    } catch (error) {
-      console.error("Error fetching contact:", error);
-    }
+  mounted() {
+    this.getContact();
+  },
+  methods: {
+    async getContact() {
+      try {
+        const contactResponse = await axios.get(api + "/contact", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        this.address = contactResponse.data.response[0].Address;
+        this.phone = contactResponse.data.response[0].Phone;
+        this.email = contactResponse.data.response[0].Email;
+      } catch (error) {
+        console.error("Error fetching contact:", error);
+      }
+    },
   },
   watch: {
     address(val) {

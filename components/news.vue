@@ -126,3 +126,15 @@
     </div>
   </v-row>
 </template>
+<script>
+import axios from "axios";
+import config from "../config.js";
+const api = config.LOCAL_API_URL;
+
+export default {
+  data: () => {},
+  mounted() {},
+  methods: {},
+  watch: {},
+};
+</script>

@@ -1,24 +1,26 @@
 <template>
   <div class="bg-repeat">
-    <v-card class="mx-auto mb-15" color="rgba(200, 176, 153, 0.7)">
-      <v-row>
-        <v-col align-self="center">
+    <v-card class="mx-auto mb-15 blur" color="rgba(200, 176, 153, 0.6)">
+      <v-row class="justify-center">
+        <div class="d-flex my-4 align-center">
           <!--Show on sx screen 	600px-- -->
-          <div class="d-flex d-sm-none justify-center mt-5 mb-5">
+          <div class="d-flex d-sm-none mt-5 mb-5">
             <div>
-              <div
-                class="d-inline-flex justify-center align-center location ml-n10"
-              >
-                <img height="50" src="@/assets/location-no-bg.gif" />
+              <div class="mb-8">
+                <div
+                  class="d-inline-flex justify-center align-center location ml-n10"
+                >
+                  <img height="50" src="@/assets/location-no-bg.gif" />
 
-                <div class="text-h4">
-                  <h4>Location</h4>
+                  <div class="text-h4">
+                    <h4>Location</h4>
+                  </div>
                 </div>
-              </div>
 
-              <p class="mb-8 mt-2 text-center">
-                Coffee bean location in the north of Thailand
-              </p>
+                <p class="mt-2 text-center font-weight-bold text-black">
+                  Coffee bean location in the north of Thailand
+                </p>
+              </div>
               <v-btn
                 color="rgb(140, 115, 70)"
                 height="25"
@@ -31,43 +33,9 @@
             </div>
           </div>
 
-          <!--Show on md screen 	960px > < 1280px-->
-          <div
-            class="d-none d-sm-flex d-md-flex d-lg-none justify-center mt-5 mb-5"
-          >
-            <div>
-              <div
-                class="d-inline-flex justify-center align-center location ml-n15"
-              >
-                <img height="50" src="@/assets/location-no-bg.gif" />
-
-                <div class="text-h2">
-                  <h3 class="text-center">Location</h3>
-                </div>
-              </div>
-
-              <h4 class="mb-10 mt-2 text-h5 font-weight-bold text-center">
-                Coffee bean location in the north of Thailand
-              </h4>
-              <v-btn
-                color="rgb(140, 115, 70)"
-                height="25"
-                width="120"
-                variant="elevated"
-                rounded="xl"
-                class="viewbtn ml-n15"
-                >View All</v-btn
-              >
-            </div>
-          </div>
-
-          <!--Show on screen bigger than lg 1280px++ -->
-          <div class="justify-end d-none d-lg-flex">
-            <v-img
-              height="50"
-              max-width="50"
-              src="@/assets/location-no-bg.gif"
-            />
+          <!--Show on screen bigger than md 960px++ -->
+          <div class="d-none d-sm-flex mt-5 mb-5 px-5">
+            <img height="50" max-width="50" src="@/assets/location-no-bg.gif" />
             <div>
               <div class="text-h2">
                 <h3>Location</h3>
@@ -86,23 +54,24 @@
               >
             </div>
           </div>
-        </v-col>
-
-        <div class="d-none d-sm-flex container-1">
-          <v-col>
-            <v-img src="@/assets/pin-no-bg.png" width="35" class="pin" />
-            <v-img
-              width="300"
-              max-height="450"
-              src="@/assets/Map-no-bg.png"
-              class=""
-            />
-          </v-col>
+          <div class="d-none d-sm-flex container-1">
+            <v-col>
+              <v-img src="@/assets/pin-no-bg.png" width="35" class="pin" />
+              <v-img width="300" src="@/assets/Map-no-bg.png" class="" />
+            </v-col>
+          </div>
         </div>
       </v-row>
     </v-card>
   </div>
-  <v-row class="justify-center mb-15 mt-5">
+  <v-row class="justify-center mb-12 mt-5 d-flex d-sm-none">
+    <v-card color="white" flat width="125">
+      <h2 class="text-black blog-head">Our Blog</h2>
+    </v-card>
+    <v-divider color="brown" class="mt-n5 divider"></v-divider>
+  </v-row>
+
+  <v-row class="justify-center mb-12 mt-5 d-none d-sm-flex">
     <v-card color="white" flat width="175">
       <h1 class="text-black blog-head">Our Blog</h1>
     </v-card>
@@ -172,7 +141,6 @@ export default {
           comments: "6",
           views: "76",
           title: "The difference between Arabica and Robusta coffee",
-          href: "",
         },
         {
           id: 2,
@@ -182,7 +150,6 @@ export default {
           views: "29",
           title:
             "What types of coffee beans are grown in each region of Thailand?",
-          href: "",
         },
         {
           id: 3,
@@ -192,7 +159,6 @@ export default {
           views: 11,
           title:
             "Get to know 'Arabica', the ultimate in delicious coffee varieties",
-          href: "",
         },
       ],
     };
@@ -201,10 +167,10 @@ export default {
 </script>
 <style scoped>
 .bg-repeat {
-  background-image: url("../assets/coffeeHome-30.png");
+  background-image: url("../assets/welcomepic2.jpg");
   background-position: center;
-  background-repeat: repeat;
-  background-size: 500px;
+
+  background-size: cover;
 }
 .viewbtn {
   left: 50%;
@@ -218,9 +184,7 @@ export default {
   display: flex;
   justify-content: center;
 }
-.container-1 {
-  width: 45%;
-}
+
 .pin {
   top: 30px;
   left: 75px;
@@ -229,5 +193,8 @@ export default {
 }
 .divider {
   z-index: -1;
+}
+.blur {
+  backdrop-filter: blur(4px);
 }
 </style>

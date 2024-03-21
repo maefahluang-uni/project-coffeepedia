@@ -5,6 +5,10 @@ const LOCAL_MYSQL_DB_PORT = env.env("LOCAL_MYSQL_DB_PORT", "3306");
 const LOCAL_MYSQL_DB_USER = env.env("LOCAL_MYSQL_DB_USER", "root");
 const LOCAL_MYSQL_DB_PASSWORD = env.env("LOCAL_MYSQL_DB_PASSWORD", "root");
 const LOCAL_MYSQL_DB = env.env("LOCAL_MYSQL_DB", "dbcoffee_db");
+const API_KEY = env.env(
+  "API_KEY",
+  "2d0EUqpnSagQWYr31VwJ1FYVcbQ_3RnkAqx6q9fDQ5ZMRYiR5"
+);
 
 const CLOUD_MYSQL_DB_URI = env.env(
   "CLOUD_MYSQL_DB_URI",
