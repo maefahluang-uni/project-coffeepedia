@@ -13,123 +13,59 @@
       >
     </div>
   </v-img>
+  <v-row class="justify-center mb-5 mt-5 d-flex blog-line">
+    <v-card flat class="px-2">
+      <h1 class="text-brown blog-head">Lastest News</h1>
+    </v-card>
+    <v-divider color="black" class="divider"></v-divider>
+  </v-row>
 
-  <div class="d-flex flex-column align-start mt-10 ml-16">
-    <h1 class="text-brown">Lastest</h1>
+  <div class="d-flex justify-center mx-2">
+    <div v-if="news.length == 0" class="d-flex">
+      <v-skeleton-loader
+        :elevation="5"
+        type="article"
+        width="300"
+        class="mb-7"
+      ></v-skeleton-loader>
+    </div>
+    <v-data-iterator v-else :items="news" :items-per-page="itemPerPage"
+      ><template v-slot:default="{ items }">
+        <v-card
+          v-for="(news, index) in items"
+          class="mb-7 d-flex elevation-5"
+          height="150"
+          max-width="700"
+          @click="openLink(news.raw.href)"
+          color="#F1F1F1"
+        >
+          <div class="d-flex">
+            <v-img
+              class="d-flex"
+              max-width="200"
+              min-width="200"
+              cover
+              :src="news.raw.newsImageUrl"
+            />
+            <div>
+              <p class="blog-title mt-2">
+                {{ news.raw.title }}
+              </p>
+              <div
+                class="text-grey blog-subtitle text-decoration-underline mt-2 mx-5"
+              >
+                read more
+              </div>
+            </div>
+          </div>
+        </v-card> </template
+      ><template v-if="showSeeMore" v-slot:footer="{}">
+        <div class="d-flex mb-7 justify-center">
+          <v-btn variant="outlined" @click="seeMore(4)"> See more </v-btn>
+        </div>
+      </template></v-data-iterator
+    >
   </div>
-  <div class="mx-16 mt-5 mb-5"><v-divider></v-divider></div>
-
-  <v-row class="d-flex justify-space-evenly">
-    <div>
-      <v-card
-        class="my-12"
-        max-width="300"
-        max-height="600"
-        color="rgba(60, 60, 60, 0.2)"
-      >
-        <v-img cover height="300" src="@/assets/news1.jpg"></v-img>
-
-        <v-card-item>
-          <v-card-subtitle class="ml-4"> July 15, 2023 </v-card-subtitle>
-          <v-card-text>
-            <div class="text-h6">
-              Point out the direction in which the Thai coffee industry can
-              develop and be sustainable
-            </div>
-          </v-card-text>
-        </v-card-item>
-        <div>
-          <a
-            href="https://www.thairath.co.th/lifestyle/life/2709619"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
-        </div>
-      </v-card>
-    </div>
-
-    <div>
-      <v-card
-        class="mx-auto my-12"
-        max-width="300"
-        color="rgba(60, 60, 60, 0.2)"
-      >
-        <v-img cover height="300" src="@/assets/news3.jpg"></v-img>
-
-        <v-card-item>
-          <v-card-subtitle class="ml-4"> July 11, 2023 </v-card-subtitle>
-          <v-card-text>
-            <div class="text-h6">
-              Thai people consume 70,000 tons of coffee per year, pushing the
-              market value to reach 60 billion
-            </div>
-          </v-card-text>
-        </v-card-item>
-        <div>
-          <a
-            href="https://www.dailynews.co.th/news/2053626/"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
-        </div>
-      </v-card>
-    </div>
-  </v-row>
-  <v-row class="d-flex justify-space-evenly">
-    <div>
-      <v-card
-        class="my-12"
-        max-width="300"
-        max-height="600"
-        color="rgba(60, 60, 60, 0.2)"
-      >
-        <v-img cover height="300" src="@/assets/news2.jpg"></v-img>
-
-        <v-card-item>
-          <v-card-subtitle class="ml-4"> Jan 15, 2023 </v-card-subtitle>
-          <v-card-text>
-            <div class="text-h6">
-              Revealing the reason why Thai people drink expensive 'coffee'
-            </div>
-          </v-card-text>
-        </v-card-item>
-        <v-spacer></v-spacer>
-        <div>
-          <a
-            href="https://today.line.me/th/v2/article/kEZqkG1"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
-        </div>
-      </v-card>
-    </div>
-
-    <div>
-      <v-card
-        class="mx-auto my-12"
-        max-width="300"
-        color="rgba(60, 60, 60, 0.2)"
-      >
-        <v-img cover height="300" src="@/assets/news4.jpg"></v-img>
-
-        <v-card-item>
-          <v-card-subtitle class="ml-4"> Dec 10, 2022 </v-card-subtitle>
-          <v-card-text>
-            <div class="text-h6">
-              Get to know espresso A menu that is more than just black coffee.
-            </div>
-          </v-card-text>
-        </v-card-item>
-        <div>
-          <a
-            href="https://www.thairath.co.th/lifestyle/life/2290026"
-            class="subheading mb-4 text-grey d-flex justify-end align-end mr-5"
-            >Read More</a
-          >
-        </div>
-      </v-card>
-    </div>
-  </v-row>
 </template>
 <script>
 import axios from "axios";
@@ -137,9 +73,50 @@ import config from "../config.js";
 const api = config.LOCAL_API_URL;
 
 export default {
-  data: () => {},
-  mounted() {},
-  methods: {},
+  data() {
+    return {
+      itemPerPage: 4,
+      showSeeMore: false,
+      news: [],
+    };
+  },
+  mounted() {
+    this.getAllNews();
+  },
+  methods: {
+    async retryAfterDelay(apiCall) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await apiCall();
+    },
+    async getAllNews() {
+      try {
+        const newsResponse = await axios.get(api + "/news", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        this.news = newsResponse.data.response;
+        this.showSeeMore = true;
+        if (this.itemPerPage >= this.news.length) {
+          this.showSeeMore = false;
+        }
+      } catch (error) {
+        console.error("Error fetching all news:", error);
+        await this.retryAfterDelay(this.getAllNews());
+      }
+    },
+    seeMore(plusNum) {
+      if (this.itemPerPage <= this.news.length - 1) {
+        this.itemPerPage += plusNum;
+        if (this.itemPerPage >= this.news.length - 1) {
+          this.showSeeMore = false;
+        }
+      }
+    },
+    openLink(link) {
+      window.open(link, "_blank"); // Open link in a new tab
+    },
+  },
   watch: {},
 };
 </script>

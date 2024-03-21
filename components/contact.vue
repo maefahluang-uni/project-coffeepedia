@@ -98,7 +98,12 @@ export default {
         this.email = contactResponse.data.response[0].Email;
       } catch (error) {
         console.error("Error fetching contact:", error);
+        await this.retryAfterDelay(this.getContact);
       }
+    },
+    async retryAfterDelay(apiCall) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await apiCall();
     },
   },
   watch: {

@@ -34,4 +34,5 @@ module.exports = {
   CLOUD_MYSQL_DB_USER,
   CLOUD_MYSQL_DB_PASSWORD,
   CLOUD_MYSQL_DB,
+  API_KEY,
 };
