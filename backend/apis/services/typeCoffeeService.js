@@ -110,10 +110,26 @@ const getTypeCoffeeDrinkSuggestion = async (TypeID) => {
   }
 };
 
+const countTypes = async () => {
+  try {
+    let sql = typeCoffeeQueries.COUNT_TYPES;
+    let results = await conn.awaitQuery(sql);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in countTypes function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
 module.exports = {
   getTypesCoffee,
   getTypeCoffee,
   getTypeCoffeeGasStates,
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
+  countTypes,
 };

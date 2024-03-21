@@ -23,6 +23,10 @@ const getTypeCoffeeDrinkSuggestion = async (req, res) => {
   const drinks = await service.getTypeCoffeeDrinkSuggestion(req.params.id);
   res.send(drinks);
 };
+const countTypes = async (req,res)=>{
+  const counttypes = await service.countTypes();
+  res.send(counttypes);
+}
 
 module.exports = {
   getTypesCoffee,
@@ -30,4 +34,5 @@ module.exports = {
   getTypeCoffeeGasStates,
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
+  countTypes,
 };

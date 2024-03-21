@@ -70,6 +70,15 @@ type_coffee.ID = ?
 ORDER BY drink_suggest.DrinkName ASC;
 `;
 
+const COUNT_TYPES = `
+SELECT 
+COUNT(*) 
+AS 
+type_count 
+FROM 
+type_coffee;
+`;
+
 // Export the SQL queries
 module.exports = {
   GET_TYPE_COFFEE_BY_ID,
@@ -77,4 +86,5 @@ module.exports = {
   GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID,
   GET_TYPES_COFFEE,
   GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID,
+  COUNT_TYPES,
 };

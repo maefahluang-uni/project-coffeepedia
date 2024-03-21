@@ -46,10 +46,20 @@ WHERE
 blog.ID = ?;
 `;
 
+const COUNT_BLOGS = `
+SELECT 
+COUNT(*) 
+AS 
+blog_count 
+FROM 
+blog;
+`;
+
 module.exports = {
   GET_ALL_BLOGS,
   GET_TOP3_BLOGS,
   GET_BLOG_COMMENTS_BY_ID,
   INSERT_COMMENT_INTO_BLOG,
   UPDATE_COMMENT_COUNT,
+  COUNT_BLOGS,
 };

@@ -45,4 +45,19 @@ const getNews = async () => {
     });
   }
 };
-module.exports = { getNews };
+
+const countNews = async () => {
+  try {
+    let sql = newsQueries.COUNT_NEWS;
+    let results = await conn.awaitQuery(sql);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in countNews function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+module.exports = { getNews, countNews };

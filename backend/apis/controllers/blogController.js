@@ -17,10 +17,15 @@ const insertCommentIntoBlog = async (req, res) => {
   const insertedComment = await service.insertCommentIntoBlog(req.body);
   res.send(insertedComment);
 };
+const countBlogs = async (req,res)=>{
+  const countblogs = await service.countBlogs();
+  res.send(countblogs);
+}
 
 module.exports = {
   getBlogs,
   getTop3Blogs,
   getBlogCommentsByID,
   insertCommentIntoBlog,
+  countBlogs,
 };

@@ -101,10 +101,25 @@ const insertCommentIntoBlog = async (data) => {
     });
   }
 };
+const countBlogs = async () => {
+  try {
+    let sql = blogQueries.COUNT_BLOGS;
+    let results = await conn.awaitQuery(sql);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in countBlogs function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
 
 module.exports = {
   getBlogs,
   getTop3Blogs,
   getBlogCommentsByID,
   insertCommentIntoBlog,
+  countBlogs,
 };
