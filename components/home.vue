@@ -71,46 +71,71 @@
     <v-divider color="black" class="divider"></v-divider>
   </v-row>
 
-  <div class="d-flex justify-center">
+  <v-skeleton-loader
+    v-if="blogs.length == 0"
+    v-for="n in 3"
+    :elevation="5"
+    type="article"
+    class="mb-7 mx-2 fill-width"
+  ></v-skeleton-loader>
+  <div v-else class="d-flex justify-center">
     <div>
       <v-card
         v-for="(blog, index) in blogs"
-        class="mb-7 d-flex elevation-5"
-        height="150"
-        max-width="700"
+        class="mb-7 elevation-5 d-flex recent-blog-card"
+        @click=""
+        color="#F1F1F1"
       >
-        <v-img
-          class="d-flex"
-          max-width="170"
-          min-width="170"
-          cover
-          src="@/assets/picblog2.jpg"
-        />
-        <div>
-          <p class="blog-title mt-2">
-            {{ blog.title }}
-          </p>
-          <v-row class="d-flex mx-5 mt-1 align-center blog-subtitle">
-            <p class="text-grey mr-2">{{ blog.date }}</p>
-            <div class="mr-2 d-flex">
-              <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
-              <p class="text-grey">{{ blog.commentCount }}</p>
+        <div class="d-flex">
+          <v-img
+            class="d-flex blog-img"
+            cover
+            :src="blogImage(blog.imageFile, blog.imageURL)"
+          />
+
+          <div>
+            <p class="blog-title mt-2">
+              {{ blog.title }}
+            </p>
+            <v-row class="d-flex mx-5 mt-1 blog-subtitle">
+              <p class="text-grey mr-2">
+                {{ formatDateNotime(blog.date) }}
+              </p>
+              <div class="mr-2 d-flex">
+                <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
+                <p class="text-grey">{{ blog.commentCount }}</p>
+              </div>
+              <div class="d-flex">
+                <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
+                <p class="text-grey">{{ blog.viewCount }}</p>
+              </div>
+            </v-row>
+            <div class="text-grey blog-subtitle clamp mx-5 my-4">
+              {{ blog.content.replace(/<[^>]*>/g, "") }}
             </div>
-            <div class="d-flex">
-              <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
-              <p class="text-grey">{{ blog.viewCount }}</p>
+            <div class="justify-end d-none d-sm-flex">
+              <v-btn
+                class="ma-4 rounded-xl"
+                density="compact"
+                color="rgb(140,115,70)"
+              >
+                <div class="blog-subtitle">read more</div>
+              </v-btn>
             </div>
-          </v-row>
+          </div>
         </div>
       </v-card>
     </div>
   </div>
 </template>
 <script>
+import axios from "axios";
+import config from "../config.js";
+const api = config.LOCAL_API_URL;
 export default {
   data() {
     return {
-      blogs: [
+      blogs2: [
         {
           ID: "1",
           blogImage: "@/assets/picblog3.jpg",
@@ -140,7 +165,67 @@ export default {
           commentCount: "6",
         },
       ],
+
+      blogs: [],
     };
+  },
+  mounted() {
+    this.getAllBlogs();
+  },
+  methods: {
+    async retryAfterDelay(apiCall) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await apiCall();
+    },
+    async getAllBlogs() {
+      try {
+        const blogsResponse = await axios.get(api + "/blogs/top", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        this.blogs = blogsResponse.data.response;
+      } catch (error) {
+        console.error("Error fetching all blogs:", error);
+        await this.retryAfterDelay(this.getAllBlogs);
+      }
+    },
+    formatDateNotime(dateString) {
+      const date = new Date(dateString);
+      const options = { month: "short", day: "numeric", year: "numeric" };
+      const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
+        date
+      );
+      return formattedDate;
+    },
+    formatDateWithTime(dateString) {
+      const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      };
+      const date = new Date(dateString);
+      return date.toLocaleString("en-US", options);
+    },
+    getImageUrl(buffer) {
+      if (!buffer) return "";
+      const uint32Array = new Uint32Array(buffer);
+      const base64Image = btoa(String.fromCharCode.apply(null, uint32Array));
+      return `data:image/jpeg;base64,${base64Image}`;
+    },
+    blogImage(buffer, url) {
+      if (buffer == null) {
+        return `${url}`;
+      }
+      if (url == null) {
+        let imgurl = this.getImageUrl(buffer.data);
+        return imgurl;
+      }
+      return "";
+    },
   },
 };
 </script>

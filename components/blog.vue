@@ -1,10 +1,11 @@
-
 <template>
   <div v-if="topBlogs.length == 0" class="d-flex ma-2 justify-center">
     <v-skeleton-loader
+      v-for="n in 3"
       :elevation="5"
       type="card"
       width="200"
+      class="ma-2"
     ></v-skeleton-loader>
   </div>
   <div v-else class="d-flex mx-2 justify-center">
@@ -12,7 +13,7 @@
       <v-img
         class="d-flex align-end"
         cover
-        :src="topBlogImage(topBlogs[0].imageFile, topBlogs[0].imageURL)"
+        :src="blogImage(topBlogs[0].imageFile, topBlogs[0].imageURL)"
       >
         <div class="text-white">
           <v-card color="rgba(60, 60, 60, 0.7)">
@@ -46,7 +47,7 @@
         <v-img
           class="d-flex align-end"
           cover
-          :src="topBlogImage(topBlogs[1].imageFile.data, topBlogs[1].imageURL)"
+          :src="blogImage(topBlogs[1].imageFile, topBlogs[1].imageURL)"
         >
           <div class="text-white">
             <v-card color="rgba(60, 60, 60, 0.7)">
@@ -81,7 +82,7 @@
         <v-img
           class="d-flex align-end"
           cover
-          :src="topBlogImage(topBlogs[2].imageFile.data, topBlogs[2].imageURL)"
+          :src="blogImage(topBlogs[2].imageFile, topBlogs[2].imageURL)"
         >
           <div class="text-white">
             <v-card color="rgba(60, 60, 60, 0.7)">
@@ -114,57 +115,41 @@
     </div>
   </div>
 
-  <v-row class="justify-center mb-5 mt-5 d-flex blog-line">
+  <v-row class="justify-start ml-10 mb-5 mt-5 d-flex blog-line">
     <v-card flat class="px-2">
-      <h1 class="text-brown blog-head">Lastest Blog</h1>
+      <h1 class="text-brown blog-head">Recent post</h1>
     </v-card>
     <v-divider color="black" class="divider"></v-divider>
   </v-row>
-  <div class="d-flex justify-center mx-2">
-    <div v-if="blogsDatabase.length == 0" class="d-flex">
-      <v-skeleton-loader
-        :elevation="5"
-        type="article"
-        width="300"
-        class="mb-7"
-      ></v-skeleton-loader>
-    </div>
-    <v-data-iterator
-      v-else
-      :items="blogsDatabase"
-      :items-per-page="itemPerPage"
-    >
+  <container class="d-flex justify-center mx-2" fluid>
+    <v-skeleton-loader
+      v-if="blogs.length == 0"
+      v-for="n in 3"
+      :elevation="5"
+      type="article"
+      class="mb-7 mx-2 fill-width"
+    ></v-skeleton-loader>
+
+    <v-data-iterator v-else :items="blogs" :items-per-page="itemPerPage">
       <template v-slot:default="{ items }">
         <v-card
           v-for="(blog, index) in items"
-          class="mb-7 d-flex elevation-5"
-          height="200"
-          max-width="700"
+          class="mb-7 elevation-5 d-flex recent-blog-card"
           @click="showDetail(blog.raw)"
           color="#F1F1F1"
         >
           <div v-if="blog.raw.IsActivate == 1" class="d-flex">
             <v-img
-              v-if="blog.raw.imageFile != null"
-              class="d-flex"
-              max-width="200"
-              min-width="200"
+              class="d-flex blog-img"
               cover
-              :src="getImageUrl(blog.raw.imageFile.data)"
+              :src="blogImage(blog.raw.imageFile, blog.raw.imageURL)"
             />
-            <v-img
-              v-if="blog.raw.imageURL != null"
-              class="d-flex"
-              max-width="200"
-              min-width="200"
-              cover
-              :src="blog.raw.imageURL"
-            />
+
             <div>
               <p class="blog-title mt-2">
                 {{ blog.raw.title }}
               </p>
-              <v-row class="d-flex mx-5 mt-1 align-center blog-subtitle">
+              <v-row class="d-flex mx-5 mt-1 blog-subtitle">
                 <p class="text-grey mr-2">
                   {{ formatDateNotime(blog.raw.date) }}
                 </p>
@@ -177,13 +162,17 @@
                   <p class="text-grey">{{ blog.raw.viewCount }}</p>
                 </div>
               </v-row>
-              <div class="text-grey blog-subtitle clamp mx-5 mt-4">
+              <div class="text-grey blog-subtitle clamp mx-5 my-4">
                 {{ blog.raw.content.replace(/<[^>]*>/g, "") }}
               </div>
-              <div
-                class="text-grey text-end blog-subtitle text-decoration-underline mt-2 mx-5"
-              >
-                read more
+              <div class="justify-end d-none d-sm-flex">
+                <v-btn
+                  class="ma-4 rounded-xl"
+                  density="compact"
+                  color="rgb(140,115,70)"
+                >
+                  <div class="blog-subtitle">read more</div>
+                </v-btn>
               </div>
             </div>
           </div>
@@ -216,15 +205,13 @@
             <v-divider></v-divider>
             <v-card class="mt-4" color="#C8B099"
               ><div class="d-flex ma-4">
-                <div class="text-white font-weight-bold text-h5">Com</div>
-                <div class="text-black font-weight-bold text-h5">ment</div>
+                <div class="text-black font-weight-bold text-h5">Comment</div>
               </div>
               <div class="d-flex mx-4">
-                <v-text-field v-model="comment" variant="outlined">
-                </v-text-field>
+                <v-text-field v-model="comment" variant="solo"> </v-text-field>
                 <v-btn
                   class="mt-1 ml-2"
-                  icon="mdi-share"
+                  icon="mdi-send"
                   @click="confirmComment(comment, selectblog.ID)"
                 ></v-btn>
               </div>
@@ -273,7 +260,7 @@
         </div>
       </template>
     </v-data-iterator>
-  </div>
+  </container>
 </template>
 <script>
 import axios from "axios";
@@ -288,9 +275,10 @@ export default {
       itemPerPage: 4,
       showSeeMore: false,
       selectblog: "",
+      selectedblogID: -1,
       comment: "",
 
-      blogsDatabase: [],
+      blogs: [],
       topBlogs: [],
       comments: [],
     };
@@ -311,10 +299,10 @@ export default {
             "ngrok-skip-browser-warning": "true",
           },
         });
-        this.blogsDatabase = blogsResponse.data.response;
+        this.blogs = blogsResponse.data.response;
 
         this.showSeeMore = true;
-        if (this.itemPerPage >= this.blogsDatabase.length) {
+        if (this.itemPerPage >= this.blogs.length) {
           this.showSeeMore = false;
         }
       } catch (error) {
@@ -336,21 +324,24 @@ export default {
       }
     },
 
-    //Will add one-time cache later
     async getComments(BlogID) {
-      try {
-        const commentsResponse = await axios.get(
-          api + "/blogs/comments/" + BlogID,
-          {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
-          }
-        );
-        this.comments = commentsResponse.data.response;
-      } catch (error) {
-        console.error("Error fetching all blogs:", error);
-        await this.retryAfterDelay(this.getTopBlogs);
+      if (this.selectedblogID != BlogID) {
+        try {
+          const commentsResponse = await axios.get(
+            api + "/blogs/comments/" + BlogID,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "true",
+              },
+            }
+          );
+          this.comments = commentsResponse.data.response;
+          this.selectedblogID = BlogID;
+        } catch (error) {
+          console.error("Error fetching all blogs:", error);
+          await this.retryAfterDelay(this.getTopBlogs);
+        }
+        return;
       }
     },
     formatDateNotime(dateString) {
@@ -398,9 +389,9 @@ export default {
       }
     },
     seeMore(plusNum) {
-      if (this.itemPerPage <= this.blogsDatabase.length - 1) {
+      if (this.itemPerPage <= this.blogs.length - 1) {
         this.itemPerPage += plusNum;
-        if (this.itemPerPage >= this.blogsDatabase.length - 1) {
+        if (this.itemPerPage >= this.blogs.length - 1) {
           this.showSeeMore = false;
         }
       }
@@ -421,14 +412,15 @@ export default {
     cancelComment() {
       this.overlay2 = !this.overlay2;
     },
-    topBlogImage(buffer, url) {
+    blogImage(buffer, url) {
       if (buffer == null) {
         return `${url}`;
       }
       if (url == null) {
-        let imgurl = this.getImageUrl(buffer);
+        let imgurl = this.getImageUrl(buffer.data);
         return imgurl;
       }
+      return "";
     },
     showDetail(blog) {
       this.getComments(blog.ID);
@@ -446,6 +438,13 @@ export default {
 };
 </script>
 <style>
+:root {
+  --default-card1-height: 600px;
+  --default-cards-width: 1000px;
+  --default-margin-card: 20px;
+  --card1-height: var(--default-card1-height);
+  --margin-card: var(--default-margin-card);
+}
 .divider {
   position: absolute;
   width: 100%;
@@ -474,6 +473,10 @@ export default {
 }
 
 @media (max-width: 600px) {
+  :root {
+    --card1-height: calc(var(--default-card1-height) - 300px);
+    --margin-card: calc(var(--default-margin-card) * (2 / 5));
+  }
   .blog-subtitle {
     font-size: 12px;
   }
@@ -486,8 +489,12 @@ export default {
     margin-left: 10px;
     margin-right: 10px;
   }
+  .blog-img {
+    width: 150px;
+    height: 100%;
+  }
   .card1 {
-    height: 400px;
+    height: var(--card1-height);
   }
   .card1 .blog-subtitle,
   .card2 .blog-subtitle,
@@ -496,14 +503,16 @@ export default {
     margin-right: 4px;
   }
   .cards-right {
-    margin-left: 8px;
+    margin-left: var(--margin-card);
   }
   .card2 {
-    height: 196px;
+    height: calc((var(--card1-height) / 2) - (var(--margin-card) / 2));
   }
   .card3 {
-    margin-top: 8px;
-    height: 196px;
+    margin-top: var(--margin-card);
+    height: calc((var(--card1-height) / 2) - (var(--margin-card) / 2));
+  }
+  .recent-blog-card {
   }
   .blog-detail-card {
     width: 95vw;
@@ -524,8 +533,13 @@ export default {
   .blog-subtitle {
     font-size: 14px;
   }
+  .blog-img {
+    width: 200px;
+    height: 100%;
+  }
   .card1 {
-    height: 600px;
+    height: var(--card1-height);
+    width: calc((var(--default-cards-width) / 2) - (var(--margin-card) / 2));
   }
   .card1 .blog-subtitle,
   .card2 .blog-subtitle,
@@ -534,14 +548,23 @@ export default {
     margin-right: 10px;
   }
   .cards-right {
-    margin-left: 20px;
+    margin-left: var(--margin-card);
   }
   .card2 {
-    height: 290px;
+    height: calc((var(--card1-height) / 2) - (var(--margin-card) / 2));
+    max-width: calc(
+      (var(--default-cards-width) / 2) - (var(--margin-card) / 2)
+    );
   }
   .card3 {
-    height: 290px;
-    margin-top: 20px;
+    height: calc((var(--card1-height) / 2) - (var(--margin-card) / 2));
+    max-width: calc(
+      (var(--default-cards-width) / 2) - (var(--margin-card) / 2)
+    );
+    margin-top: var(--margin-card);
+  }
+  .recent-blog-card {
+    max-width: var(--default-cards-width);
   }
 }
 </style>

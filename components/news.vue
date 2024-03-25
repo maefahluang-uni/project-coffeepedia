@@ -1,12 +1,5 @@
 <template>
-  <v-img :height="490" aspect-ratio="16/9" cover src="@/assets/news_main.jpg">
-    <!--<div
-      class="d-flex flex-column fill-height justify-end align-start text-white ml-10"
-    >
-      <h1 class="mb-4">
-        News
-      </h1>
-    </div>-->
+  <v-img aspect-ratio="16/9" cover src="@/assets/news_main.jpg" class="banner">
   </v-img>
   <v-row class="justify-center mb-5 mt-5 d-flex blog-line">
     <v-card flat class="px-2">
@@ -15,45 +8,52 @@
     <v-divider color="black" class="divider"></v-divider>
   </v-row>
 
-  <div class="d-flex justify-center mx-2">
+  <div class="d-flex mx-2 mb-7 justify-space-evenly">
     <div v-if="news.length == 0" class="d-flex">
       <v-skeleton-loader
+        v-for="n in 3"
         :elevation="5"
         type="article"
-        width="300"
-        class="mb-7"
+        width="200"
+        class="mb-7 mx-4"
       ></v-skeleton-loader>
     </div>
-    <v-data-iterator v-else :items="news" :items-per-page="itemPerPage"
+    <v-data-iterator
+      v-else
+      :items="news"
+      :items-per-page="itemPerPage"
+      class="d-flex justify-center"
       ><template v-slot:default="{ items }">
-        <v-card
-          v-for="(news, index) in items"
-          class="mb-7 d-flex elevation-5"
-          height="150"
-          max-width="700"
-          @click="openLink(news.raw.href)"
-          color="#F1F1F1"
+        <div
+          class="d-flex align-content-space-around flex-wrap justify-space-around"
         >
-          <div class="d-flex">
-            <v-img
-              class="d-flex"
-              max-width="200"
-              min-width="200"
-              cover
-              :src="news.raw.newsImageUrl"
-            />
-            <div>
-              <p class="blog-title mt-2">
-                {{ news.raw.title }}
-              </p>
-              <div
-                class="text-grey blog-subtitle text-decoration-underline mt-2 mx-5"
-              >
-                read more
+          <v-card
+            v-for="(news, index) in items"
+            class="ma-3 elevation-5"
+            max-width="400"
+            @click="openLink(news.raw.href)"
+            color="#F1F1F1"
+          >
+            <div class="">
+              <v-img
+                class="d-flex"
+                cover
+                :src="news.raw.newsImageUrl"
+                height="200"
+              />
+              <div>
+                <p class="blog-title mt-2">
+                  {{ news.raw.title }}
+                </p>
+                <div
+                  class="text-grey text-end blog-subtitle text-decoration-underline my-2 mx-5"
+                >
+                  read more
+                </div>
               </div>
             </div>
-          </div>
-        </v-card> </template
+          </v-card>
+        </div> </template
       ><template v-if="showSeeMore" v-slot:footer="{}">
         <div class="d-flex mb-7 justify-center">
           <v-btn variant="outlined" @click="seeMore(4)"> See more </v-btn>
@@ -115,3 +115,14 @@ export default {
   watch: {},
 };
 </script>
+<style>
+:root {
+  --banner-height: 40vh;
+}
+
+@media (min-width: 601px) {
+  .banner {
+    height: 450px;
+  }
+}
+</style>

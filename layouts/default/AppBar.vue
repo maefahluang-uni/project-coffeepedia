@@ -102,7 +102,7 @@
 export default {
   data: () => ({
     overlay: false,
-    language: "EN",
+    language: "TH",
   }),
   methods: {
     changeLanguage() {
