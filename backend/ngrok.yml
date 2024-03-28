@@ -1,0 +1,11 @@
+version: "2"
+authtoken: 2bgUC2Feb8BCcQEqSFO6z5HZdjW_4FbgZ7sxt8oKFPPawAT1S
+
+tunnels:
+  webapp:
+    addr: 3000
+    proto: http
+  webapi:
+    addr: 5000
+    hostname: heartily-one-lobster.ngrok-free.app
+    proto: http

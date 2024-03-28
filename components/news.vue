@@ -9,7 +9,7 @@
   </v-row>
 
   <div class="d-flex mx-2 mb-7 justify-space-evenly">
-    <div v-if="news.length == 0" class="d-flex">
+    <div v-if="news.length == 0" class="wrap">
       <v-skeleton-loader
         v-for="n in 3"
         :elevation="5"
@@ -123,6 +123,9 @@ export default {
 @media (min-width: 601px) {
   .banner {
     height: 450px;
+  }
+  .wrap {
+    display: contents;
   }
 }
 </style>

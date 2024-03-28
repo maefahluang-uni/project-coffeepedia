@@ -78,7 +78,7 @@
     type="article"
     class="mb-7 mx-2 fill-width"
   ></v-skeleton-loader>
-  <div v-else class="d-flex justify-center">
+  <div v-else class="d-flex justify-center mx-2">
     <div>
       <v-card
         v-for="(blog, index) in blogs"

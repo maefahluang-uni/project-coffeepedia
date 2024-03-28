@@ -127,7 +127,7 @@
       v-for="n in 3"
       :elevation="5"
       type="article"
-      class="mb-7 mx-2 fill-width"
+      class="mb-7 mx-2"
     ></v-skeleton-loader>
 
     <v-data-iterator v-else :items="blogs" :items-per-page="itemPerPage">
@@ -381,7 +381,6 @@ export default {
           "ngrok-skip-browser-warning": "true",
         },
       });
-      console.log(res);
       if (res.status == 200) {
         this.comments.unshift({ comment: comment, datetime: timestamp });
         this.overlay2 = !this.overlay2;

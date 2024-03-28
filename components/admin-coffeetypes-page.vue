@@ -1,13 +1,11 @@
 <template>
-  <div><v-divider></v-divider></div>
-  <div>
+  <div class="ma-2">
     <v-data-table
       v-model:expanded="expanded"
       :headers="headers"
-      :items="process"
+      :items="types"
       :sort-by="[{ key: 'Process', order: 'asc' }]"
       item-value="id"
-      show-expand
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -28,52 +26,93 @@
                 Add Type
               </v-btn>
             </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
+            <v-form ref="form">
+              <v-card>
                 <v-container>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="editedItem.name"
+                  <v-card-title class="pa-0 mb-4">
+                    {{ formTitle }}
+                  </v-card-title>
+                  <div class="d-flex">
+                    <v-select
+                      v-model="editedItem.process"
+                      :items="process"
+                      class="pe-2"
                       label="Process"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
+                      :rules="rules.requireInput"
+                    >
+                    </v-select>
+                    <v-select
                       v-model="editedItem.roasted"
+                      :items="process"
                       label="Roasted"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      v-model="editedItem.description"
-                      label="Description"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-file-input
-                      v-slot:item.image="{ item }"
-                      v-model="editedItem.picture"
-                      accept="image/*"
-                      label="Picture"
-                    ></v-file-input>
-                  </v-col>
-                </v-container>
-              </v-card-text>
+                      :rules="rules.requireInput"
+                    >
+                    </v-select>
+                  </div>
 
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue-darken-1" variant="text" @click="close">
-                  Cancel
-                </v-btn>
-                <v-btn color="blue-darken-1" variant="text" @click="save">
-                  Save
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+                  <v-text-field
+                    v-model="editedItem.commonName"
+                    label="Common name"
+                  ></v-text-field>
+
+                  <v-file-input
+                    v-slot:item.image="{ item }"
+                    accept="image/*"
+                    label="Picture"
+                  ></v-file-input>
+
+                  <div class="d-flex align-center mb-4">
+                    <v-card-title class="pa-0 mr-2"> Gas states </v-card-title>
+                    <v-btn
+                      class=""
+                      variant="tonal"
+                      icon="mdi-plus"
+                      size="x-small"
+                      @click="insertGasState()"
+                    >
+                    </v-btn>
+                  </div>
+
+                  <div
+                    v-for="(state, index) in editedItem.gasStates"
+                    class="d-flex"
+                    :key="index"
+                  >
+                    <v-btn
+                      class="mt-2 mr-2"
+                      icon="mdi-minus"
+                      variant="text"
+                      color="error"
+                      size="small"
+                      @click="deleteGasState(index)"
+                    >
+                    </v-btn>
+                    <v-text-field
+                      class="pe-2"
+                      label="Gas"
+                      v-model="state.gas"
+                      :rules="rules.requireInput"
+                    ></v-text-field
+                    ><v-text-field
+                      label="Tempurature (degree celsius)"
+                      v-model="state.WhenTempurature"
+                      @keypress="onlyNumber($event, 3)"
+                      :rules="rules.requireInput"
+                    ></v-text-field>
+                  </div>
+                </v-container>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue-darken-1" variant="text" @click="close">
+                    Cancel
+                  </v-btn>
+                  <v-btn color="blue-darken-1" variant="text" @click="save">
+                    Save
+                  </v-btn>
+                </v-card-actions>
+              </v-card></v-form
+            >
           </v-dialog>
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
@@ -97,22 +136,16 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:expanded-row="{ columns, item }">
-        <tr>
-          <td :colspan="columns.length">
-            <ul>
-              <li v-for="(hide, index) in item.hides" :key="index">
-                {{ hide.hide }}
-              </li>
-            </ul>
-          </td>
-        </tr>
+      <template v-slot:item.picture="{ item }">
+        <img v-if="item.picture" :src="item.picture" height="30" width="30" />
       </template>
       <template v-slot:item.actions="{ item }">
-        <v-icon size="small" class="me-2" @click="editItem(item)">
-          mdi-pencil
-        </v-icon>
-        <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+        <div class="d-flex justify-space-evenly">
+          <v-icon size="small" class="pr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+          <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+        </div>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -122,6 +155,7 @@
 </template>
 
 <script>
+const REGEX_NUMBER = /^[0-9]+$/;
 export default {
   data: () => ({
     expanded: [],
@@ -131,31 +165,39 @@ export default {
       {
         title: "Process",
         align: "start",
-        sortable: false,
-        key: "name",
+        key: "process",
       },
       { title: "Roasted", key: "roasted" },
-      { title: "Picture", key: "picture" },
-      { title: "Description", key: "description" },
-      { title: "", key: "data-table-expand" },
-      { title: "Actions", key: "actions", sortable: false },
+      { title: "Picture", key: "picture", sortable: false },
+      { title: "Common name", key: "commonName" },
+      { title: "Edit type", key: "actions", sortable: false, align: "center" },
     ],
+    types: [],
     process: [],
+    roast: [],
+
     editedIndex: -1,
     editedItem: {
-      name: "",
+      process: "",
       roasted: "",
       picture: "",
-      description: "",
-      hides: "",
+      commonName: "",
+      pictureUrl: "",
+      gasStates: [],
+    },
+    gasState: {
+      gas: 0,
+      WhenTempurature: 0,
     },
     defaultItem: {
-      name: "",
+      process: "",
       roasted: "",
       picture: "",
-      description: "",
-      hides: "",
+      commonName: "",
+      pictureUrl: "",
+      gasStates: [],
     },
+    rules: { requireInput: [(v) => !!v || "Field is required"] },
   }),
 
   computed: {
@@ -172,318 +214,50 @@ export default {
     },
   },
 
-  created() {
+  mounted() {
     this.initialize();
   },
 
   methods: {
     initialize() {
-      this.process = [
+      this.types = [
         {
           id: 1,
-          name: "Wet process",
-          roasted: "Light roasted",
-          description: "Light (Cinnamon Roast, Half City)",
-          hides: [
-            {
-              hide: "Light (Cinnamon Roast, Half City)",
-            },
-            {
-              hide: "199-205  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "1st crack",
-            },
-            {
-              hide: "Dry",
-            },
-            {
-              hide: "Light-bodied and somewhat sour, grassy, and snappy",
-            },
-            {
-              hide: "Suitable for brewing Filter",
-            },
-          ],
+          process: "Wet",
+          roasted: "Light",
+          commonName: "Cinnamon Roast, Half City",
+          gasStates: [],
         },
         {
           id: 2,
-          name: "Wet process",
-          roasted: "Medium roasted",
-          description: "Medium(Full City, Regular)",
-          hides: [
-            {
-              hide: "Medium(Full City, Regular)",
-            },
-            {
-              hide: "215-218  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C ",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "Between 1st and 2nd crack",
-            },
-            {
-              hide: "Dry",
-            },
-            {
-              hide: "A bit sweeter than light roast; full body balanced by acid snap, aroma, and complexity",
-            },
-            {
-              hide: "Suitable for brewing Filter and Espresso",
-            },
-          ],
+          process: "Wet",
+          roasted: "Medium",
+          commonName: "Full City, Regular",
+          gasStates: [],
         },
         {
           id: 3,
-          name: "Wet process",
-          roasted: "Dark roasted",
-          description: "Dark(Italian Espresso, Viennese)",
-          hides: [
-            {
-              hide: "Dark(Italian Espresso, Viennese)",
-            },
-            {
-              hide: "225-245  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C ",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "2nd crack",
-            },
-            {
-              hide: "Slightly shiny",
-            },
-            {
-              hide: "Somewhat spicy; complexity is traded for a rich chocolaty body. aroma is exchanged for sweetness",
-            },
-            {
-              hide: "Suitable for brewing with Espresso machines and making coffee with milk",
-            },
-          ],
-        },
-        {
-          id: 4,
-          name: "Dry process",
-          roasted: "Light roasted",
-          description: "Light (Cinnamon Roast, Half City)",
-          hides: [
-            {
-              hide: "Light (Cinnamon Roast, Half City)",
-            },
-            {
-              hide: "199-205  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "1st crack",
-            },
-            {
-              hide: "Dry",
-            },
-            {
-              hide: "Light-bodied and somewhat sour, grassy, and snappy",
-            },
-            {
-              hide: "Suitable for brewing Filter",
-            },
-          ],
-        },
-        {
-          id: 5,
-          name: "Dry process",
-          roasted: "Medium roasted",
-          description: "Medium(Full City, Regular)",
-          hides: [
-            {
-              hide: "Medium(Full City, Regular)",
-            },
-            {
-              hide: "215-218  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C ",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "Between 1st and 2nd crack",
-            },
-            {
-              hide: "Dry",
-            },
-            {
-              hide: "A bit sweeter than light roast; full body balanced by acid snap, aroma, and complexity",
-            },
-            {
-              hide: "Suitable for brewing Filter and Espresso",
-            },
-          ],
-        },
-        {
-          id: 6,
-          name: "Dry process",
-          roasted: "Dark roasted",
-          description: "Dark(Italian Espresso, Viennese)",
-          hides: [
-            {
-              hide: "Dark(Italian Espresso, Viennese)",
-            },
-            {
-              hide: "225-245  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C ",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "2nd crack",
-            },
-            {
-              hide: "Slightly shiny",
-            },
-            {
-              hide: "Somewhat spicy; complexity is traded for a rich chocolaty body. aroma is exchanged for sweetness",
-            },
-            {
-              hide: "Suitable for brewing with Espresso machines and making coffee with milk",
-            },
-          ],
-        },
-        {
-          id: 7,
-          name: "Honey process",
-          roasted: "Light roasted",
-          description: "Light (Cinnamon Roast, Half City)",
-          hides: [
-            {
-              hide: "Light (Cinnamon Roast, Half City)",
-            },
-            {
-              hide: "199-205  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "1st crack",
-            },
-            {
-              hide: "Dry",
-            },
-            {
-              hide: "Light-bodied and somewhat sour, grassy, and snappy",
-            },
-            {
-              hide: "Suitable for brewing Filter",
-            },
-          ],
-        },
-        {
-          id: 8,
-          name: "Honey process",
-          roasted: "Medium roasted",
-          description: "Medium(Full City, Regular)",
-          hides: [
-            {
-              hide: "Medium(Full City, Regular)",
-            },
-            {
-              hide: "215-218  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C ",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "Between 1st and 2nd crack",
-            },
-            {
-              hide: "Dry",
-            },
-            {
-              hide: "A bit sweeter than light roast; full body balanced by acid snap, aroma, and complexity",
-            },
-            {
-              hide: "Suitable for brewing Filter and Espresso",
-            },
-          ],
-        },
-        {
-          id: 9,
-          name: "Honey process",
-          roasted: "Dark roasted",
-          description: "Dark(Italian Espresso, Viennese)",
-          hides: [
-            {
-              hide: "Dark(Italian Espresso, Viennese)",
-            },
-            {
-              hide: "225-245  °C",
-            },
-            {
-              hide: "Gas 10 when 180 °C ",
-            },
-            {
-              hide: "Gas 5 when 195 °C",
-            },
-            {
-              hide: "2nd crack",
-            },
-            {
-              hide: "Slightly shiny",
-            },
-            {
-              hide: "Somewhat spicy; complexity is traded for a rich chocolaty body. aroma is exchanged for sweetness",
-            },
-            {
-              hide: "Suitable for brewing with Espresso machines and making coffee with milk",
-            },
-          ],
+          process: "Wet",
+          roasted: "Dark",
+          commonName: "Italian Espresso, Viennese",
+          gasStates: [],
         },
       ];
     },
-
     editItem(item) {
-      this.editedIndex = this.process.indexOf(item);
+      this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
 
     deleteItem(item) {
-      this.editedIndex = this.process.indexOf(item);
+      this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
 
     deleteItemConfirm() {
-      this.process.splice(this.editedIndex, 1);
+      this.types.splice(this.editedIndex, 1);
       this.closeDelete();
     },
 
@@ -502,14 +276,44 @@ export default {
         this.editedIndex = -1;
       });
     },
-
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.process[this.editedIndex], this.editedItem);
+    async save() {
+      const { valid } = await this.$refs.form.validate();
+      if (valid) {
+        if (this.editedIndex > -1) {
+          Object.assign(this.types[this.editedIndex], this.editedItem);
+        } else {
+          this.types.push(this.editedItem);
+        }
+        this.close();
+        return;
       } else {
-        this.process.push(this.editedItem);
+        const invalidField = this.$refs.form.$el.querySelector(
+          ".v-messages__message"
+        );
+        if (invalidField) {
+          invalidField.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
       }
-      this.close();
+    },
+    onlyNumber(event, max) {
+      if (!REGEX_NUMBER.test(event.key) || event.target.value.length == max) {
+        return event.preventDefault();
+      }
+    },
+
+    insertGasState() {
+      this.editedItem.gasStates.push(this.gasState);
+      this.gasState = {
+        gas: 0,
+        WhenTempurature: 0,
+      };
+    },
+    deleteGasState(index) {
+      this.editedItem.gasStates.splice(index, 1); // Remove gas state at the specified index
+      this.gasState = {
+        gas: 0,
+        WhenTempurature: 0,
+      };
     },
   },
 };
