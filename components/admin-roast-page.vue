@@ -65,18 +65,22 @@
           </v-dialog>
         </v-toolbar>
       </template>
+
       <template v-slot:item.actions="{ item }">
-        <v-icon
-          class="me-2"
-          size="small"
-          @click="
-            editItem(item, this.tables.indexOf(table)),
-              (selecting = table.headers[0].title),
-              (tableIndex = this.tables.indexOf(table))
-          "
-        >
-          mdi-pencil
-        </v-icon>
+        <div class="d-flex justify-space-evenly">
+          <v-icon
+            class="pr-2"
+            size="small"
+            @click="
+              editItem(item, this.tables.indexOf(table)),
+                (selecting = table.headers[0].title),
+                (tableIndex = this.tables.indexOf(table))
+            "
+          >
+            mdi-pencil
+          </v-icon>
+          <v-icon size="small"> mdi-eye </v-icon>
+        </div>
       </template>
     </v-data-table>
   </div>
@@ -136,15 +140,14 @@ export default {
           headers: [
             {
               title: "Roasted",
-              align: "start",
+              align: "center",
               sortable: false,
               key: "name",
             },
-            { title: "Edit", key: "actions", sortable: false },
+            { title: "Edit", align: "center", key: "actions", sortable: false },
           ],
         },
       ];
-      console.log(this.tables);
     },
 
     editItem(item, index) {

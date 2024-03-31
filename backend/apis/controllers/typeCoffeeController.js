@@ -1,7 +1,7 @@
 const service = require("../services/typeCoffeeService");
 
 const getTypesCoffee = async (req, res) => {
-  const types = await service.getTypesCoffee();
+  const types = await service.getTypesCoffee(req);
   res.send(types);
 };
 const getTypeCoffee = async (req, res) => {
@@ -27,15 +27,24 @@ const countTypes = async (req, res) => {
   const counttypes = await service.countTypes();
   res.send(counttypes);
 };
-const getAllRoastAndProcess = async (req, res) => {
-  const roastandprocess = await service.getAllRoastAndProcess();
-  res.send(roastandprocess);
-};
-const insertNewProcess = async (req, res) => {
-  const insertedprocess = await service.insertNewProcess(req.body);
-  res.send(insertedprocess);
+const getAllRoast = async (req, res) => {
+  const roast = await service.getAllRoast();
+  res.send(roast);
 };
 
+const getAllProcess = async (req, res) => {
+  const process = await service.getAllProcess();
+  res.send(process);
+};
+
+const postRequestProcess = async (req, res) => {
+  const response = await service.postRequestProcess(req, req.body);
+  res.send(response);
+};
+const postRequestRoast = async (req, res) => {
+  const response = await service.postRequestRoast(req, req.body);
+  res.send(response);
+};
 module.exports = {
   getTypesCoffee,
   getTypeCoffee,
@@ -43,6 +52,8 @@ module.exports = {
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
   countTypes,
-  getAllRoastAndProcess,
-  insertNewProcess,
+  getAllRoast,
+  getAllProcess,
+  postRequestProcess,
+  postRequestRoast,
 };

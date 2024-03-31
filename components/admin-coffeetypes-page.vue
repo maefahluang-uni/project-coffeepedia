@@ -1,114 +1,251 @@
 <template>
   <div class="ma-2">
     <v-data-table
-      v-model:expanded="expanded"
       :headers="headers"
       :items="types"
       :sort-by="[{ key: 'Process', order: 'asc' }]"
       item-value="id"
+      :loading="types.length == 0 || roast.length == 0 || process.length == 0"
     >
+      <template v-slot:loading>
+        <v-skeleton-loader type="table-row-divider@6"></v-skeleton-loader>
+      </template>
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title><h4>Type Coffee Beans</h4></v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ props }">
-              <v-btn
-                color="green"
-                dark
-                class="mb-2"
-                v-bind="props"
-                variant="tonal"
-                rounded="xl"
-              >
-                <v-icon icon="mdi-plus" color="green"></v-icon>
-                Add Type
-              </v-btn>
-            </template>
+          <v-spacer></v-spacer
+          ><v-btn
+            color="green"
+            variant="tonal"
+            rounded="xl"
+            @click="dialog = !dialog"
+          >
+            <v-icon icon="mdi-plus" color="green"></v-icon>
+            Add Type
+          </v-btn>
+          <v-dialog v-model="dialog" max-width="700px">
             <v-form ref="form">
               <v-card>
                 <v-container>
                   <v-card-title class="pa-0 mb-4">
                     {{ formTitle }}
                   </v-card-title>
-                  <div class="d-flex">
+                  <div class="d-flex mb-2">
                     <v-select
                       v-model="editedItem.process"
                       :items="process"
+                      item-title="ID"
+                      item-value="ID"
                       class="pe-2"
-                      label="Process"
-                      :rules="rules.requireInput"
-                    >
+                      label="Process*"
+                      :rules="rules.requireInput('Process')"
+                      ><template v-slot:item="{ props, item }">
+                        <v-list-item
+                          v-bind="props"
+                          :subtitle="
+                            item.raw.ProcessName.charAt(0).toUpperCase() +
+                            item.raw.ProcessName.slice(1)
+                          "
+                        ></v-list-item>
+                      </template>
                     </v-select>
                     <v-select
                       v-model="editedItem.roasted"
-                      :items="process"
-                      label="Roasted"
-                      :rules="rules.requireInput"
-                    >
+                      :items="roast"
+                      label="Roasted*"
+                      item-title="ID"
+                      item-value="ID"
+                      :rules="rules.requireInput('Roast')"
+                      ><template v-slot:item="{ props, item }">
+                        <v-list-item
+                          v-bind="props"
+                          :subtitle="
+                            item.raw.RoastName.charAt(0).toUpperCase() +
+                            item.raw.RoastName.slice(1)
+                          "
+                        ></v-list-item>
+                      </template>
                     </v-select>
                   </div>
 
                   <v-text-field
+                    class="mb-2"
                     v-model="editedItem.commonName"
-                    label="Common name"
+                    label="Common name*"
+                    :rules="rules.requireInput('Common name')"
                   ></v-text-field>
 
                   <v-file-input
+                    class="mb-2"
+                    v-model="pictureFile"
                     v-slot:item.image="{ item }"
                     accept="image/*"
                     label="Picture"
+                    :rules="rules.requireInput('Picture')"
                   ></v-file-input>
-
-                  <div class="d-flex align-center mb-4">
-                    <v-card-title class="pa-0 mr-2"> Gas states </v-card-title>
-                    <v-btn
-                      class=""
-                      variant="tonal"
-                      icon="mdi-plus"
-                      size="x-small"
-                      @click="insertGasState()"
+                  <div class="mb-7">
+                    <v-card
+                      class="d-flex justify-center align-center mb-2"
+                      width="150"
+                      style="z-index: 1"
+                      flat
                     >
-                    </v-btn>
+                      <v-card-title class="pa-0 mr-2">
+                        Gas states
+                      </v-card-title>
+                      <v-btn
+                        variant="tonal"
+                        icon="mdi-plus"
+                        size="x-small"
+                        @click="insertGasState()"
+                      >
+                      </v-btn>
+                    </v-card>
+                    <v-card
+                      class="mt-n6"
+                      variant="outlined"
+                      v-if="editedItem.gasStates.length != 0"
+                    >
+                      <div class="mt-6 pe-2">
+                        <div
+                          v-for="(state, index) in editedItem.gasStates"
+                          class="d-flex mb-1"
+                          :key="index"
+                        >
+                          <v-btn
+                            class="mt-2"
+                            icon="mdi-minus"
+                            variant="text"
+                            color="error"
+                            size="small"
+                            @click="deleteGasState(index)"
+                          >
+                          </v-btn>
+                          <v-text-field
+                            class="pe-2"
+                            label="Gas*"
+                            v-model="state.gas"
+                            :rules="rules.requireInput('Gas')"
+                          ></v-text-field
+                          ><v-text-field
+                            label="Tempurature*"
+                            v-model="state.WhenTempurature"
+                            suffix="°C"
+                            :rules="rules.onlyNumber('Tempurature')"
+                          ></v-text-field>
+                        </div>
+                      </div>
+                    </v-card>
                   </div>
+                  <v-text-field
+                    class="mb-2"
+                    v-model="editedItem.intervalTempureture"
+                    label="Interval tempurature*"
+                    suffix="°C"
+                    :rules="rules.intervalTempureture"
+                  ></v-text-field>
+                  <v-select
+                    class="mb-2"
+                    v-model="editedItem.crackState"
+                    :items="crackStates"
+                    label="Crack state*"
+                    item-title="ID"
+                    item-value="ID"
+                    :rules="rules.requireInput('Crack state')"
+                    ><template v-slot:item="{ props, item }">
+                      <v-list-item
+                        v-bind="props"
+                        :subtitle="
+                          item.raw.state.charAt(0).toUpperCase() +
+                          item.raw.state.slice(1)
+                        "
+                      ></v-list-item>
+                    </template>
+                  </v-select>
 
-                  <div
-                    v-for="(state, index) in editedItem.gasStates"
-                    class="d-flex"
-                    :key="index"
-                  >
-                    <v-btn
-                      class="mt-2 mr-2"
-                      icon="mdi-minus"
-                      variant="text"
-                      color="error"
-                      size="small"
-                      @click="deleteGasState(index)"
+                  <v-textarea
+                    class="mb-2"
+                    v-model="editedItem.flavorDetail"
+                    label="Flavor detail*"
+                    variant="solo-filled"
+                    :rules="rules.requireInput('Flavor detail')"
+                    flat
+                  ></v-textarea>
+                  <v-textarea
+                    class="mb-2"
+                    v-model="editedItem.moreDetail"
+                    label="More detail (optional)"
+                    variant="solo-filled"
+                    flat
+                  ></v-textarea>
+
+                  <div class="mb-7">
+                    <v-card
+                      class="d-flex justify-center align-center mb-2"
+                      width="205"
+                      style="z-index: 1"
+                      flat
                     >
-                    </v-btn>
-                    <v-text-field
-                      class="pe-2"
-                      label="Gas"
-                      v-model="state.gas"
-                      :rules="rules.requireInput"
-                    ></v-text-field
-                    ><v-text-field
-                      label="Tempurature (degree celsius)"
-                      v-model="state.WhenTempurature"
-                      @keypress="onlyNumber($event, 3)"
-                      :rules="rules.requireInput"
-                    ></v-text-field>
+                      <v-card-title class="pa-0 mr-2">
+                        Drink suggestion
+                      </v-card-title>
+                      <v-btn
+                        variant="tonal"
+                        icon="mdi-plus"
+                        size="x-small"
+                        @click="insertDrinkSuggest()"
+                      >
+                      </v-btn>
+                    </v-card>
+                    <v-card
+                      class="mt-n6"
+                      variant="outlined"
+                      v-if="editedItem.drinkSuggest.length != 0"
+                    >
+                      <div class="mt-6 pe-2">
+                        <div
+                          v-for="(drink, index) in editedItem.drinkSuggest"
+                          class="d-flex mb-1"
+                          :key="index"
+                        >
+                          <v-btn
+                            class="mt-2"
+                            icon="mdi-minus"
+                            variant="text"
+                            color="error"
+                            size="small"
+                            @click="deleteDrinkSuggest(index)"
+                          >
+                          </v-btn>
+                          <v-text-field
+                            class="pe-2"
+                            label="Drink name*"
+                            v-model="drink.drinkName"
+                            :rules="rules.requireInput('Drink name')"
+                          ></v-text-field>
+                          <v-select
+                            :prepend-inner-icon="mdi + drink.icon"
+                            class="pe-2"
+                            v-model="drink.icon"
+                            :items="drinkIcons"
+                            label="Drink icon*"
+                            :rules="rules.requireInput('Drink icon')"
+                          >
+                          </v-select>
+                        </div>
+                      </div>
+                    </v-card>
                   </div>
                 </v-container>
 
-                <v-card-actions>
+                <v-card-actions class="mb-2">
                   <v-spacer></v-spacer>
-                  <v-btn color="blue-darken-1" variant="text" @click="close">
+                  <v-btn color="gray" variant="tonal" @click="close">
                     Cancel
                   </v-btn>
-                  <v-btn color="blue-darken-1" variant="text" @click="save">
-                    Save
+                  <v-btn color="#6AC479" variant="elevated" @click="save">
+                    <div class="font-weight-bold text-white">Save</div>
                   </v-btn>
                 </v-card-actions>
               </v-card></v-form
@@ -117,34 +254,40 @@
           <v-dialog v-model="dialogDelete" max-width="500px">
             <v-card>
               <v-card-title class="text-h5"
-                >Are you sure you want to delete this type?</v-card-title
+                >Are you sure you want to delete this?</v-card-title
               >
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
-                  >Cancel</v-btn
-                >
-                <v-btn
-                  color="blue-darken-1"
-                  variant="text"
-                  @click="deleteItemConfirm"
-                  >OK</v-btn
-                >
+                <v-btn color="blue-darken-1" variant="text">Cancel</v-btn>
+                <v-btn color="blue-darken-1" variant="text">OK</v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-card>
           </v-dialog>
         </v-toolbar>
       </template>
+
+      <template v-slot:item.process="{ item }">
+        {{
+          getProcessName(item.process).charAt(0).toUpperCase() +
+          getProcessName(item.process).slice(1)
+        }}
+      </template>
+      <template v-slot:item.roasted="{ item }">
+        {{
+          getRoastName(item.roasted).charAt(0).toUpperCase() +
+          getRoastName(item.roasted).slice(1)
+        }}
+      </template>
       <template v-slot:item.picture="{ item }">
-        <img v-if="item.picture" :src="item.picture" height="30" width="30" />
+        <!--<img v-if="item.picture" :src="item.picture" height="30" width="30" />-->
       </template>
       <template v-slot:item.actions="{ item }">
         <div class="d-flex justify-space-evenly">
           <v-icon size="small" class="pr-2" @click="editItem(item)">
             mdi-pencil
           </v-icon>
-          <v-icon size="small" @click="deleteItem(item)"> mdi-delete </v-icon>
+          <v-icon size="small" @click="activateItem(item)"> mdi-eye </v-icon>
         </div>
       </template>
       <template v-slot:no-data>
@@ -155,10 +298,16 @@
 </template>
 
 <script>
-const REGEX_NUMBER = /^[0-9]+$/;
+import axios from "axios";
+import config from "../config.js";
+const api = config.LOCAL_API_URL;
+const REGEX_NUMBER = /^\d+$/;
+const REGEX_INTERVAL_TEMPURATURE = /^(\d+(\.\d+)?\s*-\s*\d+(\.\d+)?)?$/;
+
 export default {
   data: () => ({
-    expanded: [],
+    mdi: "mdi-",
+    visibleDialog: true,
     dialog: false,
     dialogDelete: false,
     headers: [
@@ -175,7 +324,21 @@ export default {
     types: [],
     process: [],
     roast: [],
-
+    crackStates: [
+      { ID: 1, state: "first crack" },
+      { ID: 2, state: "between first and second crack" },
+      { ID: 3, state: "second crack" },
+    ],
+    pictureFile: "",
+    gasState: {
+      gas: "",
+      WhenTempurature: "",
+    },
+    drinkSuggest: {
+      drinkName: "",
+      icon: "",
+    },
+    drinkIcons: ["coffee-maker", "coffee", "kettle-pour-over", "cup"],
     editedIndex: -1,
     editedItem: {
       process: "",
@@ -184,10 +347,11 @@ export default {
       commonName: "",
       pictureUrl: "",
       gasStates: [],
-    },
-    gasState: {
-      gas: 0,
-      WhenTempurature: 0,
+      intervalTempureture: "",
+      crackState: "",
+      flavorDetail: "",
+      moreDetail: "",
+      drinkSuggest: [],
     },
     defaultItem: {
       process: "",
@@ -196,8 +360,54 @@ export default {
       commonName: "",
       pictureUrl: "",
       gasStates: [],
+      intervalTempureture: "",
+      crackState: "",
+      flavorDetail: "",
+      moreDetail: "",
+      drinkSuggest: [],
     },
-    rules: { requireInput: [(v) => !!v || "Field is required"] },
+    rules: {
+      requireInput: (fieldName) => [
+        (value) => {
+          if (value) return true;
+          return `${
+            fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+          } is required`;
+        },
+      ],
+      onlyNumber: (fieldName) => [
+        (value) => {
+          if (value) return true;
+          return `${
+            fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
+          } is required`;
+        },
+        (value) => {
+          if (value && REGEX_NUMBER.test(value)) return true;
+          return "Please enter only number";
+        },
+      ],
+      intervalTempureture: [
+        (value) => {
+          if (value && REGEX_INTERVAL_TEMPURATURE.test(value)) {
+            return true;
+          }
+          return "Please enter a valid format eg. 199-205";
+        },
+        (value) => {
+          if (!value || typeof value !== "string" || !value.includes("-")) {
+            return true; // Skip validation if format is invalid or range is not provided
+          }
+          const [left, right] = value
+            .split("-")
+            .map((item) => parseFloat(item.trim()));
+          if (left >= right) {
+            return "Left number must less than right number";
+          }
+          return true;
+        },
+      ],
+    },
   }),
 
   computed: {
@@ -219,29 +429,80 @@ export default {
   },
 
   methods: {
+    async retryAfterDelay(apiCall) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await apiCall();
+    },
     initialize() {
       this.types = [
         {
-          id: 1,
-          process: "Wet",
-          roasted: "Light",
+          ID: 1,
+          process: 3,
+          roasted: 1,
           commonName: "Cinnamon Roast, Half City",
-          gasStates: [],
+          gasStates: [
+            {
+              gas: "10",
+              WhenTempurature: "180",
+            },
+            {
+              gas: "5",
+              WhenTempurature: "195",
+            },
+          ],
+          intervalTempureture: "199-205",
+          crackState: 1,
+          flavorDetail: "Light-bodied and somewhat sour, grassy, and snappy",
+          moreDetail: "Suitable for brewing filter",
+          drinkSuggest: [
+            {
+              drinkName: "Espresso",
+              icon: "coffee-maker",
+            },
+            {
+              drinkName: "Americano",
+              icon: "coffee",
+            },
+            {
+              drinkName: "Drip",
+              icon: "kettle-pour-over",
+            },
+          ],
         },
         {
-          id: 2,
-          process: "Wet",
-          roasted: "Medium",
+          ID: 2,
+          process: 3,
+          roasted: 2,
           commonName: "Full City, Regular",
           gasStates: [],
+          intervalTempureture: "",
+          crackState: 2,
+          flavorDetail: "",
+          moreDetail: "",
+          drinkSuggest: [],
         },
         {
-          id: 3,
-          process: "Wet",
-          roasted: "Dark",
+          ID: 3,
+          process: 3,
+          roasted: 3,
           commonName: "Italian Espresso, Viennese",
           gasStates: [],
+          intervalTempureture: "",
+          crackState: 3,
+          flavorDetail: "",
+          moreDetail: "",
+          drinkSuggest: [],
         },
+      ];
+      this.process = [
+        { ID: 1, ProcessName: "dry" },
+        { ID: 2, ProcessName: "honey" },
+        { ID: 3, ProcessName: "wet" },
+      ];
+      this.roast = [
+        { ID: 1, RoastName: "light" },
+        { ID: 2, RoastName: "medium" },
+        { ID: 3, RoastName: "dark" },
       ];
     },
     editItem(item) {
@@ -250,7 +511,7 @@ export default {
       this.dialog = true;
     },
 
-    deleteItem(item) {
+    activateItem(item) {
       this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
@@ -263,6 +524,7 @@ export default {
 
     close() {
       this.dialog = false;
+      this.pictureFile = "";
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
@@ -295,25 +557,41 @@ export default {
         }
       }
     },
-    onlyNumber(event, max) {
-      if (!REGEX_NUMBER.test(event.key) || event.target.value.length == max) {
-        return event.preventDefault();
-      }
-    },
-
     insertGasState() {
       this.editedItem.gasStates.push(this.gasState);
       this.gasState = {
-        gas: 0,
-        WhenTempurature: 0,
+        gas: "",
+        WhenTempurature: "",
       };
     },
     deleteGasState(index) {
       this.editedItem.gasStates.splice(index, 1); // Remove gas state at the specified index
       this.gasState = {
-        gas: 0,
-        WhenTempurature: 0,
+        gas: "",
+        WhenTempurature: "",
       };
+    },
+    insertDrinkSuggest() {
+      this.editedItem.drinkSuggest.push(this.drinkSuggest);
+      this.drinkSuggest = {
+        drinkName: "",
+        icon: "",
+      };
+    },
+    deleteDrinkSuggest(index) {
+      this.editedItem.drinkSuggest.splice(index, 1);
+      this.drinkSuggest = {
+        drinkName: "",
+        icon: "",
+      };
+    },
+    getProcessName(id) {
+      const processItem = this.process.find((item) => item.ID === id);
+      return processItem ? processItem.ProcessName : null;
+    },
+    getRoastName(id) {
+      const roastItem = this.roast.find((item) => item.ID === id);
+      return roastItem ? roastItem.RoastName : null;
     },
   },
 };

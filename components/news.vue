@@ -29,28 +29,20 @@
         >
           <v-card
             v-for="(news, index) in items"
-            class="ma-3 elevation-5"
-            max-width="400"
+            class="ma-3 elevation-5 d-flex flex-column"
+            width="400"
             @click="openLink(news.raw.href)"
             color="#F1F1F1"
           >
-            <div class="">
-              <v-img
-                class="d-flex"
-                cover
-                :src="news.raw.newsImageUrl"
-                height="200"
-              />
-              <div>
-                <p class="blog-title mt-2">
-                  {{ news.raw.title }}
-                </p>
-                <div
-                  class="text-grey text-end blog-subtitle text-decoration-underline my-2 mx-5"
-                >
-                  read more
-                </div>
-              </div>
+            <v-img cover :src="news.raw.newsImageUrl" max-height="200" />
+
+            <p class="blog-title mt-2 mb-auto">
+              {{ news.raw.title }}
+            </p>
+            <div
+              class="text-grey text-end blog-subtitle text-decoration-underline mb-2 mx-5"
+            >
+              read more
             </div>
           </v-card>
         </div> </template

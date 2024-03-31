@@ -511,8 +511,6 @@ export default {
     margin-top: var(--margin-card);
     height: calc((var(--card1-height) / 2) - (var(--margin-card) / 2));
   }
-  .recent-blog-card {
-  }
   .blog-detail-card {
     width: 95vw;
     height: 93dvh;
