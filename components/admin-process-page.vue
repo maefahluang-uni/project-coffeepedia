@@ -179,7 +179,7 @@ export default {
         };
         this.tables.push(table);
       } catch (error) {
-        console.error("Error fetching all news:", error);
+        console.error("Error fetching all process:", error);
         await this.retryAfterDelay(this.getAllNews());
       }
     },
