@@ -174,7 +174,7 @@ export default {
     guestCount: 0,
     commentCount: 0,
   }),
-  mounted() {
+  created() {
     this.getTypeCount();
     this.getBlogCount();
     this.getNewsCount();

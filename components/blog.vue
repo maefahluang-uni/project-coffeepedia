@@ -283,7 +283,7 @@ export default {
       comments: [],
     };
   },
-  mounted() {
+  created() {
     this.getAllBlogs();
     this.getTopBlogs();
   },

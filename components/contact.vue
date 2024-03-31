@@ -83,7 +83,7 @@ export default {
       email: "",
     };
   },
-  mounted() {
+  created() {
     this.getContact();
   },
   methods: {

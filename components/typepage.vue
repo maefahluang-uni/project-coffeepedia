@@ -435,7 +435,7 @@ export default {
     loadingSuggest: true,
     window: 0,
   }),
-  mounted() {
+  created() {
     this.getTypes();
   },
   computed: {},

@@ -424,7 +424,8 @@ export default {
     },
   },
 
-  mounted() {
+  created() {
+    this.getAllProcessAndRoast();
     this.initialize();
   },
 
@@ -433,7 +434,7 @@ export default {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await apiCall();
     },
-    initialize() {
+    async initialize() {
       this.types = [
         {
           ID: 1,
@@ -494,16 +495,33 @@ export default {
           drinkSuggest: [],
         },
       ];
-      this.process = [
-        { ID: 1, ProcessName: "dry" },
-        { ID: 2, ProcessName: "honey" },
-        { ID: 3, ProcessName: "wet" },
-      ];
-      this.roast = [
-        { ID: 1, RoastName: "light" },
-        { ID: 2, RoastName: "medium" },
-        { ID: 3, RoastName: "dark" },
-      ];
+    },
+    async getAllProcessAndRoast() {
+      try {
+        const res1 = await axios.get(api + "/coffeetypes/process", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        const res2 = await axios.get(api + "/coffeetypes/roast", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        let items1 = [];
+
+        res1.data.response.forEach((element) => {
+          if (element.IsActivate == "1") {
+            items1.push(element);
+          }
+        });
+
+        this.process = res1.data.response;
+        this.roast = res2.data.response;
+      } catch (error) {
+        console.error("Error fetching all ProcessAndRoast:", error);
+        await this.retryAfterDelay(this.getAllProcessAndRoast());
+      }
     },
     editItem(item) {
       this.editedIndex = this.types.indexOf(item);

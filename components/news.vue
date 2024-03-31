@@ -67,7 +67,7 @@ export default {
       news: [],
     };
   },
-  mounted() {
+  created() {
     this.getAllNews();
   },
   methods: {
