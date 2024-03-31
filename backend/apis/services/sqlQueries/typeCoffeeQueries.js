@@ -12,7 +12,7 @@ roast_level ON type_coffee.RoastLevelID = roast_level.ID
 JOIN
 coffee_process ON type_coffee.CoffeeProcessID = coffee_process.ID
 WHERE
-roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1  
+roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1 AND type_coffee.IsActivate = 1
 ORDER BY coffee_process.ProcessName ASC
 `;
 
@@ -53,6 +53,41 @@ WHERE
 roast_level.IsActivate = 1 AND coffee_process.IsActivate = 1 AND type_coffee.ID = ?;
 `;
 
+const INSERT_NEW_TYPE_COFFEE = `
+INSERT INTO 
+type_coffee 
+( RoastLevelID, 
+  CoffeeProcessID, 
+  CommonName, 
+  Tempurature, 
+  CrackState, 
+  Flavor, 
+  MoreDetail) 
+VALUES 
+( ?, 
+?, 
+?, 
+?, 
+?, 
+?,
+? )
+`;
+
+const UPDATE_TYPE_COFFEE = `
+UPDATE 
+type_coffee
+SET 
+RoastLevelID = ?, 
+CoffeeProcessID = ?, 
+CommonName = ?, 
+Tempurature = ?, 
+CrackState = ?, 
+Flavor = ?, 
+MoreDetail = ?
+WHERE 
+type_coffee.ID = ?;
+`;
+
 const GET_TYPE_COFFEE_GAS_STATES = `
 SELECT 
 gas_state.Gas, gas_state.WhenTempurature 
@@ -62,6 +97,30 @@ type_coffee ON gas_state.TypeCoffeeID = type_coffee.ID
 WHERE
 type_coffee.ID = ?  
 ORDER BY gas_state.Gas  DESC
+`;
+
+const INSERT_GAS_STATE = `
+INSERT INTO 
+gas_state 
+(TypeCoffeeID, 
+Gas, 
+WhenTempurature) 
+VALUES 
+( ?, 
+?, 
+?)
+`;
+
+const INSERT_DRINK_SUGGESTION = `
+INSERT INTO 
+drink_suggest 
+(TypeID, 
+DrinkName, 
+icon) 
+VALUES 
+( ?,
+  ?, 
+  ?)
 `;
 
 const GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID = `
@@ -174,6 +233,10 @@ module.exports = {
   GET_TYPE_COFFEE_BY_ID,
   GET_TYPE_COFFEE_GAS_STATES,
   GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID,
+  INSERT_NEW_TYPE_COFFEE,
+  UPDATE_TYPE_COFFEE,
+  INSERT_GAS_STATE,
+  INSERT_DRINK_SUGGESTION,
   GET_TYPES_COFFEE,
   GET_TYPES_COFFEE_FOR_ADMIN,
   GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID,

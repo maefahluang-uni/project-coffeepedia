@@ -218,7 +218,7 @@ const postRequestProcess = async (req, data) => {
       });
     }
 
-    if (isedit) {
+    if (isedit && !data.IsActivate) {
       if (!data.ProcessName || !data.ID) {
         return JSON.stringify({
           status: 400,
@@ -226,6 +226,7 @@ const postRequestProcess = async (req, data) => {
           response: null,
         });
       }
+
       let sql = typeCoffeeQueries.UPDATE_PROCESS;
       let results = await conn.awaitQuery(sql, [data.ProcessName, data.ID]);
       return JSON.stringify({
@@ -234,7 +235,22 @@ const postRequestProcess = async (req, data) => {
         response: results,
       });
     }
-
+    if (isedit && data.IsActivate) {
+      if (!data.IsActivate || !data.ID) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = typeCoffeeQueries.UPDATE_PROCESS_ACTIVATE;
+      let results = await conn.awaitQuery(sql, [data.IsActivate, data.ID]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
     return JSON.stringify({
       status: 400,
       error: "Bad Request",
@@ -253,16 +269,84 @@ const postRequestProcess = async (req, data) => {
 
 const postRequestRoast = async (req, data) => {
   try {
-    if (!data || typeof data !== "object" || !data.RoastName) {
+    if (!data || typeof data !== "object") {
       throw new Error("Invalid request data");
     }
+    const insertValue = req.query.insert;
+    const editValue = req.query.edit;
+    let isinsert = false;
+    let isedit = false;
 
-    let sql = typeCoffeeQueries.INSERT_NEW_ROAST;
-    let results = await conn.awaitQuery(sql, [data.RoastName]);
+    if (insertValue === "true") {
+      isinsert = true;
+    }
+    if (editValue === "true") {
+      isedit = true;
+    }
+
+    if (isinsert && isedit) {
+      return JSON.stringify({
+        status: 400,
+        error:
+          "Bad Request: Provide only one insert or edit parameter at a time",
+        response: null,
+      });
+    }
+
+    if (isinsert) {
+      if (!data.RoastName) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = typeCoffeeQueries.INSERT_NEW_ROAST;
+      let results = await conn.awaitQuery(sql, [data.RoastName]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+
+    if (isedit && !data.IsActivate) {
+      if (!data.RoastName || !data.ID) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+
+      let sql = typeCoffeeQueries.UPDATE_ROAST;
+      let results = await conn.awaitQuery(sql, [data.RoastName, data.ID]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+    if (isedit && data.IsActivate) {
+      if (!data.IsActivate || !data.ID) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = typeCoffeeQueries.UPDATE_ROAST_ACTIVATE;
+      let results = await conn.awaitQuery(sql, [data.IsActivate, data.ID]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
     return JSON.stringify({
-      status: 200,
-      error: null,
-      response: results,
+      status: 400,
+      error: "Bad Request",
+      response: null,
     });
   } catch (err) {
     console.error("Error in postRequestRoast function:", err);
@@ -270,6 +354,22 @@ const postRequestRoast = async (req, data) => {
     return JSON.stringify({
       status: 400,
       error: "Bad Request",
+      response: null,
+    });
+  }
+};
+
+const postTypeCoffee = async (req, data) => {
+  try {
+    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_BY_ID;
+    let results = await conn.awaitQuery(sql, TypeID);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getTypeCoffee function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
       response: null,
     });
   }

@@ -46,25 +46,28 @@
       </v-tabs>
     </v-card>
   </v-expand-transition>
-  <v-card flat>
-    <v-window v-model="tab" v-show="showMainTab">
-      <v-window-item :value="1"> <admin-home-page /> </v-window-item>
-      <v-window-item :value="2"><admin-coffeetypes-page /> </v-window-item>
+  <v-expand-transition>
+    <v-card flat>
+      <v-window v-model="tab" v-show="showMainTab">
+        <v-window-item :value="1"> <admin-home-page /> </v-window-item>
+        <v-window-item :value="2" :key="'admin-coffeetypes-page-' + reloadKey"
+          ><admin-coffeetypes-page />
+        </v-window-item>
 
-      <v-window-item :value="6"> <blog /> </v-window-item>
-      <v-window-item :value="7"> <admin-news-page /> </v-window-item>
-      <v-window-item :value="8">
-        <div class="d-flex justify-center align-center contact-window">
-          <contact />
-        </div>
-      </v-window-item>
-    </v-window>
-    <v-window v-model="expandTab" v-show="showExpandTab">
-      <v-window-item :value="3"><admin-process-page /> </v-window-item>
-      <v-window-item :value="4"><admin-roast-page /> </v-window-item>
-      <v-window-item :value="5"><admin-map-page /> </v-window-item>
-    </v-window>
-  </v-card>
+        <v-window-item :value="6"> <blog /> </v-window-item>
+        <v-window-item :value="7"> <admin-news-page /> </v-window-item>
+        <v-window-item :value="8">
+          <div class="d-flex justify-center align-center contact-window">
+            <contact />
+          </div>
+        </v-window-item>
+      </v-window>
+      <v-window v-model="expandTab" v-show="showExpandTab">
+        <v-window-item :value="3"><admin-process-page /> </v-window-item>
+        <v-window-item :value="4"><admin-roast-page /> </v-window-item>
+        <v-window-item :value="5"><admin-map-page /> </v-window-item>
+      </v-window> </v-card
+  ></v-expand-transition>
 </template>
 
 <script>
@@ -75,6 +78,7 @@ export default {
     tab: 1,
     expandTab: "",
     isIconUp: false,
+    reloadKey: 0,
   }),
   methods: {
     toggleIcon() {
@@ -90,6 +94,18 @@ export default {
       this.showMainTab = false;
       this.showExpandTab = true;
       this.tab = "";
+    },
+    reloadComponent() {
+      this.reloadKey += 1;
+    },
+  },
+  watch: {
+    // Watch for changes in tab value to trigger reload
+    tab(newTab) {
+      if (newTab === 2) {
+        // Adjust condition based on your tab values
+        this.reloadComponent();
+      }
     },
   },
 };

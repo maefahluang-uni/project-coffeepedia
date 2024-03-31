@@ -75,14 +75,14 @@
                     label="Common name*"
                     :rules="rules.requireInput('Common name')"
                   ></v-text-field>
-
+                  <!--:rules="rules.requireInput('Picture')"-->
                   <v-file-input
                     class="mb-2"
                     v-model="pictureFile"
                     v-slot:item.image="{ item }"
                     accept="image/*"
                     label="Picture"
-                    :rules="rules.requireInput('Picture')"
+                    disabled
                   ></v-file-input>
                   <div class="mb-7">
                     <v-card
@@ -287,7 +287,7 @@
           <v-icon size="small" class="pr-2" @click="editItem(item)">
             mdi-pencil
           </v-icon>
-          <v-icon size="small" @click="activateItem(item)"> mdi-eye </v-icon>
+          <v-icon size="small"> mdi-eye </v-icon>
         </div>
       </template>
       <template v-slot:no-data>

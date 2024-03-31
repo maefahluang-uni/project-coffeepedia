@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(table, index) in tables">
+  <div v-for="(table, index) in tables" v-if="tables.length != 0">
     <v-data-table
       :headers="table.headers"
       :items="table.data"
@@ -40,7 +40,7 @@
                   <v-row>
                     <v-col cols="12">
                       <v-text-field
-                        v-model="editedItem.name"
+                        v-model="editedItem.RoastName"
                         :label="selecting"
                       ></v-text-field>
                     </v-col>
@@ -65,9 +65,8 @@
           </v-dialog>
         </v-toolbar>
       </template>
-
       <template v-slot:item.actions="{ item }">
-        <div class="d-flex justify-space-evenly">
+        <div class="d-flex justify-space-evenly align-center">
           <v-icon
             class="pr-2"
             size="small"
@@ -79,7 +78,19 @@
           >
             mdi-pencil
           </v-icon>
-          <v-icon size="small"> mdi-eye </v-icon>
+          <v-progress-circular
+            v-if="item.iconLoading"
+            size="small"
+            :width="3"
+            indeterminate
+          ></v-progress-circular>
+          <v-icon
+            v-else
+            size="small"
+            @click="toggleRoast(item, this.tables.indexOf(table))"
+          >
+            {{ item.eyeIcon }}
+          </v-icon>
         </div>
       </template>
     </v-data-table>
@@ -87,25 +98,33 @@
 </template>
 
 <script>
+import axios from "axios";
+import config from "../config.js";
+const api = config.LOCAL_API_URL;
+
 export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
     selecting: "",
     tableIndex: "",
+    eyeIcon: "mdi-eye",
+    isHidden: false,
     editedIndex: -1,
     editedItem: {
-      name: "",
+      RoastName: "",
+      IsActivate: "1",
     },
     defaultItem: {
-      name: "",
+      RoastName: "",
+      IsActivate: "1",
     },
     tables: [],
   }),
 
   computed: {
     formTitle() {
-      return this.editedIndex === -1 ? "New Process" : "Edit Process";
+      return this.editedIndex === -1 ? "New Roast" : "Edit Roast";
     },
   },
 
@@ -116,38 +135,89 @@ export default {
     selecting(val) {
       this.selecting = val;
     },
+    eyeIcon(val) {
+      this.eyeIcon = val;
+    },
   },
 
   created() {
-    this.initialize();
+    this.getAllRoast();
   },
 
   methods: {
-    initialize() {
-      this.tables = [
-        {
-          data: [
-            {
-              name: "Light",
-            },
-            {
-              name: "Midium",
-            },
-            {
-              name: "Dark",
-            },
-          ],
+    async retryAfterDelay(apiCall) {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      await apiCall();
+    },
+    async getAllRoast() {
+      try {
+        const res = await axios.get(api + "/coffeetypes/roast", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        //Object.assign(res.data.response, { iconLoading: false })
+        res.data.response.forEach((element) => {
+          let eyeIcon = "mdi-eye";
+          if (element.IsActivate == 0) {
+            eyeIcon = "mdi-eye-off";
+          }
+          Object.assign(element, { iconLoading: false });
+          Object.assign(element, { eyeIcon });
+        });
+        let table = {
+          data: res.data.response,
           headers: [
             {
-              title: "Roasted",
+              title: "Roast",
               align: "center",
               sortable: false,
-              key: "name",
+              key: "RoastName",
             },
             { title: "Edit", align: "center", key: "actions", sortable: false },
           ],
-        },
-      ];
+        };
+        this.tables.push(table);
+      } catch (error) {
+        console.error("Error fetching all news:", error);
+        await this.retryAfterDelay(this.getAllRoast());
+      }
+    },
+    async toggleRoast(item, tableIndex) {
+      let eyeIcon = "mdi-eye";
+      let dataIndex = this.tables[tableIndex].data.indexOf(item);
+      let isactivateNumChange =
+        this.tables[tableIndex].data[dataIndex].IsActivate === "1" ? "0" : "1"; // using this to change IsActivate in database
+
+      this.tables[tableIndex].data[dataIndex].iconLoading = true;
+
+      let roast = {
+        ID: this.tables[tableIndex].data[dataIndex].ID,
+        IsActivate: isactivateNumChange,
+      };
+      try {
+        const res = await axios.post(
+          api + "/coffeetypes/roast?edit=true",
+          roast,
+          {
+            headers: {
+              "ngrok-skip-browser-warning": "true",
+            },
+          }
+        );
+        if (res.data.status == 200) {
+          this.tables[tableIndex].data[dataIndex].IsActivate =
+            isactivateNumChange;
+
+          if (isactivateNumChange == 0) {
+            eyeIcon = "mdi-eye-off";
+          }
+          this.tables[tableIndex].data[dataIndex].eyeIcon = eyeIcon;
+          this.tables[tableIndex].data[dataIndex].iconLoading = false;
+        }
+      } catch (error) {
+        console.error("Error changeRoastActivate:", error);
+      }
     },
 
     editItem(item, index) {
@@ -164,14 +234,51 @@ export default {
       });
     },
 
-    save(tableIndex) {
+    async save(tableIndex) {
       if (this.editedIndex > -1) {
-        Object.assign(
-          this.tables[tableIndex].data[this.editedIndex],
-          this.editedItem
-        );
+        const sentItem = {
+          ID: this.editedItem.ID,
+          RoastName: this.editedItem.RoastName,
+        };
+        try {
+          const res = await axios.post(
+            api + "/coffeetypes/roast?edit=true",
+            sentItem,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "true",
+              },
+            }
+          );
+          if (res.data.status == 200) {
+            Object.assign(
+              this.tables[tableIndex].data[this.editedIndex],
+              this.editedItem
+            );
+          }
+        } catch (error) {
+          console.error("Error update roast name:", error);
+        }
       } else {
-        this.tables[tableIndex].data.push(this.editedItem);
+        try {
+          const res = await axios.post(
+            api + "/coffeetypes/roast?insert=true",
+            this.editedItem,
+            {
+              headers: {
+                "ngrok-skip-browser-warning": "true",
+              },
+            }
+          );
+          if (res.data.status == 200) {
+            Object.assign(this.editedItem, { ID: res.data.response.insertId });
+            Object.assign(this.editedItem, { iconLoading: false });
+            Object.assign(this.editedItem, { eyeIcon: "mdi-eye" });
+            this.tables[tableIndex].data.push(this.editedItem);
+          }
+        } catch (error) {
+          console.error("Error update roast name:", error);
+        }
       }
       this.close();
     },

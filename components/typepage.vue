@@ -54,7 +54,7 @@
               <div class="pl-2">Loading types coffee bean..</div>
             </div>
             <div
-              v-else-if="types.length == 0"
+              v-else-if="!isgettedType"
               class="flex-grow-1 d-flex align-center"
             >
               <div class="mr-3">Cannot get types coffee bean</div>
@@ -95,7 +95,7 @@
             <div class="pl-2">Loading types coffee bean..</div>
           </div>
           <div
-            v-else-if="types.length == 0"
+            v-else-if="!isgettedType"
             class="flex-grow-1 d-flex align-center"
           >
             <div class="mr-3">Cannot get types coffee bean</div>
@@ -124,10 +124,11 @@
               <div class="cardbgcolor text-center pb-2">
                 <div class="whitebg d-flex justify-center">
                   <img
+                    v-if="item.raw.ImageDataFront != null"
                     :src="getImageUrl(item.raw.ImageDataFront.data)"
                     width="200"
                     class="pa-5"
-                  />
+                  /><v-icon v-else size="200" icon="mdi-image-remove"></v-icon>
                 </div>
                 <div>
                   <v-card-title class="font-weight-bold text-brown">
@@ -399,9 +400,8 @@
 
 <script>
 import axios from "axios";
-import config from '../config.js';
+import config from "../config.js";
 const api = config.LOCAL_API_URL;
-
 
 export default {
   data: () => ({
@@ -411,6 +411,7 @@ export default {
     length: 3,
     onboarding: 1,
     showarrow: true,
+    isgettedType: false,
 
     filterProcess: "",
     search: "",
@@ -453,7 +454,9 @@ export default {
             "ngrok-skip-browser-warning": "true",
           },
         });
-
+        if (typesResponse.status == 200) {
+          this.isgettedType = true;
+        }
         if (typesResponse.data.response != null) {
           if (Array.isArray(typesResponse.data.response)) {
             // Append each element of the response data to the types array
@@ -464,6 +467,7 @@ export default {
           } else {
             this.loadingTypes = false;
             this.types = [];
+            this.isgettedType = false;
             console.error(
               "Invalid response data format:",
               typesResponse.data.response
@@ -473,6 +477,7 @@ export default {
       } catch (error) {
         this.loadingTypes = false;
         this.types = [];
+        this.isgettedType = false;
         console.error("Error fetching coffee types:", error);
       }
     },
