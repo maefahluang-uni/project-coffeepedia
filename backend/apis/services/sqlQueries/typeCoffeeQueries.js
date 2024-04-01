@@ -18,10 +18,7 @@ ORDER BY coffee_process.ProcessName ASC
 
 const GET_TYPES_COFFEE_FOR_ADMIN = `
 SELECT 
-type_coffee.ID,
-roast_level.RoastName,
-coffee_process.ProcessName,
-type_coffee.ImageDataFront
+*
 FROM 
 type_coffee
 JOIN

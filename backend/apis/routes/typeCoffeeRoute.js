@@ -3,6 +3,7 @@ const controller = require("../controllers/typeCoffeeController");
 
 const router = express.Router();
 router.get("/", controller.getTypesCoffee);
+router.post("/", controller.postRequestTypeCoffee);
 router.get("/type/:id", controller.getTypeCoffee);
 router.get("/type/gasstates/:id", controller.getTypeCoffeeGasStates);
 router.get("/type/drinks/:id", controller.getTypeCoffeeDrinkSuggestion);

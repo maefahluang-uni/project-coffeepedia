@@ -359,17 +359,126 @@ const postRequestRoast = async (req, data) => {
   }
 };
 
-const postTypeCoffee = async (req, data) => {
+const postRequestTypeCoffee = async (req, data) => {
   try {
-    let sql = typeCoffeeQueries.GET_TYPE_COFFEE_BY_ID;
-    let results = await conn.awaitQuery(sql, TypeID);
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid request data");
+    }
+    const insertValue = req.query.insert;
+    const editValue = req.query.edit;
+    let isinsert = false;
+    let isedit = false;
 
-    return JSON.stringify({ status: 200, error: null, response: results });
-  } catch (err) {
-    console.error("Error in getTypeCoffee function:", err);
+    if (insertValue === "true") {
+      isinsert = true;
+    }
+    if (editValue === "true") {
+      isedit = true;
+    }
+
+    if (isinsert && isedit) {
+      return JSON.stringify({
+        status: 400,
+        error:
+          "Bad Request: Provide only one insert or edit parameter at a time",
+        response: null,
+      });
+    }
+
+    if (isinsert) {
+      if (
+        !data.process ||
+        !data.roasted ||
+        !data.commonName ||
+        !data.intervalTempurature ||
+        !data.crackState ||
+        !data.flavorDetail ||
+        !data.moreDetail
+      ) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = typeCoffeeQueries.INSERT_NEW_TYPE_COFFEE;
+      let results = await conn.awaitQuery(sql, [
+        data.roasted,
+        data.process,
+        data.commonName,
+        data.intervalTempurature,
+        data.crackState,
+        data.flavorDetail,
+        data.moreDetail,
+      ]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+
+    if (isedit && !data.IsActivate) {
+      if (
+        !data.ID ||
+        !data.process ||
+        !data.roasted ||
+        !data.commonName ||
+        !data.intervalTempurature ||
+        !data.crackState ||
+        !data.flavorDetail ||
+        !data.moreDetail
+      ) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = typeCoffeeQueries.UPDATE_TYPE_COFFEE;
+      let results = await conn.awaitQuery(sql, [
+        data.roasted,
+        data.process,
+        data.commonName,
+        data.intervalTempurature,
+        data.crackState,
+        data.flavorDetail,
+        data.moreDetail,
+        data.ID,
+      ]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+    if (isedit && data.IsActivate) {
+      if (!data.IsActivate || !data.ID) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = typeCoffeeQueries.UPDATE_TYPE_ACTIVATE;
+      let results = await conn.awaitQuery(sql, [data.IsActivate, data.ID]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
     return JSON.stringify({
-      status: 500,
-      error: "Internal Server Error",
+      status: 400,
+      error: "Bad Request",
+      response: null,
+    });
+  } catch (err) {
+    console.error("Error in postRequestTypeCoffee function:", err);
+    console.log("Safe to continute");
+    return JSON.stringify({
+      status: 400,
+      error: "Bad Request",
       response: null,
     });
   }
@@ -386,4 +495,5 @@ module.exports = {
   getAllProcess,
   postRequestProcess,
   postRequestRoast,
+  postRequestTypeCoffee,
 };

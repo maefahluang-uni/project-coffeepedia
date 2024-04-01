@@ -140,10 +140,10 @@
                   </div>
                   <v-text-field
                     class="mb-2"
-                    v-model="editedItem.intervalTempureture"
+                    v-model="editedItem.intervalTempurature"
                     label="Interval tempurature*"
                     suffix="°C"
-                    :rules="rules.intervalTempureture"
+                    :rules="rules.intervalTempurature"
                   ></v-text-field>
                   <v-select
                     class="mb-2"
@@ -175,8 +175,9 @@
                   <v-textarea
                     class="mb-2"
                     v-model="editedItem.moreDetail"
-                    label="More detail (optional)"
+                    label="More detail"
                     variant="solo-filled"
+                    :rules="rules.requireInput('More detail')"
                     flat
                   ></v-textarea>
 
@@ -291,7 +292,7 @@
         </div>
       </template>
       <template v-slot:no-data>
-        <v-btn color="primary" @click="initialize"> Reset </v-btn>
+        <v-btn color="primary" @click="getAllTypes"> Reset </v-btn>
       </template>
     </v-data-table>
   </div>
@@ -347,7 +348,7 @@ export default {
       commonName: "",
       pictureUrl: "",
       gasStates: [],
-      intervalTempureture: "",
+      intervalTempurature: "",
       crackState: "",
       flavorDetail: "",
       moreDetail: "",
@@ -360,7 +361,7 @@ export default {
       commonName: "",
       pictureUrl: "",
       gasStates: [],
-      intervalTempureture: "",
+      intervalTempurature: "",
       crackState: "",
       flavorDetail: "",
       moreDetail: "",
@@ -387,7 +388,7 @@ export default {
           return "Please enter only number";
         },
       ],
-      intervalTempureture: [
+      intervalTempurature: [
         (value) => {
           if (value && REGEX_INTERVAL_TEMPURATURE.test(value)) {
             return true;
@@ -426,7 +427,7 @@ export default {
 
   created() {
     this.getAllProcessAndRoast();
-    this.initialize();
+    this.getAllTypes();
   },
 
   methods: {
@@ -434,7 +435,7 @@ export default {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await apiCall();
     },
-    async initialize() {
+    async getAllTypes() {
       this.types = [
         {
           ID: 1,
@@ -442,59 +443,51 @@ export default {
           roasted: 1,
           commonName: "Cinnamon Roast, Half City",
           gasStates: [
-            {
-              gas: "10",
-              WhenTempurature: "180",
-            },
-            {
-              gas: "5",
-              WhenTempurature: "195",
-            },
+            { ID: 1, gas: "10", WhenTempurature: "180" },
+            { ID: 2, gas: "5", WhenTempurature: "195" },
           ],
-          intervalTempureture: "199-205",
+          intervalTempurature: "199-205",
           crackState: 1,
           flavorDetail: "Light-bodied and somewhat sour, grassy, and snappy",
           moreDetail: "Suitable for brewing filter",
           drinkSuggest: [
-            {
-              drinkName: "Espresso",
-              icon: "coffee-maker",
-            },
-            {
-              drinkName: "Americano",
-              icon: "coffee",
-            },
-            {
-              drinkName: "Drip",
-              icon: "kettle-pour-over",
-            },
+            { ID: 1, drinkName: "Espresso", icon: "coffee-maker" },
+            { ID: 2, drinkName: "Americano", icon: "coffee" },
+            { ID: 3, drinkName: "Drip", icon: "kettle-pour-over" },
           ],
         },
-        {
-          ID: 2,
-          process: 3,
-          roasted: 2,
-          commonName: "Full City, Regular",
-          gasStates: [],
-          intervalTempureture: "",
-          crackState: 2,
-          flavorDetail: "",
-          moreDetail: "",
-          drinkSuggest: [],
-        },
-        {
-          ID: 3,
-          process: 3,
-          roasted: 3,
-          commonName: "Italian Espresso, Viennese",
-          gasStates: [],
-          intervalTempureture: "",
-          crackState: 3,
-          flavorDetail: "",
-          moreDetail: "",
-          drinkSuggest: [],
-        },
       ];
+
+      try {
+        const res = await axios.get(api + "/coffeetypes?admin=true", {
+          headers: {
+            "ngrok-skip-browser-warning": "true",
+          },
+        });
+        let items = [];
+
+        res.data.response.forEach((element) => {
+          let item = {
+            ID: element.ID,
+            process: element.CoffeeProcessID,
+            roasted: element.RoastLevelID,
+            commonName: element.CommonName,
+            gasStates: [],
+            intervalTempurature: element.Tempurature,
+            crackState: element.CrackState,
+            flavorDetail: element.Flavor,
+            moreDetail: element.MoreDetail,
+            IsActivate: element.IsActivate,
+            ImageDataFront: element.ImageDataFront,
+            drinkSuggest: [],
+          };
+          items.push(item);
+        });
+        this.types = items;
+      } catch (error) {
+        console.error("Error fetching all types:", error);
+        await this.retryAfterDelay(this.getAllTypes());
+      }
     },
     async getAllProcessAndRoast() {
       try {
@@ -509,15 +502,21 @@ export default {
           },
         });
         let items1 = [];
+        let items2 = [];
 
         res1.data.response.forEach((element) => {
           if (element.IsActivate == "1") {
             items1.push(element);
           }
         });
+        res2.data.response.forEach((element) => {
+          if (element.IsActivate == "1") {
+            items2.push(element);
+          }
+        });
 
-        this.process = res1.data.response;
-        this.roast = res2.data.response;
+        this.process = items1;
+        this.roast = items2;
       } catch (error) {
         console.error("Error fetching all ProcessAndRoast:", error);
         await this.retryAfterDelay(this.getAllProcessAndRoast());
@@ -560,9 +559,62 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         if (this.editedIndex > -1) {
-          Object.assign(this.types[this.editedIndex], this.editedItem);
+          const sentItem = {
+            ID: this.editedItem.ID,
+            process: this.editedItem.process,
+            roasted: this.editedItem.roasted,
+            commonName: this.editedItem.commonName,
+            intervalTempurature: this.editedItem.intervalTempurature,
+            crackState: this.editedItem.crackState,
+            flavorDetail: this.editedItem.flavorDetail,
+            moreDetail: this.editedItem.moreDetail,
+          };
+          console.log(sentItem);
+          try {
+            const res = await axios.post(
+              api + "/coffeetypes?edit=true",
+              sentItem,
+              {
+                headers: {
+                  "ngrok-skip-browser-warning": "true",
+                },
+              }
+            );
+            console.log(res);
+            if (res.data.status == 200) {
+              Object.assign(this.types[this.editedIndex], this.editedItem);
+            }
+          } catch (error) {
+            console.error("Error update type:", error);
+          }
         } else {
-          this.types.push(this.editedItem);
+          const sentItem = {
+            process: this.editedItem.process,
+            roasted: this.editedItem.roasted,
+            commonName: this.editedItem.commonName,
+            intervalTempurature: this.editedItem.intervalTempurature,
+            crackState: this.editedItem.crackState,
+            flavorDetail: this.editedItem.flavorDetail,
+            moreDetail: this.editedItem.moreDetail,
+          };
+          console.log(sentItem);
+          try {
+            const res = await axios.post(
+              api + "/coffeetypes?insert=true",
+              sentItem,
+              {
+                headers: {
+                  "ngrok-skip-browser-warning": "true",
+                },
+              }
+            );
+            console.log(res);
+            if (res.data.status == 200) {
+              this.types.push(this.editedItem);
+            }
+          } catch (error) {
+            console.error("Error update type:", error);
+          }
         }
         this.close();
         return;

@@ -45,6 +45,11 @@ const postRequestRoast = async (req, res) => {
   const response = await service.postRequestRoast(req, req.body);
   res.send(response);
 };
+
+const postRequestTypeCoffee = async (req, res) => {
+  const response = await service.postRequestTypeCoffee(req, req.body);
+  res.send(response);
+};
 module.exports = {
   getTypesCoffee,
   getTypeCoffee,
@@ -56,4 +61,5 @@ module.exports = {
   getAllProcess,
   postRequestProcess,
   postRequestRoast,
+  postRequestTypeCoffee,
 };
