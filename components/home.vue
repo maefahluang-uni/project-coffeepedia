@@ -131,7 +131,7 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.LOCAL_API_URL;
+const api = config.NGROK_API_URL;
 export default {
   data() {
     return {
