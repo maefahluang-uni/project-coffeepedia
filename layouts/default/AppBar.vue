@@ -1,9 +1,9 @@
 <template>
   <v-app-bar elevation="0">
     <v-row justify="space-between">
-      <div class="d-none d-sm-flex">
+      <div class="d-none d-md-flex">
         <v-col cols="3" class="ml-5">
-          <div class="d-inline-flex">
+          <div class="d-inline-flex" @click="toHome()">
             <v-img
               height="50"
               width="150"
@@ -21,7 +21,7 @@
         </v-col>
       </div>
 
-      <div class="d-flex d-sm-none">
+      <div class="d-flex d-md-none" @click="toHome()">
         <div class="d-inline-flex">
           <v-img
             height="37"
@@ -53,12 +53,28 @@
             {{ language }}</v-btn
           >
           <v-btn
-            @click="navigateToTargetPage"
-            class=""
+            @click="login()"
+            class="mr-5"
             icon="mdi-account"
             size="35"
             color="#39150E"
           />
+          <v-btn
+            v-if="isAdmin"
+            variant="outlined"
+            class="rounded-xl"
+            @click="logout()"
+            text="Sign-out"
+            color="error"
+          />
+          <v-btn
+            v-else
+            @click="login()"
+            text="Sign-in"
+            variant="outlined"
+            class="rounded-xl"
+            color="success"
+          ></v-btn>
         </v-col>
       </div>
 
@@ -83,7 +99,7 @@
         value="search"
       ></v-list-item>
       <v-list-item
-        @click="navigateToTargetPage"
+        @click="login()"
         prepend-icon="mdi-account"
         title="Admin account"
         value="account"
@@ -93,28 +109,67 @@
         :title="language"
         value="language"
         @click="changeLanguage()"
-      ></v-list-item>
+      ></v-list-item
+      ><v-list-item v-if="isAdmin" class="d-flex justify-center"
+        ><v-btn
+          @click="logout()"
+          text="Sign-out"
+          color="error"
+          variant="outlined"
+          class="rounded-xl"
+      /></v-list-item>
+      <v-list-item v-else class="d-flex justify-center">
+        <v-btn
+          @click="login()"
+          text="Sign-in"
+          variant="outlined"
+          class="rounded-xl"
+          color="success"
+        ></v-btn>
+      </v-list-item>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
-export default {
+import { useCookies } from "vue3-cookies";
+import { watch } from "vue";
+export default defineComponent({
+  setup() {
+    const { cookies } = useCookies();
+    return { cookies };
+  },
   data: () => ({
     overlay: false,
     language: "TH",
+    isAdmin: false,
   }),
+  mounted() {
+    this.isAdmin = false;
+    if (
+      this.cookies.isKey("isAdmin") ||
+      this.cookies.get("isAdmin") == "true"
+    ) {
+      this.isAdmin = true;
+    }
+  },
   methods: {
     changeLanguage() {
       this.language = this.language === "EN" ? "TH" : "EN";
     },
-    navigateToTargetPage() {
-      // Navigate to the target page programmatically
-      this.$router.push("/admin"); // Replace '/target-page' with your actual target page path
+    toHome() {
+      this.$router.push("/");
+    },
+    login() {
+      this.$router.push("/login");
+    },
+    logout() {
+      if (this.cookies.isKey("isAdmin")) {
+        this.isAdmin = false;
+        this.cookies.remove("isAdmin");
+        this.$router.push("/");
+      }
     },
   },
-
-  watch: {},
-};
+});
 </script>
-<style></style>

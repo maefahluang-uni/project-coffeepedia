@@ -29,28 +29,20 @@
         >
           <v-card
             v-for="(news, index) in items"
-            class="ma-3 elevation-5"
-            max-width="400"
+            class="ma-3 elevation-5 d-flex flex-column"
+            width="400"
             @click="openLink(news.raw.href)"
             color="#F1F1F1"
           >
-            <div class="">
-              <v-img
-                class="d-flex"
-                cover
-                :src="news.raw.newsImageUrl"
-                height="200"
-              />
-              <div>
-                <p class="blog-title mt-2">
-                  {{ news.raw.title }}
-                </p>
-                <div
-                  class="text-grey text-end blog-subtitle text-decoration-underline my-2 mx-5"
-                >
-                  read more
-                </div>
-              </div>
+            <v-img cover :src="news.raw.newsImageUrl" max-height="200" />
+
+            <p class="blog-title mt-2 mb-auto">
+              {{ news.raw.title }}
+            </p>
+            <div
+              class="text-grey text-end blog-subtitle text-decoration-underline mb-2 mx-5"
+            >
+              read more
             </div>
           </v-card>
         </div> </template
@@ -66,7 +58,8 @@
 import axios from "axios";
 import config from "../config.js";
 const api = config.LOCAL_API_URL;
-
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data() {
     return {
@@ -75,7 +68,7 @@ export default {
       news: [],
     };
   },
-  mounted() {
+  created() {
     this.getAllNews();
   },
   methods: {
@@ -86,9 +79,7 @@ export default {
     async getAllNews() {
       try {
         const newsResponse = await axios.get(api + "/news", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         this.news = newsResponse.data.response;
         this.showSeeMore = true;

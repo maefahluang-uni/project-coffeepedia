@@ -11,12 +11,12 @@
   </v-card>
   <v-card flat>
     <v-window v-model="tab">
-      <v-window-item :value="1"> <home /> </v-window-item>
-      <v-window-item :value="2"><typepage /> </v-window-item>
-      <v-window-item :value="3"> <blog /> </v-window-item>
-      <v-window-item :value="4"> <news /> </v-window-item>
+      <v-window-item disabled :value="1"> <home /> </v-window-item>
+      <v-window-item disabled :value="2"><typepage /> </v-window-item>
+      <v-window-item disabled :value="3"> <blog /> </v-window-item>
+      <v-window-item disabled :value="4"> <news /> </v-window-item>
 
-      <v-window-item :value="5">
+      <v-window-item disabled :value="5">
         <div class="d-flex justify-center align-center contact-window">
           <contact />
         </div>
@@ -26,15 +26,11 @@
 </template>
 
 <script>
-import home from "../components/home.vue";
-import typepage from "../components/typepage.vue";
-import news from "../components/news.vue";
-import blog from "../components/blog.vue";
-import contact from "../components/contact.vue";
 export default {
   data: () => ({
     tab: 1,
   }),
+  created() {},
 };
 </script>
 <style>
