@@ -164,7 +164,8 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
 
 export default {
   data: () => ({
@@ -189,6 +190,7 @@ export default {
         const countResponse = await axios.get(api + "/coffeetypes/count", {
           headers: {
             "ngrok-skip-browser-warning": "true",
+            "api-key": apiKey,
           },
         });
 
@@ -203,6 +205,7 @@ export default {
         const countResponse = await axios.get(api + "/blogs/count", {
           headers: {
             "ngrok-skip-browser-warning": "true",
+            "api-key": apiKey,
           },
         });
 
@@ -217,6 +220,7 @@ export default {
         const countResponse = await axios.get(api + "/news/count", {
           headers: {
             "ngrok-skip-browser-warning": "true",
+            "api-key": apiKey,
           },
         });
 

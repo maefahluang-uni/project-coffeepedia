@@ -265,8 +265,9 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
-
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data() {
     return {
@@ -295,9 +296,7 @@ export default {
     async getAllBlogs() {
       try {
         const blogsResponse = await axios.get(api + "/blogs", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         this.blogs = blogsResponse.data.response;
 
@@ -313,9 +312,7 @@ export default {
     async getTopBlogs() {
       try {
         const topblogsResponse = await axios.get(api + "/blogs/top", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+         headers: apiHaders,
         });
         this.topBlogs = topblogsResponse.data.response;
       } catch (error) {
@@ -330,9 +327,7 @@ export default {
           const commentsResponse = await axios.get(
             api + "/blogs/comments/" + BlogID,
             {
-              headers: {
-                "ngrok-skip-browser-warning": "true",
-              },
+              headers: apiHaders,
             }
           );
           this.comments = commentsResponse.data.response;
@@ -377,9 +372,7 @@ export default {
         timestamp: timestamp,
       };
       const res = await axios.post(api + "/blogs/comment", newComment, {
-        headers: {
-          "ngrok-skip-browser-warning": "true",
-        },
+       headers: apiHaders,
       });
       if (res.status == 200) {
         this.comments.unshift({ comment: comment, datetime: timestamp });

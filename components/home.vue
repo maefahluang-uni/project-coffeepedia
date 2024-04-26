@@ -22,6 +22,7 @@
                 </p>
               </div>
               <v-btn
+                disabled
                 color="rgb(140, 115, 70)"
                 height="25"
                 width="120"
@@ -45,6 +46,7 @@
                 Coffee bean location in the north of Thailand
               </h4>
               <v-btn
+                disabled
                 color="rgb(140, 115, 70)"
                 height="25"
                 width="120"
@@ -83,7 +85,7 @@
       <v-card
         v-for="(blog, index) in blogs"
         class="mb-7 elevation-5 d-flex recent-blog-card"
-        @click=""
+        @click="showDetail(blog)"
         color="#F1F1F1"
       >
         <div class="d-flex">
@@ -125,47 +127,49 @@
           </div>
         </div>
       </v-card>
+      <v-overlay v-model="overlay" class="align-top justify-center pt-10"
+        ><v-card class="overflow-auto blog-detail-card justify-center pa-5">
+          <h1 class="font-weight-bold">
+            {{ selectblog.title }}
+          </h1>
+
+          <div class="d-flex mx-5 my-2 align-center blog-subtitle">
+            <p class="text-grey mr-2">
+              {{ formatDateNotime(selectblog.date) }}
+            </p>
+            <div class="mr-2 d-flex">
+              <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
+              <p class="text-grey">{{ selectblog.commentCount }}</p>
+            </div>
+            <div class="d-flex">
+              <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
+              <p class="text-grey">{{ selectblog.viewCount }}</p>
+            </div>
+          </div>
+          <v-divider></v-divider>
+          <div
+            contenteditable="false"
+            v-html="selectblog.content"
+            class="my-4"
+          ></div>
+          <v-divider></v-divider>
+        </v-card>
+      </v-overlay>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data() {
     return {
-      blogs2: [
-        {
-          ID: "1",
-          blogImage: "@/assets/picblog3.jpg",
-          title: "A drink made from dark roasted coffee beans",
-          blogContent: "",
-          date: "Nov 5 , 2023",
-          viewCount: "107",
-          commentCount: "15",
-        },
-        {
-          ID: "2",
-          blogImage: "@/assets/picblog2.jpg",
-          title: "The most popular types of coffee beans that people drink",
-          blogContent: "",
-          date: "Nov 9 , 2023",
-          viewCount: "89",
-          commentCount: "7",
-        },
-        {
-          ID: "3",
-          blogImage: "@/assets/picblog1.png",
-          title:
-            "5 coffee farms that are most worth visiting in the northern region",
-          blogContent: "",
-          date: "Nov 12 , 2023",
-          viewCount: "76",
-          commentCount: "6",
-        },
-      ],
-
+      overlay: false,
+      selectblog: "",
+      selectedblogID: -1,
       blogs: [],
     };
   },
@@ -180,9 +184,7 @@ export default {
     async getAllBlogs() {
       try {
         const blogsResponse = await axios.get(api + "/blogs/top", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         this.blogs = blogsResponse.data.response;
       } catch (error) {
@@ -225,6 +227,11 @@ export default {
         return imgurl;
       }
       return "";
+    },
+    showDetail(blog) {
+      console.log(blog);
+      this.overlay = true;
+      this.selectblog = blog;
     },
   },
 };

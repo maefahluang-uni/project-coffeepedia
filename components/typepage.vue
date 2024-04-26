@@ -401,8 +401,9 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
-
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data: () => ({
     overlay: false,
@@ -450,9 +451,7 @@ export default {
       this.loadingTypes = true;
       try {
         const typesResponse = await axios.get(api + "/coffeetypes", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         if (typesResponse.status == 200) {
           this.isgettedType = true;
@@ -508,9 +507,7 @@ export default {
         const imagesResponse = await axios.get(
           api + "/coffeetypes/images/" + ID,
           {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+            headers: apiHaders,
           }
         );
 
@@ -533,9 +530,7 @@ export default {
         const typeCoffeeResponse = await axios.get(
           api + "/coffeetypes/type/" + ID,
           {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+            headers: apiHaders,
           }
         );
         this.typeDetail = typeCoffeeResponse.data.response;
@@ -548,9 +543,7 @@ export default {
         const gasStatesResponse = await axios.get(
           api + "/coffeetypes/type/gasstates/" + ID,
           {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+            headers: apiHaders,
           }
         );
         this.gasStates = gasStatesResponse.data.response;
@@ -563,9 +556,7 @@ export default {
         const drinksResponse = await axios.get(
           api + "/coffeetypes/type/drinks/" + ID,
           {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+            headers: apiHaders,
           }
         );
         if (drinksResponse.data.response != null) {

@@ -57,8 +57,9 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
-
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data() {
     return {
@@ -78,9 +79,7 @@ export default {
     async getAllNews() {
       try {
         const newsResponse = await axios.get(api + "/news", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         this.news = newsResponse.data.response;
         this.showSeeMore = true;

@@ -31,9 +31,18 @@ conn.connect((error) => {
   console.log("Mysql Connected...");
 });
 
-const getNews = async () => {
+const getNews = async (req) => {
   try {
+    const adminValue = req.query.admin;
+    let isAdmin = false;
+
+    if (adminValue === "true") {
+      isAdmin = true;
+    }
     let sql = newsQueries.GET_NEWS;
+    if (isAdmin) {
+      sql = newsQueries.GET_NEWS_ADMIN;
+    }
     let results = await conn.awaitQuery(sql);
     return JSON.stringify({ status: 200, error: null, response: results });
   } catch (err) {
@@ -60,4 +69,113 @@ const countNews = async () => {
     });
   }
 };
-module.exports = { getNews, countNews };
+
+const postRequestNews = async (req, data) => {
+  try {
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid request data");
+    }
+    const insertValue = req.query.insert;
+    const editValue = req.query.edit;
+    let isinsert = false;
+    let isedit = false;
+
+    if (insertValue === "true") {
+      isinsert = true;
+    }
+    if (editValue === "true") {
+      isedit = true;
+    }
+
+    if (isinsert && isedit) {
+      return JSON.stringify({
+        status: 400,
+        error:
+          "Bad Request: Provide only one insert or edit parameter at a time",
+        response: null,
+      });
+    }
+
+    if (isinsert) {
+      if (!data.title || !data.date || !data.href || !data.newsImageUrl) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = newsQueries.INSERT_NEW_NEWS;
+      let results = await conn.awaitQuery(sql, [
+        data.title,
+        data.date,
+        data.href,
+        data.newsImageUrl,
+      ]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+
+    if (isedit && !data.IsActivate) {
+      if (
+        !data.ID ||
+        !data.title ||
+        !data.date ||
+        !data.href ||
+        !data.newsImageUrl
+      ) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = newsQueries.UPDATE_NEWS;
+      let results = await conn.awaitQuery(sql, [
+        data.title,
+        data.date,
+        data.href,
+        data.newsImageUrl,
+        data.ID,
+      ]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+    if (isedit && data.IsActivate) {
+      if (!data.IsActivate || !data.ID) {
+        return JSON.stringify({
+          status: 400,
+          error: "Bad Request: Missing body parameter",
+          response: null,
+        });
+      }
+      let sql = newsQueries.UPDATE_NEWS_ACTIVATE;
+      let results = await conn.awaitQuery(sql, [data.IsActivate, data.ID]);
+      return JSON.stringify({
+        status: 200,
+        error: null,
+        response: results,
+      });
+    }
+    return JSON.stringify({
+      status: 400,
+      error: "Bad Request",
+      response: null,
+    });
+  } catch (err) {
+    console.error("Error in postRequestnews function:", err);
+    console.log("Safe to continute");
+    return JSON.stringify({
+      status: 400,
+      error: "Bad Request",
+      response: null,
+    });
+  }
+};
+
+module.exports = { getNews, countNews, postRequestNews };

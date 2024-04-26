@@ -1,72 +1,76 @@
 <template>
-  <div v-for="(table, index) in tables" v-if="tables.length != 0">
-    <v-data-table
-      :headers="table.headers"
-      :items="table.data"
-      :sort-by="[{ key: table.headers[0].title }]"
-    >
-      <template v-slot:top>
-        <v-toolbar flat>
-          <v-toolbar-title
-            ><h4>{{ table.headers[0].title }} Coffee Bean</h4>
-          </v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
-          <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="500px">
-            <template v-slot:activator="{ props }">
-              <v-btn
-                color="green"
-                dark
-                class="mb-2"
-                v-bind="props"
-                variant="tonal"
-                rounded="xl"
-                @click="
-                  (selecting = table.headers[0].title),
-                    (tableIndex = this.tables.indexOf(table))
-                "
-              >
-                <v-icon icon="mdi-plus" color="green"></v-icon>
-                Add {{ table.headers[0].title }}
-              </v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="editedItem.ProcessName"
-                        :label="selecting"
-                      ></v-text-field>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="blue-darken-1" variant="text" @click="close()">
-                  Cancel
-                </v-btn>
+  <div
+    v-for="(table, index) in tables"
+    v-if="tables.length != 0"
+    class="d-flex justify-center my-10"
+  >
+    <v-card class="card-table elevation-10">
+      <v-data-table
+        :headers="table.headers"
+        :items="table.data"
+        :sort-by="[{ key: table.headers[0].title }]"
+      >
+        <template v-slot:top>
+          <v-toolbar flat>
+            <v-toolbar-title
+              ><h4>{{ table.headers[0].title }} Coffee Bean</h4>
+            </v-toolbar-title>
+            <v-divider class="mx-4" inset vertical></v-divider>
+            <v-spacer></v-spacer>
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ props }">
                 <v-btn
-                  color="blue-darken-1"
-                  variant="text"
-                  @click="save(tableIndex)"
+                  color="green"
+                  dark
+                  class="mb-2"
+                  v-bind="props"
+                  variant="tonal"
+                  rounded="xl"
+                  @click="
+                    (selecting = table.headers[0].title),
+                      (tableIndex = this.tables.indexOf(table))
+                  "
                 >
-                  Save
+                  <v-icon icon="mdi-plus" color="green"></v-icon>
+                  Add {{ table.headers[0].title }}
                 </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </v-toolbar>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <div class="d-flex justify-space-evenly align-center">
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="text-h5">{{ formTitle }}</span>
+                </v-card-title>
+
+                <v-card-text>
+                  <v-container>
+                    <v-row>
+                      <v-col cols="12">
+                        <v-text-field
+                          v-model="editedItem.ProcessName"
+                          :label="selecting"
+                        ></v-text-field>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card-text>
+
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue-darken-1" variant="text" @click="close()">
+                    Cancel
+                  </v-btn>
+                  <v-btn
+                    color="blue-darken-1"
+                    variant="text"
+                    @click="save(tableIndex)"
+                  >
+                    Save
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
+        </template>
+        <template v-slot:item.actions="{ item }">
           <v-icon
             class="pr-2"
             size="small"
@@ -78,30 +82,36 @@
           >
             mdi-pencil
           </v-icon>
+        </template>
+        <template v-slot:item.actions2="{ item }">
           <v-progress-circular
             v-if="item.iconLoading"
             size="small"
             :width="3"
             indeterminate
           ></v-progress-circular>
-          <v-icon
+          <v-switch
             v-else
-            size="small"
+            v-model="item.IsActivate"
+            false-value="0"
+            true-value="1"
+            color="success"
+            hide-details
+            class="d-inline-block"
             @click="toggleProcess(item, this.tables.indexOf(table))"
-          >
-            {{ item.eyeIcon }}
-          </v-icon>
-        </div>
-      </template>
-    </v-data-table>
+          ></v-switch>
+        </template>
+      </v-data-table>
+    </v-card>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
-
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data: () => ({
     dialog: false,
@@ -152,9 +162,7 @@ export default {
     async getAllProcess() {
       try {
         const res = await axios.get(api + "/coffeetypes/process", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         //Object.assign(res.data.response, { iconLoading: false })
         res.data.response.forEach((element) => {
@@ -174,7 +182,12 @@ export default {
               sortable: false,
               key: "ProcessName",
             },
-            { title: "Edit", align: "center", key: "actions", sortable: false },
+            { title: "Edit", align: "end", key: "actions", sortable: false },
+            {
+              title: "Status",
+              key: "actions2",
+              sortable: false,
+            },
           ],
         };
         this.tables.push(table);
@@ -200,9 +213,7 @@ export default {
           api + "/coffeetypes/process?edit=true",
           process,
           {
-            headers: {
-              "ngrok-skip-browser-warning": "true",
-            },
+            headers: apiHaders,
           }
         );
         if (res.data.status == 200) {
@@ -245,9 +256,7 @@ export default {
             api + "/coffeetypes/process?edit=true",
             sentItem,
             {
-              headers: {
-                "ngrok-skip-browser-warning": "true",
-              },
+              headers: apiHaders,
             }
           );
           if (res.data.status == 200) {
@@ -265,9 +274,7 @@ export default {
             api + "/coffeetypes/process?insert=true",
             this.editedItem,
             {
-              headers: {
-                "ngrok-skip-browser-warning": "true",
-              },
+              headers: apiHaders,
             }
           );
           if (res.data.status == 200) {

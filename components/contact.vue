@@ -72,8 +72,9 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.NGROK_API_URL;
-
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 
 export default {
   data() {
@@ -90,9 +91,7 @@ export default {
     async getContact() {
       try {
         const contactResponse = await axios.get(api + "/contact", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
+          headers: apiHaders,
         });
         this.address = contactResponse.data.response[0].Address;
         this.phone = contactResponse.data.response[0].Phone;
