@@ -312,7 +312,7 @@ export default {
     async getTopBlogs() {
       try {
         const topblogsResponse = await axios.get(api + "/blogs/top", {
-         headers: apiHaders,
+          headers: apiHaders,
         });
         this.topBlogs = topblogsResponse.data.response;
       } catch (error) {
@@ -372,7 +372,7 @@ export default {
         timestamp: timestamp,
       };
       const res = await axios.post(api + "/blogs/comment", newComment, {
-       headers: apiHaders,
+        headers: apiHaders,
       });
       if (res.status == 200) {
         this.comments.unshift({ comment: comment, datetime: timestamp });
@@ -394,12 +394,19 @@ export default {
       }
     },
     sendComment(comment, BlogID) {
-      const now = new Date();
+      const dateObj = new Date();
+      let timestamp = dateObj.getTime();
+      const nowDateObj = new Date(timestamp);
+      // Extract the components of the date object (year, month, day, hour, minute, second)
+      const year = nowDateObj.getFullYear();
+      const month = String(nowDateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1
+      const day = String(nowDateObj.getDate()).padStart(2, "0");
+      const hours = String(nowDateObj.getHours()).padStart(2, "0");
+      const minutes = String(nowDateObj.getMinutes()).padStart(2, "0");
+      const seconds = String(nowDateObj.getSeconds()).padStart(2, "0");
 
-      let timestamp = now.toISOString();
-      //post
-
-      this.addComment(BlogID, comment, timestamp);
+      const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      this.addComment(BlogID, comment, formattedDateTime);
     },
     cancelComment() {
       this.overlay2 = !this.overlay2;

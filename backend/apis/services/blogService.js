@@ -73,17 +73,14 @@ const getBlogCommentsByID = async (BlogID) => {
   }
 };
 const insertCommentIntoBlog = async (data) => {
-  const timestamp = new Date(data.timestamp)
-    .toISOString()
-    .slice(0, 19)
-    .replace("T", " ");
+  console.log("Added comment to blog ID:" + data.BlogID + " " + data.timestamp);
   try {
     let sql1 = blogQueries.INSERT_COMMENT_INTO_BLOG;
     let sql2 = blogQueries.UPDATE_COMMENT_COUNT;
     let results1 = await conn.awaitQuery(sql1, [
       data.BlogID,
       data.comment,
-      timestamp,
+      data.timestamp,
     ]);
     let results2 = await conn.awaitQuery(sql2, data.BlogID);
     return JSON.stringify({
