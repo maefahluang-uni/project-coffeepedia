@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center my-10">
-    <v-card class="card-table">
+    <v-card class="card-table elevation-10">
       <v-data-table
         :headers="headers"
         :items="news"
@@ -130,13 +130,21 @@ export default {
       { title: "Status", key: "actions2", sortable: false },
     ],
     editedIndex: -1,
-    editedItem: { ID: "", title: "", date: "", newsImageUrl: "", href: "" },
+    editedItem: {
+      ID: "",
+      title: "",
+      date: "",
+      newsImageUrl: "",
+      href: "",
+      IsActivate: "1",
+    },
     defaultItem: {
       ID: "",
       title: "",
       date: "",
       newsImageUrl: "",
       href: "",
+      IsActivate: "1",
     },
     rules: {
       requireInput: (fieldName) => [
@@ -242,51 +250,66 @@ export default {
       });
     },
     async save() {
-      console.log("save");
       const { valid } = await this.$refs.form.validate();
-      const start = Date.now();
-      if (valid) {
-        if (this.editedIndex > -1) {
-          const sentItem = {
-            ID: this.editedItem.ID,
-            title: this.editedItem.title,
-            date: start,
-            newsImageUrl: this.editedItem.newsImageUrl,
-            href: this.editedItem.href,
-          };
-          try {
-            const res = await axios.post(api + "/news?edit=true", sentItem, {
-              headers: apiHaders,
-            });
-            console.log(res);
-            if (res.data.status == 200) {
-              Object.assign(this.news[this.editedIndex], this.editedItem);
-            }
-          } catch (error) {
-            console.error("Error update news:", error);
-          }
-        } else {
-          const sentItem = {
-            title: this.editedItem.title,
-            date: start,
-            newsImageUrl: this.editedItem.newsImageUrl,
-            href: this.editedItem.href,
-          };
-          try {
-            const res = await axios.post(api + "/news?insert=true", sentItem, {
-              headers: apiHaders,
-            });
-            console.log(res);
-            if (res.data.status == 200) {
-              this.news.push(this.editedItem);
-            }
-          } catch (error) {
-            console.error("Error update news:", error);
-          }
-        }
-        this.close();
+      const timestamp = Date.now();
+      const nowDateTime = this.getDateTime(timestamp);
+      if (!valid) {
         return;
       }
+      if (this.editedIndex > -1) {
+        const sentItem = {
+          ID: this.editedItem.ID,
+          title: this.editedItem.title,
+          date: nowDateTime,
+          newsImageUrl: this.editedItem.newsImageUrl,
+          href: this.editedItem.href,
+        };
+        try {
+          const res = await axios.post(api + "/news?edit=true", sentItem, {
+            headers: apiHaders,
+          });
+          console.log(res);
+          if (res.data.status == 200) {
+            Object.assign(this.news[this.editedIndex], this.editedItem);
+          }
+        } catch (error) {
+          console.error("Error update news:", error);
+        }
+      } else {
+        const sentItem = {
+          title: this.editedItem.title,
+          date: nowDateTime,
+          newsImageUrl: this.editedItem.newsImageUrl,
+          href: this.editedItem.href,
+        };
+        
+        try {
+          const res = await axios.post(api + "/news?insert=true", sentItem, {
+            headers: apiHaders,
+          });
+          if (res.data.status == 200) {
+            this.editedItem.ID = res.data.response.insertId;
+            this.news.push(this.editedItem);
+          }
+        } catch (error) {
+          console.error("Error update news:", error);
+        }
+      }
+      this.close();
+      return;
+    },
+    getDateTime(timestamp) {
+      const nowDateObj = new Date(timestamp);
+      // Extract the components of the date object (year, month, day, hour, minute, second)
+      const year = nowDateObj.getFullYear();
+      const month = String(nowDateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1
+      const day = String(nowDateObj.getDate()).padStart(2, "0");
+      const hours = String(nowDateObj.getHours()).padStart(2, "0");
+      const minutes = String(nowDateObj.getMinutes()).padStart(2, "0");
+      const seconds = String(nowDateObj.getSeconds()).padStart(2, "0");
+
+      const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      return formattedDateTime;
     },
   },
 };

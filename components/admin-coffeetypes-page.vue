@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex justify-center my-10">
-    <v-card class="card-table">
+    <v-card class="card-table elevation-10">
       <v-data-table
         :headers="headers"
         :items="types"
@@ -180,7 +180,6 @@
                       v-model="editedItem.moreDetail"
                       label="More detail"
                       variant="solo-filled"
-                      :rules="rules.requireInput('More detail')"
                       flat
                     ></v-textarea>
 
@@ -377,6 +376,7 @@ export default {
       flavorDetail: "",
       moreDetail: "",
       drinkSuggest: [],
+      IsActivate: "1",
     },
     defaultItem: {
       process: "",
@@ -390,6 +390,7 @@ export default {
       flavorDetail: "",
       moreDetail: "",
       drinkSuggest: [],
+      IsActivate: "1",
     },
     rules: {
       requireInput: (fieldName) => [
@@ -584,6 +585,7 @@ export default {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         if (this.editedIndex > -1) {
+          console.log(this.editedItem);
           const sentItem = {
             ID: this.editedItem.ID,
             process: this.editedItem.process,
@@ -602,7 +604,6 @@ export default {
                 headers: apiHaders,
               }
             );
-            console.log(res);
             if (res.data.status == 200) {
               Object.assign(this.types[this.editedIndex], this.editedItem);
             }
@@ -610,6 +611,7 @@ export default {
             console.error("Error update type:", error);
           }
         } else {
+          console.log(this.editedItem);
           const sentItem = {
             process: this.editedItem.process,
             roasted: this.editedItem.roasted,
@@ -629,6 +631,7 @@ export default {
             );
             console.log(res);
             if (res.data.status == 200) {
+              this.editedItem.ID = res.data.response.insertId;
               this.types.push(this.editedItem);
             }
           } catch (error) {

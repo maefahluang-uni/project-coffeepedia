@@ -392,8 +392,7 @@ const postRequestTypeCoffee = async (req, data) => {
         !data.commonName ||
         !data.intervalTempurature ||
         !data.crackState ||
-        !data.flavorDetail ||
-        !data.moreDetail
+        !data.flavorDetail
       ) {
         return JSON.stringify({
           status: 400,

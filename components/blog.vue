@@ -394,8 +394,7 @@ export default {
       }
     },
     sendComment(comment, BlogID) {
-      const dateObj = new Date();
-      let timestamp = dateObj.getTime();
+      let timestamp = Date.now();
       const nowDateObj = new Date(timestamp);
       // Extract the components of the date object (year, month, day, hour, minute, second)
       const year = nowDateObj.getFullYear();
