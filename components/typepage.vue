@@ -125,7 +125,7 @@
                 <div class="whitebg d-flex justify-center">
                   <img
                     v-if="item.raw.ImageDataFront != null"
-                    :src="getImageUrl(item.raw.ImageDataFront.data)"
+                    :src="apilink + item.raw.ImageDataFront"
                     width="200"
                     class="pa-5"
                   /><v-icon v-else size="200" icon="mdi-image-remove"></v-icon>
@@ -206,6 +206,7 @@
                       <v-window-item v-for="n in detailImageLength" :key="n">
                         <v-card
                           class="d-none d-sm-flex justify-center align-center my-5"
+                          height="190"
                           flat
                         >
                           <img
@@ -232,6 +233,7 @@
                         <v-window-item v-for="n in detailImageLength" :key="n">
                           <v-card
                             class="d-flex justify-center align-center my-5"
+                            height="190"
                             flat
                           >
                             <img
@@ -314,7 +316,9 @@
                         &#x2022; Second crack
                       </div>
                       <div>&#x2022; {{ typeDetail[0].Flavor }}</div>
-                      <div>&#x2022; {{ typeDetail[0].MoreDetail }}</div>
+                      <div v-if="typeDetail[0].MoreDetail">
+                        &#x2022; {{ typeDetail[0].MoreDetail }}
+                      </div>
                     </div>
                   </v-card>
                 </div>
@@ -413,7 +417,7 @@ export default {
     onboarding: 1,
     showarrow: true,
     isgettedType: false,
-
+    apilink: api,
     filterProcess: "",
     search: "",
     imageData: "",
@@ -441,16 +445,15 @@ export default {
   },
   computed: {},
   methods: {
-    getImageUrl(buffer) {
-      if (!buffer) return ""; // Return empty string if buffer is null or undefined
-      const uint8Array = new Uint8Array(buffer);
-      const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
-      return `data:image/jpeg;base64,${base64Image}`;
+    async getImageUrl(uri) {
+      if (!uri) return ""; // Return empty string if buffer is null or undefined
+      console.log(config.LOCAL_API_URL + uri);
+      return config.LOCAL_API_URL + uri;
     },
     async getTypes() {
       this.loadingTypes = true;
       try {
-        const typesResponse = await axios.get(api + "/coffeetypes", {
+        const typesResponse = await axios.get(api + "api/coffeetypes", {
           headers: apiHaders,
         });
         if (typesResponse.status == 200) {
@@ -505,7 +508,7 @@ export default {
     async getDetailImages(ID) {
       try {
         const imagesResponse = await axios.get(
-          api + "/coffeetypes/images/" + ID,
+          api + "api/coffeetypes/images/" + ID,
           {
             headers: apiHaders,
           }
@@ -514,12 +517,8 @@ export default {
         this.detailImageLength = imagesResponse.data.response.length;
 
         imagesResponse.data.response.forEach((element) => {
-          this.detailImagesFront.push(
-            this.getImageUrl(element.ImageDataFront.data)
-          );
-          this.detailImagesBack.push(
-            this.getImageUrl(element.ImageDataBack.data)
-          );
+          this.detailImagesFront.push(api + element.ImageDataFront);
+          this.detailImagesBack.push(api + element.ImageDataBack);
         });
       } catch (error) {
         console.error("There is error on fetching image:", error);
@@ -528,7 +527,7 @@ export default {
     async getTypeDetail(ID) {
       try {
         const typeCoffeeResponse = await axios.get(
-          api + "/coffeetypes/type/" + ID,
+          api + "api/coffeetypes/type/" + ID,
           {
             headers: apiHaders,
           }
@@ -541,7 +540,7 @@ export default {
     async getTypeGasStates(ID) {
       try {
         const gasStatesResponse = await axios.get(
-          api + "/coffeetypes/type/gasstates/" + ID,
+          api + "api/coffeetypes/type/gasstates/" + ID,
           {
             headers: apiHaders,
           }
@@ -554,7 +553,7 @@ export default {
     async getTypeDrinkSuggestion(ID) {
       try {
         const drinksResponse = await axios.get(
-          api + "/coffeetypes/type/drinks/" + ID,
+          api + "api/coffeetypes/type/drinks/" + ID,
           {
             headers: apiHaders,
           }
@@ -575,7 +574,7 @@ export default {
     imageData(val) {
       this.imageData = val;
 
-      this.cardImage = this.getImageUrl(val[0].ImageDataFront.data);
+      this.cardImage = this.getImageUrl(val[0].ImageDataFront);
     },
     types(val) {
       this.types = val;
@@ -633,5 +632,8 @@ export default {
 .cardwidthflex {
   width: 85dvw;
   max-width: 700px;
+}
+.samples-height {
+  height: 190px;
 }
 </style>

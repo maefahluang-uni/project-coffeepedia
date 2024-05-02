@@ -1,7 +1,7 @@
 <template>
   <div class="mb-5">
     <div>
-      <v-btn @click="addTag">Add title</v-btn>
+      <v-btn @click="addTitle">Add title</v-btn>
 
       <v-btn @click="logContent">log</v-btn>
       <v-btn @click="saveContent">save</v-btn>
@@ -15,9 +15,15 @@
       <v-btn @click="alignCenter">center</v-btn>
       <v-btn @click="alignRight">right</v-btn>
     </div>
+    <div>
+      <v-btn @click="addUnorderedList">Add Unordered List</v-btn>
+      <v-btn @click="addOrderedList">Add Ordered List</v-btn>
+      <v-btn @click="addListItem">Add List Item</v-btn>
+    </div>
   </div>
   <v-card class="ma-5" elevation="5">
     <div
+      placeholder="Type something..."
       class="pa-5"
       contenteditable="true"
       v-html="htmlContent"
@@ -33,7 +39,7 @@
 export default {
   data() {
     return {
-      htmlContent: "<p>This is some <strong>HTML</strong> content.</p>",
+      htmlContent: "",
       tagStage: "p",
       boldStage: "bold",
       isH1: false,
@@ -46,7 +52,7 @@ export default {
   },
 
   methods: {
-    addTag() {
+    addTitle() {
       this.saveContent();
       this.htmlContent += "<h1>Add text here</h1>";
     },
@@ -138,6 +144,29 @@ export default {
         this.isBold = false;
       }
     },
+    addUnorderedList() {
+      document.execCommand("insertUnorderedList"); // Add unordered list
+      this.saveContent();
+    },
+
+    addOrderedList() {
+      document.execCommand("insertOrderedList"); // Add ordered list
+      this.saveContent();
+    },
+    addListItem() {
+      document.execCommand("insertHTML", false, "<li></li>"); // Insert <li> tag
+      this.saveContent();
+    },
   },
 };
 </script>
+<style>
+[placeholder]:empty::before {
+  content: attr(placeholder);
+  color: #555;
+}
+
+[placeholder]:empty:focus::before {
+  content: "";
+}
+</style>

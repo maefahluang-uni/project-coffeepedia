@@ -89,6 +89,76 @@ const getTypeCoffeeGasStates = async (TypeID) => {
   }
 };
 
+const deleteGasState = async (ID) => {
+  try {
+    let sql = typeCoffeeQueries.DELETE_GAS_STATE;
+    let results = await conn.awaitQuery(sql, ID);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in deleteGasState function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
+const insertGasState = async (data) => {
+  try {
+    let sql = typeCoffeeQueries.INSERT_GAS_STATE;
+    let results = await conn.awaitQuery(sql, [
+      data.TypeID,
+      data.Gas,
+      data.WhenTempurature,
+    ]);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in insertGasState function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+const insertDrinkSuggestion = async (data) => {
+  try {
+    let sql = typeCoffeeQueries.INSERT_DRINK_SUGGESTION;
+    let results = await conn.awaitQuery(sql, [
+      data.TypeID,
+      data.DrinkName,
+      data.icon,
+    ]);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in insertGasState function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+const deleteDrinkSuggestion = async (ID) => {
+  try {
+    let sql = typeCoffeeQueries.DELETE_DRINK_SUGGESTION;
+    let results = await conn.awaitQuery(sql, ID);
+
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in deleteDrinkSuggestion function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
 const getTypeCoffeeImages = async (TypeID) => {
   try {
     let sql = typeCoffeeQueries.GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID;
@@ -390,10 +460,10 @@ const postRequestTypeCoffee = async (req, data) => {
         !data.process ||
         !data.roasted ||
         !data.commonName ||
+        !data.ImageDataFront ||
         !data.intervalTempurature ||
         !data.crackState ||
-        !data.flavorDetail ||
-        !data.moreDetail
+        !data.flavorDetail
       ) {
         return JSON.stringify({
           status: 400,
@@ -406,6 +476,7 @@ const postRequestTypeCoffee = async (req, data) => {
         data.roasted,
         data.process,
         data.commonName,
+        data.ImageDataFront,
         data.intervalTempurature,
         data.crackState,
         data.flavorDetail,
@@ -424,6 +495,7 @@ const postRequestTypeCoffee = async (req, data) => {
         !data.process ||
         !data.roasted ||
         !data.commonName ||
+        !data.ImageDataFront ||
         !data.intervalTempurature ||
         !data.crackState ||
         !data.flavorDetail ||
@@ -440,6 +512,7 @@ const postRequestTypeCoffee = async (req, data) => {
         data.roasted,
         data.process,
         data.commonName,
+        data.ImageDataFront,
         data.intervalTempurature,
         data.crackState,
         data.flavorDetail,
@@ -488,8 +561,12 @@ module.exports = {
   getTypesCoffee,
   getTypeCoffee,
   getTypeCoffeeGasStates,
+  insertGasState,
+  insertDrinkSuggestion,
+  deleteGasState,
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
+  deleteDrinkSuggestion,
   countTypes,
   getAllRoast,
   getAllProcess,

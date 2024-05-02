@@ -66,7 +66,8 @@ INSERT INTO
 type_coffee 
 ( RoastLevelID, 
   CoffeeProcessID, 
-  CommonName, 
+  CommonName,
+  ImageDataFront,
   Tempurature, 
   CrackState, 
   Flavor, 
@@ -75,6 +76,7 @@ VALUES
 ( ?, 
 ?, 
 ?, 
+?,
 ?, 
 ?, 
 ?,
@@ -87,7 +89,8 @@ type_coffee
 SET 
 RoastLevelID = ?, 
 CoffeeProcessID = ?, 
-CommonName = ?, 
+CommonName = ?,
+ImageDataFront = ?, 
 Tempurature = ?, 
 CrackState = ?, 
 Flavor = ?, 
@@ -98,10 +101,13 @@ type_coffee.ID = ?;
 
 const GET_TYPE_COFFEE_GAS_STATES = `
 SELECT 
-gas_state.Gas, gas_state.WhenTempurature 
+gas_state.ID,
+gas_state.TypeID,
+gas_state.Gas,
+gas_state.WhenTempurature
 FROM gas_state 
 JOIN 
-type_coffee ON gas_state.TypeCoffeeID = type_coffee.ID
+type_coffee ON gas_state.TypeID = type_coffee.ID
 WHERE
 type_coffee.ID = ?  
 ORDER BY gas_state.Gas  DESC
@@ -110,7 +116,7 @@ ORDER BY gas_state.Gas  DESC
 const INSERT_GAS_STATE = `
 INSERT INTO 
 gas_state 
-(TypeCoffeeID, 
+(TypeID, 
 Gas, 
 WhenTempurature) 
 VALUES 
@@ -119,6 +125,28 @@ VALUES
 ?)
 `;
 
+const DELETE_GAS_STATE = `
+DELETE 
+FROM 
+gas_state 
+WHERE 
+gas_state.ID = ?
+`;
+
+const GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID = `
+SELECT 
+drink_suggest.ID,
+drink_suggest.TypeID,
+drink_suggest.DrinkName,
+drink_suggest.icon
+FROM 
+drink_suggest
+JOIN
+type_coffee ON drink_suggest.TypeID = type_coffee.ID
+WHERE
+type_coffee.ID = ?  
+ORDER BY drink_suggest.DrinkName ASC;
+`;
 const INSERT_DRINK_SUGGESTION = `
 INSERT INTO 
 drink_suggest 
@@ -130,28 +158,21 @@ VALUES
   ?, 
   ?)
 `;
+const DELETE_DRINK_SUGGESTION = `
+DELETE 
+FROM 
+drink_suggest 
+WHERE 
+drink_suggest.ID = ?
+`;
 
 const GET_TYPE_COFFEE_IMAGES_BY_TYPE_ID = `
 SELECT 
-type_coffee_image.ImageDataFront, 
-type_coffee_image.ImageDataBack 
+*
 FROM 
 type_coffee_image 
 WHERE 
 type_coffee_image.TypeID = ?;
-`;
-
-const GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID = `
-SELECT 
-drink_suggest.DrinkName, 
-drink_suggest.icon 
-FROM 
-drink_suggest
-JOIN
-type_coffee ON drink_suggest.TypeID = type_coffee.ID
-WHERE
-type_coffee.ID = ?  
-ORDER BY drink_suggest.DrinkName ASC;
 `;
 
 const COUNT_TYPES = `
@@ -228,6 +249,7 @@ IsActivate = ?
 WHERE 
 roast_level.ID = ?;
 `;
+
 const UPDATE_TYPE_ACTIVATE = `
 UPDATE 
 type_coffee
@@ -236,6 +258,7 @@ IsActivate = ?
 WHERE 
 type_coffee.ID = ?;
 `;
+
 // Export the SQL queries
 module.exports = {
   GET_TYPE_COFFEE_BY_ID,
@@ -244,7 +267,9 @@ module.exports = {
   INSERT_NEW_TYPE_COFFEE,
   UPDATE_TYPE_COFFEE,
   INSERT_GAS_STATE,
+  DELETE_GAS_STATE,
   INSERT_DRINK_SUGGESTION,
+  DELETE_DRINK_SUGGESTION,
   GET_TYPES_COFFEE,
   GET_TYPES_COFFEE_FOR_ADMIN,
   GET_TYPE_COFFEE_DRINK_SUGGESTION_BY_TYPE_ID,

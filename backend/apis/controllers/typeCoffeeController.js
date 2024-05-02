@@ -14,6 +14,20 @@ const getTypeCoffeeGasStates = async (req, res) => {
   res.send(gasStates);
 };
 
+const deleteGasState = async (req, res) => {
+  const response = await service.deleteGasState(req.params.id);
+  res.send(response);
+};
+
+const insertGasState = async (req, res) => {
+  const response = await service.insertGasState(req.body);
+  res.send(response);
+};
+const insertDrinkSuggestion = async (req, res) => {
+  const response = await service.insertDrinkSuggestion(req.body);
+  res.send(response);
+};
+
 const getTypeCoffeeImages = async (req, res) => {
   const images = await service.getTypeCoffeeImages(req.params.id);
   res.send(images);
@@ -22,6 +36,11 @@ const getTypeCoffeeImages = async (req, res) => {
 const getTypeCoffeeDrinkSuggestion = async (req, res) => {
   const drinks = await service.getTypeCoffeeDrinkSuggestion(req.params.id);
   res.send(drinks);
+};
+
+const deleteDrinkSuggestion = async (req, res) => {
+  const response = await service.deleteDrinkSuggestion(req.params.id);
+  res.send(response);
 };
 const countTypes = async (req, res) => {
   const counttypes = await service.countTypes();
@@ -54,8 +73,12 @@ module.exports = {
   getTypesCoffee,
   getTypeCoffee,
   getTypeCoffeeGasStates,
+  deleteGasState,
+  insertGasState,
+  insertDrinkSuggestion,
   getTypeCoffeeImages,
   getTypeCoffeeDrinkSuggestion,
+  deleteDrinkSuggestion,
   countTypes,
   getAllRoast,
   getAllProcess,

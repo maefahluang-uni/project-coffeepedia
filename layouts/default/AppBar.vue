@@ -161,6 +161,9 @@ export default defineComponent({
       this.$router.push("/");
     },
     login() {
+      if (this.isAdmin) {
+        this.$router.push("/admin");
+      }
       this.$router.push("/login");
     },
     logout() {
@@ -169,6 +172,11 @@ export default defineComponent({
         this.cookies.remove("isAdmin");
         this.$router.push("/");
       }
+    },
+  },
+  watch: {
+    isAdmin(val) {
+      this.isAdmin = val;
     },
   },
 });

@@ -45,5 +45,24 @@ const getContact = async () => {
     });
   }
 };
+const updateContact = async (data) => {
+  try {
+    let sql = contactQueries.UPDATE_CONTACT;
+    let results = await conn.awaitQuery(sql, [
+      data.address,
+      data.phone,
+      data.email,
+      data.ID,
+    ]);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in updateContact function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
 
-module.exports = { getContact };
+module.exports = { getContact, updateContact };
