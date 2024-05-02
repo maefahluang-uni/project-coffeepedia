@@ -66,11 +66,9 @@
             >
           </v-toolbar>
         </template>
-        <template v-slot:item.date="{ item }">
-          <p class="">
-            {{ formatDateNotime(item.date) }}
-          </p></template
-        >
+        <template v-slot:item.title="{ item }">
+          <p class="news-title">{{ item.title }}</p>
+        </template>
         <template v-slot:item.newsImageUrl="{ item }">
           <div class="d-flex align-center">
             <img :src="item.newsImageUrl" width="100" />
@@ -100,7 +98,7 @@
         </template>
 
         <template v-slot:no-data>
-          <v-btn color="primary" @click="getAllTypes"> Reset </v-btn>
+          <v-btn color="primary" @click="getAllNews"> Reset </v-btn>
         </template>
       </v-data-table>
     </v-card>
@@ -181,7 +179,7 @@ export default {
     },
     async getAllNews() {
       try {
-        const newsResponse = await axios.get(api + "/news?admin=true", {
+        const newsResponse = await axios.get(api + "api/news?admin=true", {
           headers: apiHaders,
         });
         this.news = newsResponse.data.response;
@@ -200,7 +198,7 @@ export default {
       this.news[index].iconLoading = true;
 
       try {
-        const res = await axios.post(api + "/news/?edit=true", editnews, {
+        const res = await axios.post(api + "api/news/?edit=true", editnews, {
           headers: apiHaders,
         });
         if (res.data.status == 200) {
@@ -265,7 +263,7 @@ export default {
           href: this.editedItem.href,
         };
         try {
-          const res = await axios.post(api + "/news?edit=true", sentItem, {
+          const res = await axios.post(api + "api/news?edit=true", sentItem, {
             headers: apiHaders,
           });
           console.log(res);
@@ -282,9 +280,9 @@ export default {
           newsImageUrl: this.editedItem.newsImageUrl,
           href: this.editedItem.href,
         };
-        
+
         try {
-          const res = await axios.post(api + "/news?insert=true", sentItem, {
+          const res = await axios.post(api + "api/news?insert=true", sentItem, {
             headers: apiHaders,
           });
           if (res.data.status == 200) {
@@ -314,3 +312,11 @@ export default {
   },
 };
 </script>
+<style>
+.news-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

@@ -13,7 +13,7 @@ const uploadImage = async (req, res) => {
       }
       // File upload successful
       const fileName = req.file.filename;
-      const imageUrl = "/images/roasted_coffee/" + fileName;
+      const imageUrl = "image/roasted_coffee/" + fileName;
 
       res.status(200).json({ imageUrl }); // Send back the image URL in the response
     });
@@ -23,4 +23,9 @@ const uploadImage = async (req, res) => {
   }
 };
 
-module.exports = { uploadImage };
+const deleteRoastedCoffeeImage = async (req, res) => {
+  const response = service.deleteRoastedCoffeeImage(req.body);
+  res.send(response);
+};
+
+module.exports = { uploadImage, deleteRoastedCoffeeImage };

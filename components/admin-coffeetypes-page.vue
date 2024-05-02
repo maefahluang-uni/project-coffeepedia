@@ -21,7 +21,7 @@
               color="green"
               variant="tonal"
               rounded="xl"
-              @click="dialog = !dialog"
+              @click="addtype()"
             >
               <v-icon icon="mdi-plus" color="green"></v-icon>
               Add Type
@@ -77,16 +77,36 @@
                       label="Common name*"
                       :rules="rules.requireInput('Common name')"
                     ></v-text-field>
-                    <!--:rules="rules.requireInput('Picture')"-->
-                    <v-file-input
-                      class="mb-2"
-                      v-model="pictureFile"
-                      v-slot:item.image="{ item }"
-                      accept="image/*"
-                      label="Picture"
-                      disabled
-                    ></v-file-input>
-                    <div class="mb-7">
+                    <div class="d-flex">
+                      <img
+                        v-if="editedItem.ImageDataFront"
+                        class="mx-5"
+                        :src="apilink + editedItem.ImageDataFront"
+                        height="100"
+                        aspect-ratio="1/1"
+                      />
+                      <div class="flex-grow-1">
+                        <v-file-input
+                          class="mb-2"
+                          v-model="pictureFile"
+                          v-slot:item.image="{ item }"
+                          accept="image/*"
+                          label="New image"
+                          :rules="
+                            rules.requireInput(
+                              'Image',
+                              editedIndex,
+                              pictureFile
+                            )
+                          "
+                        ></v-file-input>
+                        <div class="mb-2 ml-10 text-grey">
+                          Old image: {{ editedItem.ImageDataFront }}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="mb-7" v-if="editedIndex > -1">
                       <v-card
                         class="d-flex justify-center align-center mb-2"
                         width="150"
@@ -97,7 +117,6 @@
                           Gas states
                         </v-card-title>
                         <v-btn
-                          disabled
                           variant="tonal"
                           icon="mdi-plus"
                           size="x-small"
@@ -105,12 +124,25 @@
                         >
                         </v-btn>
                       </v-card>
-                      <v-card
-                        class="mt-n6"
-                        variant="outlined"
-                        v-if="editedItem.gasStates.length != 0"
-                      >
-                        <div class="mt-6 pe-2">
+                      <v-card class="mt-n6" variant="outlined">
+                        <v-form ref="gasstate" class="d-flex mt-6 mb-1 mx-10">
+                          <v-text-field
+                            class="pe-2"
+                            label="Gas*"
+                            v-model="gasState.Gas"
+                            :rules="rules.onlyNumber('Gas')"
+                          ></v-text-field
+                          ><v-text-field
+                            label="Tempurature*"
+                            v-model="gasState.WhenTempurature"
+                            suffix="°C"
+                            :rules="rules.onlyNumber('Tempurature')"
+                          ></v-text-field>
+                        </v-form>
+                        <div
+                          class="pe-2"
+                          v-if="editedItem.gasStates.length != 0"
+                        >
                           <div
                             v-for="(state, index) in editedItem.gasStates"
                             class="d-flex mb-1"
@@ -122,20 +154,20 @@
                               variant="text"
                               color="error"
                               size="small"
-                              @click="deleteGasState(index)"
+                              @click="deleteGasState(index, state.ID)"
                             >
                             </v-btn>
                             <v-text-field
+                              readonly
                               class="pe-2"
-                              label="Gas*"
-                              v-model="state.gas"
-                              :rules="rules.requireInput('Gas')"
+                              label="Gas"
+                              v-model="state.Gas"
                             ></v-text-field
                             ><v-text-field
-                              label="Tempurature*"
+                              readonly
+                              label="Tempurature"
                               v-model="state.WhenTempurature"
                               suffix="°C"
-                              :rules="rules.onlyNumber('Tempurature')"
                             ></v-text-field>
                           </div>
                         </div>
@@ -182,19 +214,17 @@
                       variant="solo-filled"
                       flat
                     ></v-textarea>
-
-                    <div class="mb-7">
+                    <div class="mb-7" v-if="editedIndex > -1">
                       <v-card
                         class="d-flex justify-center align-center mb-2"
-                        width="205"
+                        width="204"
                         style="z-index: 1"
                         flat
                       >
                         <v-card-title class="pa-0 mr-2">
-                          Drink suggestion
+                          Drink Suggestion
                         </v-card-title>
                         <v-btn
-                          disabled
                           variant="tonal"
                           icon="mdi-plus"
                           size="x-small"
@@ -202,12 +232,31 @@
                         >
                         </v-btn>
                       </v-card>
-                      <v-card
-                        class="mt-n6"
-                        variant="outlined"
-                        v-if="editedItem.drinkSuggest.length != 0"
-                      >
-                        <div class="mt-6 pe-2">
+                      <v-card class="mt-n6" variant="outlined">
+                        <v-form
+                          ref="drinksuggest"
+                          class="d-flex mt-6 mb-1 mx-10"
+                        >
+                          <v-text-field
+                            class="pe-2"
+                            label="Drink name*"
+                            v-model="drinkSuggestion.DrinkName"
+                            :rules="rules.requireInput('Drink name')"
+                          ></v-text-field>
+                          <v-select
+                            :prepend-inner-icon="mdi + drinkSuggestion.icon"
+                            class="pe-2"
+                            v-model="drinkSuggestion.icon"
+                            :items="drinkIcons"
+                            label="Drink icon*"
+                            :rules="rules.requireInput('Drink icon')"
+                          >
+                          </v-select>
+                        </v-form>
+                        <div
+                          class="pe-2"
+                          v-if="editedItem.drinkSuggest.length != 0"
+                        >
                           <div
                             v-for="(drink, index) in editedItem.drinkSuggest"
                             class="d-flex mb-1"
@@ -219,22 +268,21 @@
                               variant="text"
                               color="error"
                               size="small"
-                              @click="deleteDrinkSuggest(index)"
+                              @click="deleteDrinkSuggest(index, drink.ID)"
                             >
                             </v-btn>
                             <v-text-field
+                              readonly
                               class="pe-2"
                               label="Drink name*"
-                              v-model="drink.drinkName"
-                              :rules="rules.requireInput('Drink name')"
+                              v-model="drink.DrinkName"
                             ></v-text-field>
                             <v-select
+                              readonly
                               :prepend-inner-icon="mdi + drink.icon"
                               class="pe-2"
                               v-model="drink.icon"
-                              :items="drinkIcons"
                               label="Drink icon*"
-                              :rules="rules.requireInput('Drink icon')"
                             >
                             </v-select>
                           </div>
@@ -284,29 +332,38 @@
           }}
         </template>
         <template v-slot:item.picture="{ item }">
-          <!--<img v-if="item.picture" :src="item.picture" height="30" width="30" />-->
+          <div class="d-flex align-center">
+            <img
+              v-if="item.ImageDataFront"
+              :src="apilink + item.ImageDataFront"
+              height="60"
+              aspect-ratio="1/1"
+            />
+          </div>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-icon size="small" @click="editItem(item)"> mdi-pencil </v-icon>
         </template>
         <template v-slot:item.actions2="{ item }">
-          <div v-if="item.iconLoading" class="pl-2">
-            <v-progress-circular
-              size="small"
-              :width="3"
-              indeterminate
-            ></v-progress-circular>
+          <div class="d-flex align-center">
+            <div v-if="item.iconLoading" class="pl-2">
+              <v-progress-circular
+                size="small"
+                :width="3"
+                indeterminate
+              ></v-progress-circular>
+            </div>
+            <v-switch
+              v-else
+              v-model="item.IsActivate"
+              false-value="0"
+              true-value="1"
+              color="success"
+              hide-details
+              class="d-inline-block"
+              @click="toggleType(item.ID, item)"
+            ></v-switch>
           </div>
-          <v-switch
-            v-else
-            v-model="item.IsActivate"
-            false-value="0"
-            true-value="1"
-            color="success"
-            hide-details
-            class="d-inline-block"
-            @click="toggleType(item.ID, item)"
-          ></v-switch>
         </template>
 
         <template v-slot:no-data>
@@ -334,13 +391,14 @@ export default {
     dialogDelete: false,
     alertSuccess: false,
     switchmodel: 1,
+    apilink: api,
     headers: [
       {
         title: "Process",
         key: "process",
       },
       { title: "Roasted", key: "roasted" },
-      { title: "Picture", key: "picture", sortable: false },
+      { title: "Image", key: "picture", sortable: false },
       { title: "Common name", key: "commonName" },
       { title: "Edit", key: "actions", sortable: false, align: "end" },
       { title: "Status", key: "actions2", sortable: false },
@@ -355,21 +413,24 @@ export default {
     ],
     pictureFile: "",
     gasState: {
-      gas: "",
+      ID: "",
+      TypeCoffeeID: "",
+      Gas: "",
       WhenTempurature: "",
     },
-    drinkSuggest: {
-      drinkName: "",
-      icon: "",
-    },
+    drinkSuggestion: { ID: "", TypeID: "", DrinkName: "", icon: "" },
     drinkIcons: ["coffee-maker", "coffee", "kettle-pour-over", "cup"],
+
+    sampleImage: { ID: "", TypeID: "", ImageDataFront: "", ImageDataBack: "" },
+    sampleImageFile: { front: "", back: "" },
+
     editedIndex: -1,
     editedItem: {
       process: "",
       roasted: "",
       picture: "",
       commonName: "",
-      pictureUrl: "",
+      ImageDataFront: "",
       gasStates: [],
       intervalTempurature: "",
       crackState: "",
@@ -383,7 +444,7 @@ export default {
       roasted: "",
       picture: "",
       commonName: "",
-      pictureUrl: "",
+      ImageDataFront: "",
       gasStates: [],
       intervalTempurature: "",
       crackState: "",
@@ -393,9 +454,12 @@ export default {
       IsActivate: "1",
     },
     rules: {
-      requireInput: (fieldName) => [
+      requireInput: (fieldName, editedIndex, pictureFile) => [
         (value) => {
+          if (fieldName == "Image" && editedIndex > -1 && pictureFile == "")
+            return true;
           if (value) return true;
+
           return `${
             fieldName.charAt(0).toUpperCase() + fieldName.slice(1)
           } is required`;
@@ -448,10 +512,6 @@ export default {
     dialogDelete(val) {
       val || this.closeDelete();
     },
-
-    switchmodel(val) {
-      console.log(val);
-    },
   },
 
   created() {
@@ -466,7 +526,7 @@ export default {
     },
     async getAllTypes() {
       try {
-        const res = await axios.get(api + "/coffeetypes?admin=true", {
+        const res = await axios.get(api + "api/coffeetypes?admin=true", {
           headers: apiHaders,
         });
         let items = [];
@@ -488,10 +548,37 @@ export default {
           };
           items.push(item);
         });
+
         this.types = items;
       } catch (error) {
         console.error("Error fetching all types:", error);
         await this.retryAfterDelay(this.getAllTypes());
+      }
+    },
+    async getTypeGasStates(ID) {
+      try {
+        const gasStatesResponse = await axios.get(
+          api + "api/coffeetypes/type/gasstates/" + ID,
+          {
+            headers: apiHaders,
+          }
+        );
+        this.editedItem.gasStates = gasStatesResponse.data.response;
+      } catch (error) {
+        console.error("Error fetching coffee type gas states:", error);
+      }
+    },
+    async getTypeDrink(ID) {
+      try {
+        const response = await axios.get(
+          api + "api/coffeetypes/type/drinks/" + ID,
+          {
+            headers: apiHaders,
+          }
+        );
+        this.editedItem.drinkSuggest = response.data.response;
+      } catch (error) {
+        console.error("Error fetching coffee type drinks:", error);
       }
     },
     async toggleType(id, type) {
@@ -505,7 +592,7 @@ export default {
       this.types[index].iconLoading = true;
       try {
         const res = await axios.post(
-          api + "/coffeetypes/?edit=true",
+          api + "api/coffeetypes/?edit=true",
           edittype,
           {
             headers: apiHaders,
@@ -521,10 +608,10 @@ export default {
     },
     async getAllProcessAndRoast() {
       try {
-        const res1 = await axios.get(api + "/coffeetypes/process", {
+        const res1 = await axios.get(api + "api/coffeetypes/process", {
           headers: apiHaders,
         });
-        const res2 = await axios.get(api + "/coffeetypes/roast", {
+        const res2 = await axios.get(api + "api/coffeetypes/roast", {
           headers: apiHaders,
         });
         let items1 = [];
@@ -552,12 +639,20 @@ export default {
       this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
+      if (this.editedIndex > -1) {
+        this.getTypeGasStates(this.types[this.editedIndex].ID);
+        this.getTypeDrink(this.types[this.editedIndex].ID);
+      }
     },
 
     activateItem(item) {
       this.editedIndex = this.types.indexOf(item);
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
+      if (this.editedIndex > -1) {
+        this.getTypeGasStates(this.types[this.editedIndex].ID);
+        this.getTypeDrink(this.types[this.editedIndex].ID);
+      }
     },
 
     deleteItemConfirm() {
@@ -567,9 +662,20 @@ export default {
 
     close() {
       this.dialog = false;
-      this.pictureFile = "";
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
+        this.gasState = {
+          ID: "",
+          TypeCoffeeID: "",
+          gas: "",
+          WhenTempurature: "",
+        };
+        this.drinkSuggestion = {
+          ID: "",
+          TypeID: "",
+          drinkName: "",
+          icon: "",
+        };
         this.editedIndex = -1;
       });
     },
@@ -578,19 +684,75 @@ export default {
       this.dialogDelete = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
+        this.gasState = {
+          ID: "",
+          TypeCoffeeID: "",
+          gas: "",
+          WhenTempurature: "",
+        };
+        this.drinkSuggestion = {
+          ID: "",
+          TypeID: "",
+          drinkName: "",
+          icon: "",
+        };
         this.editedIndex = -1;
       });
+    },
+    addtype() {
+      this.dialog = !this.dialog;
+      this.editedIndex = -1;
+      this.editedItem = Object.assign({}, this.defaultItem);
+      this.gasState = {
+        ID: "",
+        TypeCoffeeID: "",
+        gas: "",
+        WhenTempurature: "",
+      };
+      this.drinkSuggestion = {
+        ID: "",
+        TypeID: "",
+        drinkName: "",
+        icon: "",
+      };
     },
     async save() {
       const { valid } = await this.$refs.form.validate();
       if (valid) {
         if (this.editedIndex > -1) {
-          console.log(this.editedItem);
+          let imageUrl = this.editedItem.ImageDataFront;
+          if (this.pictureFile[0]) {
+            try {
+              const formData = new FormData();
+              formData.append(
+                "image",
+                this.pictureFile[0],
+                Date.now() + "_" + this.pictureFile[0].name
+              );
+              const res = await axios.post(
+                api + "api/images/upload",
+                formData,
+                {
+                  headers: {
+                    "ngrok-skip-browser-warning": "true",
+                    "api-key": apiKey,
+                    "Content-Type": "multipart/form-data", // Set correct content type for file upload
+                  },
+                }
+              );
+              if (res.request.status == 200) {
+                imageUrl = res.data.imageUrl;
+              }
+            } catch (error) {
+              console.error("Error upload image:", error);
+            }
+          }
           const sentItem = {
             ID: this.editedItem.ID,
             process: this.editedItem.process,
             roasted: this.editedItem.roasted,
             commonName: this.editedItem.commonName,
+            ImageDataFront: imageUrl,
             intervalTempurature: this.editedItem.intervalTempurature,
             crackState: this.editedItem.crackState,
             flavorDetail: this.editedItem.flavorDetail,
@@ -598,7 +760,7 @@ export default {
           };
           try {
             const res = await axios.post(
-              api + "/coffeetypes?edit=true",
+              api + "api/coffeetypes?edit=true",
               sentItem,
               {
                 headers: apiHaders,
@@ -611,11 +773,38 @@ export default {
             console.error("Error update type:", error);
           }
         } else {
-          console.log(this.editedItem);
+          let imageUrl = this.editedItem.ImageDataFront;
+          if (this.pictureFile[0]) {
+            try {
+              const formData = new FormData();
+              formData.append(
+                "image",
+                this.pictureFile[0],
+                Date.now() + "_" + this.pictureFile[0].name
+              );
+              const res = await axios.post(
+                api + "api/images/upload",
+                formData,
+                {
+                  headers: {
+                    "ngrok-skip-browser-warning": "true",
+                    "api-key": apiKey,
+                    "Content-Type": "multipart/form-data", // Set correct content type for file upload
+                  },
+                }
+              );
+              if (res.request.status == 200) {
+                imageUrl = res.data.imageUrl;
+              }
+            } catch (error) {
+              console.error("Error upload image:", error);
+            }
+          }
           const sentItem = {
             process: this.editedItem.process,
             roasted: this.editedItem.roasted,
             commonName: this.editedItem.commonName,
+            ImageDataFront: imageUrl,
             intervalTempurature: this.editedItem.intervalTempurature,
             crackState: this.editedItem.crackState,
             flavorDetail: this.editedItem.flavorDetail,
@@ -623,15 +812,15 @@ export default {
           };
           try {
             const res = await axios.post(
-              api + "/coffeetypes?insert=true",
+              api + "api/coffeetypes?insert=true",
               sentItem,
               {
                 headers: apiHaders,
               }
             );
-            console.log(res);
             if (res.data.status == 200) {
               this.editedItem.ID = res.data.response.insertId;
+              this.editedItem.ImageDataFront = imageUrl;
               this.types.push(this.editedItem);
             }
           } catch (error) {
@@ -649,33 +838,111 @@ export default {
         }
       }
     },
-    insertGasState() {
-      this.editedItem.gasStates.push(this.gasState);
-      this.gasState = {
-        gas: "",
-        WhenTempurature: "",
-      };
+    async insertGasState() {
+      const { valid } = await this.$refs.gasstate.validate();
+      if (valid) {
+        let sentItem = {
+          TypeID: this.editedItem.ID,
+          Gas: this.gasState.Gas,
+          WhenTempurature: this.gasState.WhenTempurature,
+        };
+        try {
+          const res = await axios.put(
+            api + "api/coffeetypes/type/gasstate",
+            sentItem,
+            {
+              headers: apiHaders,
+            }
+          );
+          if (res.data.status == 200) {
+            this.gasState.ID = res.data.response.insertId;
+
+            this.editedItem.gasStates.push(this.gasState);
+            this.gasState = {
+              ID: "",
+              TypeCoffeeID: "",
+              Gas: "",
+              WhenTempurature: "",
+            };
+          }
+        } catch (error) {
+          console.error("Error insertGasState:", error);
+        }
+      }
     },
-    deleteGasState(index) {
-      this.editedItem.gasStates.splice(index, 1); // Remove gas state at the specified index
-      this.gasState = {
-        gas: "",
-        WhenTempurature: "",
-      };
+    async deleteGasState(index, ID) {
+      try {
+        const response = await axios.delete(
+          api + "api/coffeetypes/type/gasstates/" + ID,
+          {
+            headers: apiHaders,
+          }
+        );
+        if (response.data.status == 200) {
+          this.editedItem.gasStates.splice(index, 1); // Remove gas state at the specified index
+          this.gasState = {
+            ID: "",
+            TypeCoffeeID: "",
+            gas: "",
+            WhenTempurature: "",
+          };
+        }
+      } catch (error) {
+        console.error("Error fetching coffee type gas states:", error);
+      }
     },
-    insertDrinkSuggest() {
-      this.editedItem.drinkSuggest.push(this.drinkSuggest);
-      this.drinkSuggest = {
-        drinkName: "",
-        icon: "",
-      };
+    async insertDrinkSuggest() {
+      const { valid } = await this.$refs.drinksuggest.validate();
+      if (valid) {
+        let sentItem = {
+          TypeID: this.editedItem.ID,
+          DrinkName: this.drinkSuggestion.DrinkName,
+          icon: this.drinkSuggestion.icon,
+        };
+        try {
+          const res = await axios.put(
+            api + "api/coffeetypes/type/drink",
+            sentItem,
+            {
+              headers: apiHaders,
+            }
+          );
+          if (res.data.status == 200) {
+            this.drinkSuggestion.ID = res.data.response.insertId;
+
+            this.editedItem.drinkSuggest.push(this.drinkSuggestion);
+            this.drinkSuggestion = {
+              ID: "",
+              TypeID: "",
+              drinkName: "",
+              icon: "",
+            };
+          }
+        } catch (error) {
+          console.error("Error insertdrink:", error);
+        }
+      }
     },
-    deleteDrinkSuggest(index) {
-      this.editedItem.drinkSuggest.splice(index, 1);
-      this.drinkSuggest = {
-        drinkName: "",
-        icon: "",
-      };
+    async deleteDrinkSuggest(index, ID) {
+      try {
+        const response = await axios.delete(
+          api + "api/coffeetypes/type/drinks/" + ID,
+          {
+            headers: apiHaders,
+          }
+        );
+        if (response.data.status == 200) {
+          this.editedItem.drinkSuggest.splice(index, 1);
+          this.drinkSuggestion = {
+            ID: "",
+            TypeID: "",
+            DrinkName: "",
+            icon: "",
+          };
+        }
+      } catch (error) {
+        console.error("Error fetching coffee type gas states:", error);
+      }
     },
     getProcessName(id) {
       const processItem = this.process.find((item) => item.ID === id);
@@ -684,6 +951,11 @@ export default {
     getRoastName(id) {
       const roastItem = this.roast.find((item) => item.ID === id);
       return roastItem ? roastItem.RoastName : null;
+    },
+  },
+  watch: {
+    types(val) {
+      this.types = val;
     },
   },
 };

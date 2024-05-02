@@ -161,7 +161,7 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.LOCAL_API_URL;
+const api = config.LOCAL_API_URL ;
 const apiKey = config.API_KEY;
 const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
@@ -183,7 +183,7 @@ export default {
     },
     async getAllBlogs() {
       try {
-        const blogsResponse = await axios.get(api + "/blogs/top", {
+        const blogsResponse = await axios.get(api + "api/blogs/top", {
           headers: apiHaders,
         });
         this.blogs = blogsResponse.data.response;

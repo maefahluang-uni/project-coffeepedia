@@ -90,7 +90,7 @@ export default {
   methods: {
     async getContact() {
       try {
-        const contactResponse = await axios.get(api + "/contact", {
+        const contactResponse = await axios.get(api + "api/contact", {
           headers: apiHaders,
         });
         this.address = contactResponse.data.response[0].Address;

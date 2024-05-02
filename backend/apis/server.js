@@ -19,7 +19,11 @@ const apiKeyMiddleware = (req, res, next) => {
     res.status(401).json({ error: "Unauthorized" });
   }
 };
-
+app.use(
+  "/image/roasted_coffee/",
+  express.static("public/images/roasted_coffee")
+);
+app.use("/image/blog/", express.static("public/images/roasted_coffee"));
 app.use(apiKeyMiddleware);
 
 app.get("/", (req, res) => {
@@ -28,11 +32,6 @@ app.get("/", (req, res) => {
 
 app.use("/api", router);
 
-app.use(
-  "/images/roasted_coffee/",
-  express.static("public/images/roasted_coffee")
-);
-app.use("/images/blog/", express.static("public/images/roasted_coffee"));
 
 app.listen(port, () => {
   console.log("API listenning on http://localhost:" + port + "/");

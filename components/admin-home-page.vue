@@ -187,7 +187,7 @@ export default {
     },
     async getTypeCount() {
       try {
-        const countResponse = await axios.get(api + "/coffeetypes/count", {
+        const countResponse = await axios.get(api + "api/coffeetypes/count", {
           headers: {
             "ngrok-skip-browser-warning": "true",
             "api-key": apiKey,
@@ -202,7 +202,7 @@ export default {
     },
     async getBlogCount() {
       try {
-        const countResponse = await axios.get(api + "/blogs/count", {
+        const countResponse = await axios.get(api + "api/blogs/count", {
           headers: {
             "ngrok-skip-browser-warning": "true",
             "api-key": apiKey,
@@ -217,7 +217,7 @@ export default {
     },
     async getNewsCount() {
       try {
-        const countResponse = await axios.get(api + "/news/count", {
+        const countResponse = await axios.get(api + "api/news/count", {
           headers: {
             "ngrok-skip-browser-warning": "true",
             "api-key": apiKey,

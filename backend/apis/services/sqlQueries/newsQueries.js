@@ -34,12 +34,12 @@ const UPDATE_NEWS = `
 UPDATE
 news 
 SET
-title =?,
-date =?,
+title = ?,
+date = ?,
 href = ?,
-newsImageUrl = ?,
+newsImageUrl = ?
 WHERE 
-news.ID = ?
+news.ID = ? 
 `;
 
 const UPDATE_NEWS_ACTIVATE = `

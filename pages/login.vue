@@ -90,15 +90,16 @@ export default defineComponent({
         try {
           this.loggingin = true;
           const sentItem = { username: this.username, password: this.password };
-          const response = await axios.post(api + "/login", sentItem, {
+          const response = await axios.post(api + "api/login", sentItem, {
             headers: apiHaders,
           });
-          console.log(response);
 
           if (response.data.response.length != 0) {
             this.loggingin = false;
             this.cookies.set("isAdmin", "true");
-            this.$router.push("/admin");
+            window.location.reload().then(() => {
+              this.$router.push("/admin");
+            });
           }
           await new Promise((resolve) => setTimeout(resolve, 2000));
           this.loggingin = false;

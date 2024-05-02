@@ -18,12 +18,8 @@
         class="mb-7 mx-4"
       ></v-skeleton-loader>
     </div>
-    <v-data-iterator
-      v-else
-      :items="news"
-      :items-per-page="itemPerPage"
-      class="d-flex justify-center"
-      ><template v-slot:default="{ items }">
+    <v-data-iterator v-else :items="news" :items-per-page="itemPerPage">
+      <template v-slot:default="{ items }">
         <div
           class="d-flex align-content-space-around flex-wrap justify-space-around"
         >
@@ -45,13 +41,14 @@
               read more
             </div>
           </v-card>
-        </div> </template
-      ><template v-if="showSeeMore" v-slot:footer="{}">
-        <div class="d-flex mb-7 justify-center">
+        </div>
+      </template>
+      <template v-if="showSeeMore" v-slot:footer="{}">
+        <div class="d-flex mb-7 justify-center mt-10">
           <v-btn variant="outlined" @click="seeMore(4)"> See more </v-btn>
         </div>
-      </template></v-data-iterator
-    >
+      </template>
+    </v-data-iterator>
   </div>
 </template>
 <script>
@@ -78,7 +75,7 @@ export default {
     },
     async getAllNews() {
       try {
-        const newsResponse = await axios.get(api + "/news", {
+        const newsResponse = await axios.get(api + "api/news", {
           headers: apiHaders,
         });
         this.news = newsResponse.data.response;

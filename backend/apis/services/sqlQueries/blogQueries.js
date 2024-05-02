@@ -2,6 +2,16 @@ const GET_ALL_BLOGS = `
 SELECT * 
 FROM 
 blog 
+WHERE 
+blog.IsActivate = '1'
+ORDER BY 
+blog.date 
+DESC 
+`;
+const GET_ALL_BLOGS_ADMIN = `
+SELECT * 
+FROM 
+blog 
 ORDER BY 
 blog.date 
 DESC;
@@ -11,6 +21,8 @@ const GET_TOP3_BLOGS = `
 SELECT * 
 FROM 
 blog 
+WHERE 
+blog.IsActivate = '1'
 ORDER BY 
 viewCount 
 DESC 
@@ -55,11 +67,48 @@ FROM
 blog;
 `;
 
+const INSERT_NEW_BLOG = `
+INSERT INTO 
+blog 
+( 
+  title, 
+  date, 
+  content, 
+  imageURL
+) 
+  VALUES ( ?, ?, ?, ?);
+`;
+
+const UPDATE_BLOG = `
+UPDATE
+blog
+SET
+title =?,
+date =?,
+content = ?,
+imageURL = ?
+WHERE 
+blog.ID = ?
+`;
+
+const UPDATE_BLOG_ACTIVATE = `
+UPDATE
+blog
+SET
+IsActivate = ?
+WHERE
+blog.ID = ?
+`;
+
 module.exports = {
   GET_ALL_BLOGS,
+  GET_ALL_BLOGS_ADMIN,
   GET_TOP3_BLOGS,
   GET_BLOG_COMMENTS_BY_ID,
   INSERT_COMMENT_INTO_BLOG,
   UPDATE_COMMENT_COUNT,
   COUNT_BLOGS,
+  INSERT_NEW_BLOG,
+  UPDATE_BLOG,
+  UPDATE_BLOG_ACTIVATE,
 };

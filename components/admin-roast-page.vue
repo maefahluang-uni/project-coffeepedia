@@ -110,7 +110,7 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.LOCAL_API_URL;
+const api = config.LOCAL_API_URL ;
 const apiKey = config.API_KEY;
 const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 
@@ -163,7 +163,7 @@ export default {
     },
     async getAllRoast() {
       try {
-        const res = await axios.get(api + "/coffeetypes/roast", {
+        const res = await axios.get(api + "api/coffeetypes/roast", {
           headers: apiHaders,
         });
         //Object.assign(res.data.response, { iconLoading: false })
@@ -212,7 +212,7 @@ export default {
       };
       try {
         const res = await axios.post(
-          api + "/coffeetypes/roast?edit=true",
+          api + "api/coffeetypes/roast?edit=true",
           roast,
           {
             headers: apiHaders,
@@ -255,7 +255,7 @@ export default {
         };
         try {
           const res = await axios.post(
-            api + "/coffeetypes/roast?edit=true",
+            api + "api/coffeetypes/roast?edit=true",
             sentItem,
             {
               headers: apiHaders,
@@ -273,7 +273,7 @@ export default {
       } else {
         try {
           const res = await axios.post(
-            api + "/coffeetypes/roast?insert=true",
+            api + "api/coffeetypes/roast?insert=true",
             this.editedItem,
             {
               headers: apiHaders,

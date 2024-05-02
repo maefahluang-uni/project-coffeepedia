@@ -161,7 +161,7 @@ export default {
     },
     async getAllProcess() {
       try {
-        const res = await axios.get(api + "/coffeetypes/process", {
+        const res = await axios.get(api + "api/coffeetypes/process", {
           headers: apiHaders,
         });
         //Object.assign(res.data.response, { iconLoading: false })
@@ -210,7 +210,7 @@ export default {
       };
       try {
         const res = await axios.post(
-          api + "/coffeetypes/process?edit=true",
+          api + "api/coffeetypes/process?edit=true",
           process,
           {
             headers: apiHaders,
@@ -253,7 +253,7 @@ export default {
         };
         try {
           const res = await axios.post(
-            api + "/coffeetypes/process?edit=true",
+            api + "api/coffeetypes/process?edit=true",
             sentItem,
             {
               headers: apiHaders,
@@ -271,7 +271,7 @@ export default {
       } else {
         try {
           const res = await axios.post(
-            api + "/coffeetypes/process?insert=true",
+            api + "api/coffeetypes/process?insert=true",
             this.editedItem,
             {
               headers: apiHaders,

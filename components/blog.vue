@@ -295,7 +295,7 @@ export default {
     },
     async getAllBlogs() {
       try {
-        const blogsResponse = await axios.get(api + "/blogs", {
+        const blogsResponse = await axios.get(api + "api/blogs?admin=false", {
           headers: apiHaders,
         });
         this.blogs = blogsResponse.data.response;
@@ -311,7 +311,7 @@ export default {
     },
     async getTopBlogs() {
       try {
-        const topblogsResponse = await axios.get(api + "/blogs/top", {
+        const topblogsResponse = await axios.get(api + "api/blogs/top", {
           headers: apiHaders,
         });
         this.topBlogs = topblogsResponse.data.response;
@@ -325,7 +325,7 @@ export default {
       if (this.selectedblogID != BlogID) {
         try {
           const commentsResponse = await axios.get(
-            api + "/blogs/comments/" + BlogID,
+            api + "api/blogs/comments/" + BlogID,
             {
               headers: apiHaders,
             }
@@ -371,7 +371,7 @@ export default {
         comment: comment,
         timestamp: timestamp,
       };
-      const res = await axios.post(api + "/blogs/comment", newComment, {
+      const res = await axios.post(api + "api/blogs/comment", newComment, {
         headers: apiHaders,
       });
       if (res.status == 200) {
