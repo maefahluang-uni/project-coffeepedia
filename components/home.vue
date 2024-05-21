@@ -92,7 +92,7 @@
           <v-img
             class="d-flex blog-img"
             cover
-            :src="blogImage(blog.imageFile, blog.imageURL)"
+            :src="blogImage(blog.imageURL)"
           />
 
           <div>
@@ -161,7 +161,7 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.LOCAL_API_URL ;
+const api = config.LOCAL_API_URL;
 const apiKey = config.API_KEY;
 const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
@@ -218,15 +218,11 @@ export default {
       const base64Image = btoa(String.fromCharCode.apply(null, uint32Array));
       return `data:image/jpeg;base64,${base64Image}`;
     },
-    blogImage(buffer, url) {
-      if (buffer == null) {
-        return `${url}`;
+    blogImage(url) {
+      if (!url) {
+        return "https://static.vecteezy.com/system/resources/previews/004/141/669/large_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
       }
-      if (url == null) {
-        let imgurl = this.getImageUrl(buffer.data);
-        return imgurl;
-      }
-      return "";
+      return `${url}`;
     },
     showDetail(blog) {
       console.log(blog);

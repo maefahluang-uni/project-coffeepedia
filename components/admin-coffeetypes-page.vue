@@ -332,9 +332,13 @@
           }}
         </template>
         <template v-slot:item.picture="{ item }">
-          <div class="d-flex align-center">
+          <div class="d-flex justify-center align-center">
+            <v-icon
+              v-if="!item.ImageDataFront"
+              icon="mdi-image-remove"
+            ></v-icon>
             <img
-              v-if="item.ImageDataFront"
+              v-else
               :src="apilink + item.ImageDataFront"
               height="60"
               aspect-ratio="1/1"

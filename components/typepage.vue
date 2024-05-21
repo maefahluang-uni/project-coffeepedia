@@ -193,12 +193,8 @@
                   v-if="detailImageLength == 0"
                   class="d-flex justify-center align-center py-5"
                 >
-                  <v-progress-circular
-                    :size="30"
-                    :width="2"
-                    indeterminate
-                  ></v-progress-circular>
-                  <div class="pl-2">Loading sample images..</div>
+                  
+                  <div class="">No sample images</div>
                 </div>
                 <div v-else>
                   <div>

@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex justify-center mt-15">
-    <v-card class="card-table elevation-5" height="500">
+    <v-card class="card-table elevation-5">
       <v-form ref="form">
         <div class="ma-15">
           <div class="font-weight-bold text-h4 text-center mb-5 mt-15">
