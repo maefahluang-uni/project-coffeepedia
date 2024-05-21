@@ -100,7 +100,10 @@
                             )
                           "
                         ></v-file-input>
-                        <div class="mb-2 ml-10 text-grey">
+                        <div
+                          v-if="this.editedIndex < -1"
+                          class="mb-2 ml-10 text-grey"
+                        >
                           Old image: {{ editedItem.ImageDataFront }}
                         </div>
                       </div>

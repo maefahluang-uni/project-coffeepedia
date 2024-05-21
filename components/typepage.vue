@@ -121,10 +121,10 @@
               color="rgba(185, 160, 130)"
               @click="clickTypeCard(item.raw.ID, index)"
             >
-              <div class="cardbgcolor text-center pb-2">
+              <div class="cardbgcolor text-center">
                 <div class="whitebg d-flex justify-center">
                   <img
-                    v-if="item.raw.ImageDataFront != null"
+                    v-if="item.raw.ImageDataFront"
                     :src="apilink + item.raw.ImageDataFront"
                     width="200"
                     class="pa-5"
@@ -135,21 +135,17 @@
                     {{
                       item.raw.ProcessName.charAt(0).toUpperCase() +
                       item.raw.ProcessName.slice(1) +
-                      " process"
+                      " " +
+                      item.raw.RoastName.charAt(0).toUpperCase() +
+                      item.raw.RoastName.slice(1)
                     }}
                   </v-card-title>
-                  <v-card-subtitle class="font-weight-bold text-black">
-                    {{
-                      item.raw.RoastName.charAt(0).toUpperCase() +
-                      item.raw.RoastName.slice(1) +
-                      " roast"
-                    }}
-                  </v-card-subtitle>
                 </div>
               </div>
             </v-card>
           </v-col>
         </v-row>
+
         <!--Provide coffee detail on this overlay-->
         <v-overlay v-model="overlay" class="align-top justify-center pt-10">
           <v-card
@@ -193,7 +189,6 @@
                   v-if="detailImageLength == 0"
                   class="d-flex justify-center align-center py-5"
                 >
-                  
                   <div class="">No sample images</div>
                 </div>
                 <div v-else>
@@ -406,6 +401,7 @@ const apiKey = config.API_KEY;
 const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 export default {
   data: () => ({
+    testimage: "",
     overlay: false,
     loading: true,
     itemsPerPage: 9,
@@ -565,12 +561,30 @@ export default {
         console.error("Error fetching coffee type gas states:", error);
       }
     },
+    async fetchImage(url) {
+      try {
+        const res = await axios.get(url, {
+          headers: apiHaders,
+          responseType: "arraybuffer",
+        });
+        const uint8Array = new Uint8Array(res.data);
+        const base64Image = btoa(String.fromCharCode.apply(null, uint8Array));
+        const dataUrl = `data:image/png;base64,${base64Image}`;
+        this.testimage = dataUrl;
+      } catch (error) {
+        console.error("Error fetching Image:", error);
+        return "";
+      }
+    },
   },
   watch: {
     imageData(val) {
       this.imageData = val;
 
       this.cardImage = this.getImageUrl(val[0].ImageDataFront);
+    },
+    testimage(val) {
+      this.testimage = val;
     },
     types(val) {
       this.types = val;
