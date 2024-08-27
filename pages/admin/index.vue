@@ -3,7 +3,7 @@
   <v-card flat>
     <v-tabs v-model="tab" color="rgb(240, 200, 165)" align-tabs="center">
       <v-tab :value="1" class="font-weight-bold" @click="closeExpand()"
-        >Home</v-tab
+        >Dashboard</v-tab
       >
       <v-tab :value="2" class="font-weight-bold" @click="closeExpand()"
         >Type coffee beans</v-tab
