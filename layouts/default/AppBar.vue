@@ -70,7 +70,7 @@
           <v-btn
             v-else
             @click="login()"
-            text="Sign-in"
+            text="Admin"
             variant="outlined"
             class="rounded-xl"
             color="success"
