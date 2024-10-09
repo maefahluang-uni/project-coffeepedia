@@ -13,7 +13,7 @@
       <v-img
         class="d-flex align-end"
         cover
-        :src="blogImage(topBlogs[0].imageFile, topBlogs[0].imageURL)"
+        :src="blogImage(topBlogs[0].imageURL)"
       >
         <div class="text-white">
           <v-card color="rgba(60, 60, 60, 0.7)">
@@ -47,7 +47,7 @@
         <v-img
           class="d-flex align-end"
           cover
-          :src="blogImage(topBlogs[1].imageFile, topBlogs[1].imageURL)"
+          :src="blogImage(topBlogs[1].imageURL)"
         >
           <div class="text-white">
             <v-card color="rgba(60, 60, 60, 0.7)">
@@ -82,7 +82,7 @@
         <v-img
           class="d-flex align-end"
           cover
-          :src="blogImage(topBlogs[2].imageFile, topBlogs[2].imageURL)"
+          :src="blogImage(topBlogs[2].imageURL)"
         >
           <div class="text-white">
             <v-card color="rgba(60, 60, 60, 0.7)">
@@ -142,7 +142,7 @@
             <v-img
               class="d-flex blog-img"
               cover
-              :src="blogImage(blog.raw.imageFile, blog.raw.imageURL)"
+              :src="blogImage(blog.raw.imageURL)"
             />
 
             <div>
@@ -410,15 +410,11 @@ export default {
     cancelComment() {
       this.overlay2 = !this.overlay2;
     },
-    blogImage(buffer, url) {
-      if (buffer == null) {
-        return `${url}`;
+    blogImage(url) {
+      if (!url) {
+        return "https://static.vecteezy.com/system/resources/previews/004/141/669/large_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
       }
-      if (url == null) {
-        let imgurl = this.getImageUrl(buffer.data);
-        return imgurl;
-      }
-      return "";
+      return `${url}`;
     },
     showDetail(blog) {
       this.getComments(blog.ID);

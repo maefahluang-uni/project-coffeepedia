@@ -70,8 +70,9 @@
           <p class="news-title">{{ item.title }}</p>
         </template>
         <template v-slot:item.newsImageUrl="{ item }">
-          <div class="d-flex align-center">
-            <img :src="item.newsImageUrl" width="100" />
+          <div class="align-center justify-center d-flex">
+            <v-icon v-if="!item.newsImageUrl" icon="mdi-image-remove"></v-icon>
+            <img v-else :src="item.newsImageUrl" width="100" contain />
           </div>
         </template>
         <template v-slot:item.actions="{ item }">

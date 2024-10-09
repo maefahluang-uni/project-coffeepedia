@@ -30,7 +30,11 @@
             @click="openLink(news.raw.href)"
             color="#F1F1F1"
           >
-            <v-img cover :src="news.raw.newsImageUrl" max-height="200" />
+            <v-img
+              cover
+              :src="newsImage(news.raw.newsImageUrl)"
+              max-height="200"
+            />
 
             <p class="blog-title mt-2 mb-auto">
               {{ news.raw.title }}
@@ -87,6 +91,12 @@ export default {
         console.error("Error fetching all news:", error);
         await this.retryAfterDelay(this.getAllNews());
       }
+    },
+    newsImage(url) {
+      if (!url) {
+        return "https://static.vecteezy.com/system/resources/previews/004/141/669/large_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
+      }
+      return `${url}`;
     },
     seeMore(plusNum) {
       if (this.itemPerPage <= this.news.length - 1) {

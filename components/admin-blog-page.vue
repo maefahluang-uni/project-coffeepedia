@@ -105,8 +105,9 @@
           <p class="news-title">{{ item.title }}</p>
         </template>
         <template v-slot:item.image="{ item }">
-          <div class="d-flex align-center">
-            <img :src="item.imageURL" width="100" aspect-ratio="1/1" />
+          <div class="align-center justify-center d-flex">
+            <v-icon v-if="!item.imageURL" icon="mdi-image-remove"></v-icon>
+            <img v-else :src="item.imageURL" width="100" />
           </div>
         </template>
 
@@ -233,7 +234,6 @@ export default {
         });
 
         this.blogs = blogresponse.data.response;
-        console.log(this.blogs);
       } catch (error) {
         console.error("Error fetching all blogs:", error);
         await this.retryAfterDelay(this.getAllBlogs());
@@ -320,7 +320,6 @@ export default {
           const res = await axios.post(api + "api/blogs?edit=true", sentItem, {
             headers: apiHaders,
           });
-          console.log(res);
           if (res.data.status == 200) {
             Object.assign(this.blogs[this.editedIndex], this.editedItem);
           }

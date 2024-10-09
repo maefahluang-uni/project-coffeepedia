@@ -100,7 +100,10 @@
                             )
                           "
                         ></v-file-input>
-                        <div class="mb-2 ml-10 text-grey">
+                        <div
+                          v-if="this.editedIndex < -1"
+                          class="mb-2 ml-10 text-grey"
+                        >
                           Old image: {{ editedItem.ImageDataFront }}
                         </div>
                       </div>
@@ -332,9 +335,13 @@
           }}
         </template>
         <template v-slot:item.picture="{ item }">
-          <div class="d-flex align-center">
+          <div class="d-flex justify-center align-center">
+            <v-icon
+              v-if="!item.ImageDataFront"
+              icon="mdi-image-remove"
+            ></v-icon>
             <img
-              v-if="item.ImageDataFront"
+              v-else
               :src="apilink + item.ImageDataFront"
               height="60"
               aspect-ratio="1/1"
