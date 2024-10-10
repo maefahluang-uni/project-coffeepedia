@@ -37,7 +37,7 @@ JOIN
 blog on blog.ID = blog_comment.blogID
 WHERE
 blog.ID = ?
-ORDER BY blog_comment.datetime DESC;
+ORDER BY blog_comment.datetime ASC;
 `;
 
 const INSERT_COMMENT_INTO_BLOG = `
@@ -56,6 +56,17 @@ SET
 commentCount = commentCount + 1 
 WHERE 
 blog.ID = ?;
+`;
+
+const COMMENT_COUNT_TODAY = `
+SELECT 
+COUNT(*) 
+AS 
+comment_count 
+FROM 
+blog_comment 
+WHERE 
+DATE(datetime) = CURDATE();
 `;
 
 const COUNT_BLOGS = `
@@ -107,6 +118,7 @@ module.exports = {
   GET_BLOG_COMMENTS_BY_ID,
   INSERT_COMMENT_INTO_BLOG,
   UPDATE_COMMENT_COUNT,
+  COMMENT_COUNT_TODAY,
   COUNT_BLOGS,
   INSERT_NEW_BLOG,
   UPDATE_BLOG,

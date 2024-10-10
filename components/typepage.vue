@@ -187,9 +187,38 @@
 
                 <div
                   v-if="detailImageLength == 0"
-                  class="d-flex justify-center align-center py-5"
+                  class="justify-center align-center py-5"
                 >
-                  <div class="">No sample images</div>
+                  <div class="d-none d-sm-flex justify-center">
+                    <img
+                      alt="Front Image"
+                      src="@/assets/coffeeimagefront.png"
+                      width="125"
+                      class="mr-5"
+                      contain
+                    /><img
+                      src="@/assets/coffeeimageback.png"
+                      alt="Back Image"
+                      width="125"
+                      contain
+                    />
+                  </div>
+                  <div class="d-flex d-sm-none justify-center">
+                    <img
+                      alt="Front Image"
+                      src="@/assets/coffeeimagefront.png"
+                      width="100"
+                      class="mr-5"
+                      contain
+                    /><img
+                      src="@/assets/coffeeimageback.png"
+                      alt="Back Image"
+                      width="100"
+                      contain
+                    />
+                  </div>
+
+                  <div class="text-center mt-3">No sample images</div>
                 </div>
                 <div v-else>
                   <div>
@@ -209,7 +238,7 @@
                           />
                           <img
                             :src="detailImagesBack[n - 1]"
-                            alt="Front Image"
+                            alt="Back Image"
                             width="150"
                             contain
                           />
@@ -229,7 +258,7 @@
                           >
                             <img
                               :src="detailImagesFront[n - 1]"
-                              alt="Front Image"
+                              alt="Back Image"
                               width="125"
                               class="mr-5"
                               contain
@@ -399,6 +428,7 @@ import config from "../config.js";
 const api = config.LOCAL_API_URL;
 const apiKey = config.API_KEY;
 const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
+
 export default {
   data: () => ({
     testimage: "",
@@ -505,9 +535,9 @@ export default {
             headers: apiHaders,
           }
         );
-
         this.detailImageLength = imagesResponse.data.response.length;
-
+        this.detailImagesFront = [];
+        this.detailImagesBack = [];
         imagesResponse.data.response.forEach((element) => {
           this.detailImagesFront.push(api + element.ImageDataFront);
           this.detailImagesBack.push(api + element.ImageDataBack);

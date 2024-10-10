@@ -203,6 +203,18 @@
               class="my-4"
             ></div>
             <v-divider></v-divider>
+
+            <div v-for="(comment, index) in comments">
+              <div class="d-flex mt-4 mb-2 justify-space-between align-center">
+                <div class="text-black font-weight-bold text-h6">
+                  {{ comment.comment }}
+                </div>
+                <p class="text-grey">
+                  {{ formatDateWithTime(comment.datetime) }}
+                </p>
+              </div>
+              <v-divider></v-divider>
+            </div>
             <v-card class="mt-4" color="#C8B099"
               ><div class="d-flex ma-4">
                 <div class="text-black font-weight-bold text-h5">Comment</div>
@@ -216,17 +228,6 @@
                 ></v-btn>
               </div>
             </v-card>
-            <div v-for="(comment, index) in comments">
-              <div class="d-flex mt-4 mb-2 justify-space-between align-center">
-                <div class="text-black font-weight-bold text-h6">
-                  {{ comment.comment }}
-                </div>
-                <p class="text-grey">
-                  {{ formatDateWithTime(comment.datetime) }}
-                </p>
-              </div>
-              <v-divider></v-divider>
-            </div>
           </v-card>
           <v-overlay v-model="overlay2" class="align-center justify-center">
             <v-card
@@ -375,7 +376,7 @@ export default {
         headers: apiHaders,
       });
       if (res.status == 200) {
-        this.comments.unshift({ comment: comment, datetime: timestamp });
+        this.comments.push({ comment: comment, datetime: timestamp });
         this.overlay2 = !this.overlay2;
         this.comment = "";
       }

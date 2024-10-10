@@ -101,7 +101,7 @@
       <v-list-item
         @click="login()"
         prepend-icon="mdi-account"
-        title="Admin account"
+        title="Admin"
         value="account"
       ></v-list-item>
       <v-list-item
@@ -133,7 +133,6 @@
 
 <script>
 import { useCookies } from "vue3-cookies";
-import { watch } from "vue";
 export default defineComponent({
   setup() {
     const { cookies } = useCookies();

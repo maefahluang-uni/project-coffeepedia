@@ -25,9 +25,9 @@
               >
               </v-img>
               <v-card-text>
-                <h3 class="d-flex justify-end mt-3 mr-15 text-black">
+                <h1 class="d-flex justify-end mt-3 mr-15 text-black">
                   {{ typeCount }}
-                </h3>
+                </h1>
               </v-card-text>
             </v-row>
           </v-card-item>
@@ -53,9 +53,9 @@
               >
               </v-img>
               <v-card-text>
-                <h3 class="d-flex justify-end mt-3 mr-15 text-black">
+                <h1 class="d-flex justify-end mt-3 mr-15 text-black">
                   {{ blogCount }}
-                </h3>
+                </h1>
               </v-card-text>
             </v-row>
           </v-card-item>
@@ -81,9 +81,9 @@
               >
               </v-img>
               <v-card-text>
-                <h3 class="d-flex justify-end mt-3 mr-15 text-black">
+                <h1 class="d-flex justify-end mt-3 mr-15 text-black">
                   {{ newsCount }}
-                </h3>
+                </h1>
               </v-card-text>
             </v-row>
           </v-card-item>
@@ -117,9 +117,9 @@
                 >
                 </v-img>
                 <v-card-text>
-                  <h3 class="d-flex justify-end mt-3 mr-15 text-black">
-                    {{ guestCount }}
-                  </h3>
+                  <h1 class="d-flex justify-end mt-3 mr-15 text-black">
+                    {{ visitCount }}
+                  </h1>
                 </v-card-text>
               </v-row>
             </v-card-item>
@@ -145,9 +145,9 @@
                 >
                 </v-img>
                 <v-card-text>
-                  <h3 class="d-flex justify-end mt-3 mr-15 text-black">
+                  <h1 class="d-flex justify-end mt-3 mr-15 text-black">
                     {{ commentCount }}
-                  </h3>
+                  </h1>
                 </v-card-text>
               </v-row>
             </v-card-item>
@@ -166,19 +166,22 @@ import axios from "axios";
 import config from "../config.js";
 const api = config.LOCAL_API_URL;
 const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 
 export default {
   data: () => ({
     typeCount: 0,
     blogCount: 0,
     newsCount: 0,
-    guestCount: 0,
+    visitCount: 0,
     commentCount: 0,
   }),
   created() {
     this.getTypeCount();
     this.getBlogCount();
     this.getNewsCount();
+    this.getCommentCount();
+    this.getVisitCount();
   },
   methods: {
     async retryAfterDelay(apiCall) {
@@ -188,10 +191,7 @@ export default {
     async getTypeCount() {
       try {
         const countResponse = await axios.get(api + "api/coffeetypes/count", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-            "api-key": apiKey,
-          },
+          headers: apiHaders,
         });
 
         this.typeCount = countResponse.data.response[0].type_count;
@@ -203,10 +203,7 @@ export default {
     async getBlogCount() {
       try {
         const countResponse = await axios.get(api + "api/blogs/count", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-            "api-key": apiKey,
-          },
+          headers: apiHaders,
         });
 
         this.blogCount = countResponse.data.response[0].blog_count;
@@ -218,16 +215,43 @@ export default {
     async getNewsCount() {
       try {
         const countResponse = await axios.get(api + "api/news/count", {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-            "api-key": apiKey,
-          },
+          headers: apiHaders,
         });
 
         this.newsCount = countResponse.data.response[0].news_count;
       } catch (error) {
         console.error("Error fetching news count:", error);
         await this.retryAfterDelay(this.getNewsCount);
+      }
+    },
+    async getCommentCount() {
+      try {
+        const countResponse = await axios.get(
+          api + "api/blogs/today_comments",
+          {
+            headers: apiHaders,
+          }
+        );
+
+        this.commentCount = countResponse.data.response[0].comment_count;
+      } catch (error) {
+        console.error("Error fetching comment count:", error);
+        await this.retryAfterDelay(this.getCommentCount);
+      }
+    },
+    async getVisitCount() {
+      try {
+        const countResponse = await axios.get(
+          api + "api/visithandler/visit_count",
+          {
+            headers: apiHaders,
+          }
+        );
+
+        this.visitCount = countResponse.data.response[0].visit_count;
+      } catch (error) {
+        console.error("Error fetching visit count:", error);
+        await this.retryAfterDelay(this.getVisitCount);
       }
     },
   },

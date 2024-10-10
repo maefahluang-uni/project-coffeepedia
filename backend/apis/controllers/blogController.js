@@ -13,6 +13,10 @@ const getBlogCommentsByID = async (req, res) => {
   const comments = await service.getBlogCommentsByID(req.params.id);
   res.send(comments);
 };
+const getCommentCountToday = async (req, res) => {
+  const commentCount = await service.getCommentCountToday();
+  res.send(commentCount);
+};
 const insertCommentIntoBlog = async (req, res) => {
   const insertedComment = await service.insertCommentIntoBlog(req.body);
   res.send(insertedComment);
@@ -29,6 +33,7 @@ module.exports = {
   getBlogs,
   getTop3Blogs,
   getBlogCommentsByID,
+  getCommentCountToday,
   insertCommentIntoBlog,
   countBlogs,
   postRequestBlog,

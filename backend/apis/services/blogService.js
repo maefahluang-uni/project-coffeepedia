@@ -81,6 +81,20 @@ const getBlogCommentsByID = async (BlogID) => {
     });
   }
 };
+const getCommentCountToday = async () => {
+  try {
+    let sql = blogQueries.COMMENT_COUNT_TODAY;
+    let results = await conn.awaitQuery(sql);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getCommentCountToday function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
 const insertCommentIntoBlog = async (data) => {
   console.log("Added comment to blog ID:" + data.BlogID + " " + data.timestamp);
   try {
@@ -228,6 +242,7 @@ module.exports = {
   getBlogs,
   getTop3Blogs,
   getBlogCommentsByID,
+  getCommentCountToday,
   insertCommentIntoBlog,
   countBlogs,
   postRequestBlog,
