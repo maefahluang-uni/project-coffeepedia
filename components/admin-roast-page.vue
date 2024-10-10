@@ -11,7 +11,7 @@
         :sort-by="[{ key: table.headers[0].title }]"
       >
         <template v-slot:top>
-          <v-toolbar flat>
+          <v-toolbar color="white">
             <v-toolbar-title><h4>Roast Coffee Bean</h4> </v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer
@@ -63,33 +63,44 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon
-            class="pr-2"
-            size="small"
-            @click="(tableIndex = index), editItem(item, index)"
-          >
-            mdi-pencil
-          </v-icon>
-        </template>
-        <template v-slot:item.actions2="{ item }">
-          <div v-if="item.iconLoading" class="pl-2">
-            <v-progress-circular
-              size="small"
-              :width="3"
-              indeterminate
-            ></v-progress-circular>
-          </div>
-          <v-switch
-            v-else
-            v-model="item.IsActivate"
-            false-value="0"
-            true-value="1"
-            color="success"
-            hide-details
-            class="d-inline-block align-center"
-            @click="toggleRoast(item, index)"
-          ></v-switch>
+        <template v-slot:item="{ item, index }">
+          <tr :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
+            <td>
+              <p class="news-title text-center">{{ item.RoastName }}</p>
+            </td>
+            <td>
+              <div class="d-flex justify-end align-center">
+                <v-icon
+                  size="small"
+                  @click="(tableIndex = index), editItem(item, index)"
+                >
+                  mdi-pencil
+                </v-icon>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-start align-center">
+                <div v-if="item.iconLoading" class="pl-2">
+                <v-progress-circular
+                  size="small"
+                  :width="3"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <v-switch
+                v-else
+                v-model="item.IsActivate"
+                false-value="0"
+                true-value="1"
+                color="success"
+                hide-details
+                class="d-inline-block align-center"
+                @click="toggleRoast(item, index)"
+              ></v-switch>
+              </div>
+              
+            </td>
+          </tr>
         </template>
       </v-data-table>
     </v-card>

@@ -1,8 +1,11 @@
 <template>
   <v-container>
     <v-card class="pa-5">
-      <v-text-field label="Name*" v-model="name" />
-      <v-text-field label="zipcode*" v-model="zipcode" />
+      <v-text-field label="Farm Name*" v-model="farmnamename" />
+      <v-text-field label="Location Name*" v-model="name" />
+      <v-text-field label="Zipcode" v-model="zipcode" />
+      <v-text-field label="MASL" v-model="masl" />
+
       <!-- Province Select -->
       <v-autocomplete
         v-model="selectedProvince"
@@ -52,8 +55,10 @@ import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 
 // Form state
+const farmname = ref("");
 const name = ref("");
 const zipcode = ref("");
+const masl = ref("");
 const selectedProvince = ref(null);
 const selectedDistrict = ref(null);
 const selectedSubDistrict = ref(null);

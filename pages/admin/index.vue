@@ -41,9 +41,9 @@
         <v-tab :value="4" class="font-weight-bold" @click="openExpandTab()"
           >Roast</v-tab
         >
-        <!-- <v-tab :value="5" class="font-weight-bold" @click="openExpandTab()"
-          >Map</v-tab
-        >-->
+        <v-tab :value="5" class="font-weight-bold" @click="openExpandTab()"
+          >Location</v-tab
+        >
       </v-tabs>
     </v-card>
   </v-expand-transition>
@@ -71,10 +71,9 @@
           ><admin-process-page />
         </v-window-item>
         <v-window-item disabled :value="4"><admin-roast-page /> </v-window-item>
-        <!--<v-window-item disabled :value="5"><admin-map-page /> </v-window-item>-->
-      </v-window>
-    </v-card></v-expand-transition
-  >
+        <v-window-item disabled :value="5"><admin-map-page /> </v-window-item>
+      </v-window> </v-card
+  ></v-expand-transition>
 </template>
 
 <script>

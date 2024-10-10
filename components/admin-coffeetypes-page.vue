@@ -13,7 +13,7 @@
           <v-skeleton-loader type="table-row-divider@6"></v-skeleton-loader>
         </template>
         <template v-slot:top>
-          <v-toolbar flat>
+          <v-toolbar color="white">
             <v-toolbar-title><h4>Type Coffee Beans</h4></v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer
@@ -321,56 +321,66 @@
             </v-dialog>
           </v-toolbar>
         </template>
-
-        <template v-slot:item.process="{ item }">
-          {{
-            getProcessName(item.process).charAt(0).toUpperCase() +
-            getProcessName(item.process).slice(1)
-          }}
-        </template>
-        <template v-slot:item.roasted="{ item }">
-          {{
-            getRoastName(item.roasted).charAt(0).toUpperCase() +
-            getRoastName(item.roasted).slice(1)
-          }}
-        </template>
-        <template v-slot:item.picture="{ item }">
-          <div class="d-flex justify-center align-center">
-            <v-icon
-              v-if="!item.ImageDataFront"
-              icon="mdi-image-remove"
-            ></v-icon>
-            <img
-              v-else
-              :src="apilink + item.ImageDataFront"
-              height="60"
-              aspect-ratio="1/1"
-            />
-          </div>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon size="small" @click="editItem(item)"> mdi-pencil </v-icon>
-        </template>
-        <template v-slot:item.actions2="{ item }">
-          <div class="d-flex align-center">
-            <div v-if="item.iconLoading" class="pl-2">
-              <v-progress-circular
-                size="small"
-                :width="3"
-                indeterminate
-              ></v-progress-circular>
-            </div>
-            <v-switch
-              v-else
-              v-model="item.IsActivate"
-              false-value="0"
-              true-value="1"
-              color="success"
-              hide-details
-              class="d-inline-block"
-              @click="toggleType(item.ID, item)"
-            ></v-switch>
-          </div>
+        <template v-slot:item="{ item, index }">
+          <tr :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
+            <td>
+              {{
+                getProcessName(item.process).charAt(0).toUpperCase() +
+                getProcessName(item.process).slice(1)
+              }}
+            </td>
+            <td>
+              {{
+                getRoastName(item.roasted).charAt(0).toUpperCase() +
+                getRoastName(item.roasted).slice(1)
+              }}
+            </td>
+            <td>
+              <div class="d-flex align-center">
+                <v-icon
+                  v-if="!item.ImageDataFront"
+                  icon="mdi-image-remove"
+                ></v-icon>
+                <img
+                  v-else
+                  :src="apilink + item.ImageDataFront"
+                  height="60"
+                  aspect-ratio="1/1"
+                />
+              </div>
+            </td>
+            <td>
+              {{ item.commonName }}
+            </td>
+            <td>
+              <div class="d-flex justify-center">
+                <v-icon size="small" @click="editItem(item)">
+                  mdi-pencil
+                </v-icon>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex align-center">
+                <div v-if="item.iconLoading" class="pl-2">
+                  <v-progress-circular
+                    size="small"
+                    :width="3"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+                <v-switch
+                  v-else
+                  v-model="item.IsActivate"
+                  false-value="0"
+                  true-value="1"
+                  color="success"
+                  hide-details
+                  class="d-inline-block"
+                  @click="toggleType(item.ID, item)"
+                ></v-switch>
+              </div>
+            </td>
+          </tr>
         </template>
 
         <template v-slot:no-data>
@@ -407,7 +417,7 @@ export default {
       { title: "Roasted", key: "roasted" },
       { title: "Image", key: "picture", sortable: false },
       { title: "Common name", key: "commonName" },
-      { title: "Edit", key: "actions", sortable: false, align: "end" },
+      { title: "Edit", key: "actions", sortable: false, align: "center" },
       { title: "Status", key: "actions2", sortable: false },
     ],
     types: [],

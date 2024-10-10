@@ -23,9 +23,12 @@
         </div>
 
         <div>
-          <h3>{{ marker.farmname }} ({{ marker.locationName }})</h3>
+          <h3 class="pb-2">
+            {{ marker.farmName }} ({{ marker.locationName }})
+          </h3>
           <p class="my-0">
-            Coordinates: {{ marker.latLng[0] }}, {{ marker.latLng[1] }} <br />
+            Latitude: {{ marker.latLng[0] }}<br />
+            Longtitude: {{ marker.latLng[1] }} <br />
             {{ marker.address }}
           </p>
         </div>
@@ -41,21 +44,21 @@ const zoom = ref(10);
 
 const markers = ref([
   {
-    farmname: "Chiang Rai Clock Tower",
+    farmName: "Chiang Rai Clock Tower",
     locationName: "Doi Chang",
     latLng: [19.912, 99.826],
     address: "Thasud, Muang Chiang Rai, Chiang Rai, 57100",
     image: "",
   },
   {
-    farmname: "Wat Rong Khun",
+    farmName: "Wat Rong Khun",
     locationName: "Doi Chang",
     latLng: [19.826, 99.74],
     address: " Thasud, Muang Chiang Rai, Chiang Rai, 57100",
     image: "",
   },
   {
-    farmname: "Baan Dam Museum",
+    farmName: "Baan Dam Museum",
     locationName: "Doi Chang",
     latLng: [19.969, 99.759],
     masl: "",
