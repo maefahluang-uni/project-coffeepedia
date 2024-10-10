@@ -12,7 +12,7 @@
             type="table-row-divider@6"
           ></v-skeleton-loader> </template
         ><template v-slot:top>
-          <v-toolbar flat>
+          <v-toolbar color="white">
             <v-toolbar-title><h4>Blogs</h4></v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer
@@ -101,37 +101,54 @@
             </v-dialog>
           </v-toolbar>
         </template>
-        <template v-slot:item.title="{ item }">
-          <p class="news-title">{{ item.title }}</p>
-        </template>
-        <template v-slot:item.image="{ item }">
-          <div class="align-center justify-center d-flex">
-            <v-icon v-if="!item.imageURL" icon="mdi-image-remove"></v-icon>
-            <img v-else :src="item.imageURL" width="100" />
-          </div>
-        </template>
-
-        <template v-slot:item.actions="{ item }">
-          <v-icon size="small" @click="editItem(item)"> mdi-pencil </v-icon>
-        </template>
-        <template v-slot:item.actions2="{ item }">
-          <div v-if="item.iconLoading" class="pl-2">
-            <v-progress-circular
-              size="small"
-              :width="3"
-              indeterminate
-            ></v-progress-circular>
-          </div>
-          <v-switch
-            v-else
-            v-model="item.IsActivate"
-            false-value="0"
-            true-value="1"
-            color="success"
-            hide-details
-            class="d-inline-block"
-            @click="toggleblogs(item.ID, item)"
-          ></v-switch>
+        <template v-slot:item="{ item, index }">
+          <tr :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
+            <td>
+              <p class="news-title">{{ item.title }}</p>
+            </td>
+            <td>
+              <div class="align-center justify-center d-flex py-2">
+                <v-icon v-if="!item.imageURL" icon="mdi-image-remove"></v-icon>
+                <img v-else :src="item.imageURL" width="100" />
+              </div>
+            </td>
+            <td>
+              <div class="text-center">
+                {{ item.viewCount }}
+              </div>
+            </td>
+            <td>
+              <div class="text-center">
+                {{ item.commentCount }}
+              </div>
+            </td>
+            <td>
+              <div class="d-flex justify-center">
+                <v-icon size="small" @click="editItem(item)">
+                  mdi-pencil
+                </v-icon>
+              </div>
+            </td>
+            <td>
+              <div v-if="item.iconLoading" class="pl-2">
+                <v-progress-circular
+                  size="small"
+                  :width="3"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <v-switch
+                v-else
+                v-model="item.IsActivate"
+                false-value="0"
+                true-value="1"
+                color="success"
+                hide-details
+                class="d-inline-block"
+                @click="toggleblogs(item.ID, item)"
+              ></v-switch>
+            </td>
+          </tr>
         </template>
 
         <template v-slot:no-data>
@@ -412,5 +429,13 @@ export default {
 
 [placeholder]:empty:focus::before {
   content: "";
+}
+
+.even-row {
+  background-color: #f0f0f0; /* Light grey background for even rows */
+}
+
+.odd-row {
+  background-color: #ffffff; /* White background for odd rows */
 }
 </style>

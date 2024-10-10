@@ -48,19 +48,29 @@ const getTodaySiteVisit = async () => {
 };
 
 const siteVisitHandler = async (event) => {
-  const todayDate = new Date().toISOString().split("T")[0]; // Get today's date in 'YYYY-MM-DD' format
+  let timestamp = Date.now();
+  const nowDateObj = new Date(timestamp);
+  // Extract the components of the date object (year, month, day, hour, minute, second)
+  const year = nowDateObj.getFullYear();
+  const month = String(nowDateObj.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, so add 1
+  const day = String(nowDateObj.getDate()).padStart(2, "0");
+
+  const formattedDateTime = `${year}-${month}-${day}`;
   // Check if today's record exists
   const rows = await conn.awaitQuery(siteVisitQuery.SELECT_VISIT_BYDATE, [
-    todayDate,
+    formattedDateTime,
   ]);
 
   if (rows.length > 0) {
     // If record exists, update the visit count
-    await conn.awaitQuery(siteVisitQuery.UPDATE_VISIT, [todayDate]);
+    await conn.awaitQuery(siteVisitQuery.UPDATE_VISIT, [formattedDateTime]);
     console.log("Visit count updated successfully");
   } else {
     // If no record for today exists, insert a new record
-    await conn.awaitQuery(siteVisitQuery.INSERT_NEW_VISIT, [todayDate, 1]);
+    await conn.awaitQuery(siteVisitQuery.INSERT_NEW_VISIT, [
+      formattedDateTime,
+      1,
+    ]);
     console.log("Visit count inserted successfully");
   }
   return JSON.stringify({

@@ -12,7 +12,7 @@
             type="table-row-divider@6"
           ></v-skeleton-loader> </template
         ><template v-slot:top>
-          <v-toolbar flat>
+          <v-toolbar color="white">
             <v-toolbar-title><h4>News</h4></v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
             <v-spacer></v-spacer
@@ -66,36 +66,48 @@
             >
           </v-toolbar>
         </template>
-        <template v-slot:item.title="{ item }">
-          <p class="news-title">{{ item.title }}</p>
-        </template>
-        <template v-slot:item.newsImageUrl="{ item }">
-          <div class="align-center justify-center d-flex">
-            <v-icon v-if="!item.newsImageUrl" icon="mdi-image-remove"></v-icon>
-            <img v-else :src="item.newsImageUrl" width="100" contain />
-          </div>
-        </template>
-        <template v-slot:item.actions="{ item }">
-          <v-icon size="small" @click="editItem(item)"> mdi-pencil </v-icon>
-        </template>
-        <template v-slot:item.actions2="{ item }">
-          <div v-if="item.iconLoading" class="pl-2">
-            <v-progress-circular
-              size="small"
-              :width="3"
-              indeterminate
-            ></v-progress-circular>
-          </div>
-          <v-switch
-            v-else
-            v-model="item.IsActivate"
-            false-value="0"
-            true-value="1"
-            color="success"
-            hide-details
-            class="d-inline-block"
-            @click="toggleNews(item.ID, item)"
-          ></v-switch>
+        <template v-slot:item="{ item, index }">
+          <tr :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
+            <td>
+              <p class="news-title">{{ item.title }}</p>
+            </td>
+            <td>
+              <div class="align-center justify-center d-flex">
+                <v-icon
+                  v-if="!item.newsImageUrl"
+                  icon="mdi-image-remove"
+                ></v-icon>
+                <img v-else :src="item.newsImageUrl" width="100" contain />
+              </div>
+            </td>
+            <td>{{ item.href }}</td>
+            <td>
+              <div class="d-flex justify-center">
+                <v-icon size="small" @click="editItem(item)">
+                  mdi-pencil
+                </v-icon>
+              </div>
+            </td>
+            <td>
+              <div v-if="item.iconLoading" class="pl-2">
+                <v-progress-circular
+                  size="small"
+                  :width="3"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <v-switch
+                v-else
+                v-model="item.IsActivate"
+                false-value="0"
+                true-value="1"
+                color="success"
+                hide-details
+                class="d-inline-block"
+                @click="toggleNews(item.ID, item)"
+              ></v-switch>
+            </td>
+          </tr>
         </template>
 
         <template v-slot:no-data>

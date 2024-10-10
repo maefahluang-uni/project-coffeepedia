@@ -22,7 +22,7 @@
                 </p>
               </div>
               <v-btn
-                disabled
+                @click="this.$router.push('/map')"
                 color="rgb(140, 115, 70)"
                 height="25"
                 width="120"
@@ -46,12 +46,12 @@
                 Coffee bean location in the north of Thailand
               </h4>
               <v-btn
-                disabled
                 color="rgb(140, 115, 70)"
                 height="25"
                 width="120"
                 variant="elevated"
                 rounded="xl"
+                @click="this.$router.push('/map')"
                 >View All</v-btn
               >
             </div>
@@ -68,95 +68,10 @@
   </div>
   <v-row class="justify-center mb-5 mt-5 d-flex blog-line">
     <v-card flat class="px-2">
-      <h1 class="text-brown blog-head">Our Blog</h1>
+      <h1 class="text-brown blog-head">About Us</h1>
     </v-card>
     <v-divider color="black" class="divider"></v-divider>
   </v-row>
-
-  <v-skeleton-loader
-    v-if="blogs.length == 0"
-    v-for="n in 3"
-    :elevation="5"
-    type="article"
-    class="mb-7 mx-2 fill-width"
-  ></v-skeleton-loader>
-  <div v-else class="d-flex justify-center mx-2">
-    <div>
-      <v-card
-        v-for="(blog, index) in blogs"
-        class="mb-7 elevation-5 d-flex recent-blog-card"
-        @click="showDetail(blog)"
-        color="#F1F1F1"
-      >
-        <div class="d-flex">
-          <v-img
-            class="d-flex blog-img"
-            cover
-            :src="blogImage(blog.imageURL)"
-          />
-
-          <div>
-            <p class="blog-title mt-2">
-              {{ blog.title }}
-            </p>
-            <v-row class="d-flex mx-5 mt-1 blog-subtitle">
-              <p class="text-grey mr-2">
-                {{ formatDateNotime(blog.date) }}
-              </p>
-              <div class="mr-2 d-flex">
-                <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
-                <p class="text-grey">{{ blog.commentCount }}</p>
-              </div>
-              <div class="d-flex">
-                <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
-                <p class="text-grey">{{ blog.viewCount }}</p>
-              </div>
-            </v-row>
-            <div class="text-grey blog-subtitle clamp mx-5 my-4">
-              {{ blog.content.replace(/<[^>]*>/g, "") }}
-            </div>
-            <div class="justify-end d-none d-sm-flex">
-              <v-btn
-                class="ma-4 rounded-xl"
-                density="compact"
-                color="rgb(140,115,70)"
-              >
-                <div class="blog-subtitle">read more</div>
-              </v-btn>
-            </div>
-          </div>
-        </div>
-      </v-card>
-      <v-overlay v-model="overlay" class="align-top justify-center pt-10"
-        ><v-card class="overflow-auto blog-detail-card justify-center pa-5">
-          <h1 class="font-weight-bold">
-            {{ selectblog.title }}
-          </h1>
-
-          <div class="d-flex mx-5 my-2 align-center blog-subtitle">
-            <p class="text-grey mr-2">
-              {{ formatDateNotime(selectblog.date) }}
-            </p>
-            <div class="mr-2 d-flex">
-              <v-icon class="mr-2" icon="mdi-comment" color="grey"></v-icon>
-              <p class="text-grey">{{ selectblog.commentCount }}</p>
-            </div>
-            <div class="d-flex">
-              <v-icon class="mr-2" icon="mdi-eye" color="grey"></v-icon>
-              <p class="text-grey">{{ selectblog.viewCount }}</p>
-            </div>
-          </div>
-          <v-divider></v-divider>
-          <div
-            contenteditable="false"
-            v-html="selectblog.content"
-            class="my-4"
-          ></div>
-          <v-divider></v-divider>
-        </v-card>
-      </v-overlay>
-    </div>
-  </div>
 </template>
 <script>
 import axios from "axios";

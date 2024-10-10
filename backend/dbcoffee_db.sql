@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: May 21, 2024 at 10:54 AM
+-- Generation Time: Oct 10, 2024 at 08:44 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.0.1
 
@@ -66,11 +66,10 @@ CREATE TABLE `blog` (
 --
 
 INSERT INTO `blog` (`ID`, `title`, `date`, `viewCount`, `commentCount`, `IsActivate`, `content`, `imageFile`, `imageURL`) VALUES
-(1, 'The difference between Arabica and Robusta coffee', '2024-05-02 09:54:19', 107, 2, '1', '<p>Arabica and Robusta are the two kinds of coffee beans used in commercial coffee production. \n          The main differences between them are their taste and where they are grown. When it comes to their difference in caffeine level, \n          Robusta beans contain twice the level of caffeine than Arabica beans. Arabica beans have a milder, more aromatic taste while Robusta beans hold a stronger, more acquired flavor. \n          Arabica beans are flat and oval in shape while Robusta beans have a more obvious round shape. \n          When they are still on their plant, the beans can easily be told apart by their difference in colour as Arabica beans are a darker shade of green then Robusta beans.</p>\n          \n          <p>Arabica beans are cultivated in Central and South America due to the subtropical climates as they can only be grown in places with higher climates. Robusta beans on the other hand, \n          are cultivated in Central and West Africa and South East Asia, as they require places with little rainfall and lower altitudes to grow. Over 70% of the coffee grown around the world is \n          Arabica and is generally known as the higher quality bean. Robusta coffee is characterised by its woody and earthy flavours. You most likely won\'t see a 100% Robusta blend on the market, \n          as Robusta is naturally higher in caffeine and is to strong to drink. However, there are many high quality blends of Robusta available on the market, which provide great flavours once \n          mixed with Arabica beans.</p>\n          \n            <h2>Arabica Beans</h2>\n              <li>Grown at high altitude above 800m</li>\n              <li>Grown in places with higher climates</li>\n              <li>Mild, well balanced in flavour</li>\n              <li>More expensive coffee bean</li>\n              <li>Naturally lower in caffeine</li>\n               <h2>Robusta Beans</h2>\n              <li>Commonly used in instant coffee</li>\n              <li>Grown at lower altitudes between 200m-800m</li>\n              <li>Grown in places with lower climates</li>\n              <li>More astringent and bitter in flavour</li>\n              <li> Has twice the amount of caffeine than Arabica beans<br></li>', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg'),
+(1, 'The difference between Arabica and Robusta coffee', '2024-05-02 09:54:19', 107, 1, '1', '<p>Arabica and Robusta are the two kinds of coffee beans used in commercial coffee production. \n          The main differences between them are their taste and where they are grown. When it comes to their difference in caffeine level, \n          Robusta beans contain twice the level of caffeine than Arabica beans. Arabica beans have a milder, more aromatic taste while Robusta beans hold a stronger, more acquired flavor. \n          Arabica beans are flat and oval in shape while Robusta beans have a more obvious round shape. \n          When they are still on their plant, the beans can easily be told apart by their difference in colour as Arabica beans are a darker shade of green then Robusta beans.</p>\n          \n          <p>Arabica beans are cultivated in Central and South America due to the subtropical climates as they can only be grown in places with higher climates. Robusta beans on the other hand, \n          are cultivated in Central and West Africa and South East Asia, as they require places with little rainfall and lower altitudes to grow. Over 70% of the coffee grown around the world is \n          Arabica and is generally known as the higher quality bean. Robusta coffee is characterised by its woody and earthy flavours. You most likely won\'t see a 100% Robusta blend on the market, \n          as Robusta is naturally higher in caffeine and is to strong to drink. However, there are many high quality blends of Robusta available on the market, which provide great flavours once \n          mixed with Arabica beans.</p>\n          \n            <h2>Arabica Beans</h2>\n              <li>Grown at high altitude above 800m</li>\n              <li>Grown in places with higher climates</li>\n              <li>Mild, well balanced in flavour</li>\n              <li>More expensive coffee bean</li>\n              <li>Naturally lower in caffeine</li>\n               <h2>Robusta Beans</h2>\n              <li>Commonly used in instant coffee</li>\n              <li>Grown at lower altitudes between 200m-800m</li>\n              <li>Grown in places with lower climates</li>\n              <li>More astringent and bitter in flavour</li>\n              <li> Has twice the amount of caffeine than Arabica beans<br></li>', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg'),
 (2, 'The most popular types of coffee beans that people drink', '2023-11-09 00:00:00', 89, 0, '1', 'The most popular types of coffee beans that people drink. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', NULL, NULL),
 (3, '5 coffee farms that are most worth visiting in the northern region', '2023-07-15 00:00:00', 76, 0, '1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', NULL, NULL),
-(4, 'Blog 4 Lorem ipsum dolor sit amet, consectetur adipiscing elit', '2023-07-15 00:00:00', 76, 0, '1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', NULL, NULL),
-(5, 'Blog 5 Lorem ipsum dolor sit amet, consectetur adipiscing elit', '2023-07-15 00:00:00', 76, 0, '1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', NULL, 'https://assets.epicurious.com/photos/63e54a0664e14d52936a2937/16:9/w_960,c_limit/CoffeeSubscriptions_IG_V1_030922_6350_V1_final.jpg');
+(6, 'asdasdas', '2024-10-10 16:55:24', 0, 0, '1', 'teccc', NULL, 'https://upload.wikimedia.org/wikipedia/commons/c/c5/Roasted_coffee_beans.jpg');
 
 -- --------------------------------------------------------
 
@@ -90,8 +89,7 @@ CREATE TABLE `blog_comment` (
 --
 
 INSERT INTO `blog_comment` (`ID`, `blogID`, `comment`, `datetime`) VALUES
-(25, 1, 'Testtt', '2024-04-30 20:28:33'),
-(26, 1, 'test', '2024-04-30 20:45:29');
+(30, 1, 'This is very good', '2024-10-10 23:31:33');
 
 -- --------------------------------------------------------
 
@@ -230,6 +228,25 @@ INSERT INTO `roast_level` (`ID`, `RoastName`, `IsActivate`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `site_visits`
+--
+
+CREATE TABLE `site_visits` (
+  `id` int(11) NOT NULL,
+  `visit_date` date NOT NULL,
+  `visit_count` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `site_visits`
+--
+
+INSERT INTO `site_visits` (`id`, `visit_date`, `visit_count`) VALUES
+(5, '2024-10-11', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `type_coffee`
 --
 
@@ -340,6 +357,13 @@ ALTER TABLE `roast_level`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `site_visits`
+--
+ALTER TABLE `site_visits`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `visit_date` (`visit_date`);
+
+--
 -- Indexes for table `type_coffee`
 --
 ALTER TABLE `type_coffee`
@@ -368,13 +392,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `blog`
 --
 ALTER TABLE `blog`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `blog_comment`
 --
 ALTER TABLE `blog_comment`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `coffee_process`
@@ -411,6 +435,12 @@ ALTER TABLE `news`
 --
 ALTER TABLE `roast_level`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `site_visits`
+--
+ALTER TABLE `site_visits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `type_coffee`

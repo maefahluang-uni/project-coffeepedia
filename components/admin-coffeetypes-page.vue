@@ -109,7 +109,7 @@
                       </div>
                     </div>
 
-                    <div class="mb-7" v-if="editedIndex > -1">
+                    <div class="my-7" v-if="editedIndex > -1">
                       <v-card
                         class="d-flex justify-center align-center mb-2"
                         width="150"
