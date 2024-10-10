@@ -12,29 +12,22 @@
       >
         <template v-slot:top>
           <v-toolbar flat>
-            <v-toolbar-title
-              ><h4>{{ table.headers[0].title }} Coffee Bean</h4>
-            </v-toolbar-title>
+            <v-toolbar-title><h4>Roast Coffee Bean</h4> </v-toolbar-title>
             <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer>
+            <v-spacer></v-spacer
+            ><v-btn
+              color="green"
+              dark
+              class="mb-2"
+              v-bind="props"
+              variant="tonal"
+              rounded="xl"
+              @click="(tableIndex = index), (dialog = !dialog)"
+            >
+              <v-icon icon="mdi-plus" color="green"></v-icon>
+              Add Roast
+            </v-btn>
             <v-dialog v-model="dialog" max-width="500px">
-              <template v-slot:activator="{ props }">
-                <v-btn
-                  color="green"
-                  dark
-                  class="mb-2"
-                  v-bind="props"
-                  variant="tonal"
-                  rounded="xl"
-                  @click="
-                    (selecting = table.headers[0].title),
-                      (tableIndex = this.tables.indexOf(table))
-                  "
-                >
-                  <v-icon icon="mdi-plus" color="green"></v-icon>
-                  Add {{ table.headers[0].title }}
-                </v-btn>
-              </template>
               <v-card>
                 <v-card-title>
                   <span class="text-h5">{{ formTitle }}</span>
@@ -46,7 +39,7 @@
                       <v-col cols="12">
                         <v-text-field
                           v-model="editedItem.RoastName"
-                          :label="selecting"
+                          label="Roast"
                         ></v-text-field>
                       </v-col>
                     </v-row>
@@ -61,7 +54,7 @@
                   <v-btn
                     color="blue-darken-1"
                     variant="text"
-                    @click="save(tableIndex)"
+                    @click="save(index)"
                   >
                     Save
                   </v-btn>
@@ -74,11 +67,7 @@
           <v-icon
             class="pr-2"
             size="small"
-            @click="
-              editItem(item, this.tables.indexOf(table)),
-                (selecting = table.headers[0].title),
-                (tableIndex = this.tables.indexOf(table))
-            "
+            @click="(tableIndex = index), editItem(item, index)"
           >
             mdi-pencil
           </v-icon>
@@ -99,7 +88,7 @@
             color="success"
             hide-details
             class="d-inline-block align-center"
-            @click="toggleRoast(item, this.tables.indexOf(table))"
+            @click="toggleRoast(item, index)"
           ></v-switch>
         </template>
       </v-data-table>
@@ -110,7 +99,7 @@
 <script>
 import axios from "axios";
 import config from "../config.js";
-const api = config.LOCAL_API_URL ;
+const api = config.LOCAL_API_URL;
 const apiKey = config.API_KEY;
 const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 
