@@ -46,16 +46,7 @@ const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 const zoom = ref(10);
 const imagelocation = ref(null);
 
-const markers = ref([
-  {
-    farmName: "Chiang Rai Clock Tower",
-    locationName: "Doi Chang",
-    latLng: [19.912, 99.826],
-    masl: "",
-    address: "Thasud, Muang Chiang Rai, Chiang Rai, 57100",
-    image: "",
-  },
-]);
+const markers = ref([]);
 
 // State for the dialog and selected marker
 const dialog = ref(false);
