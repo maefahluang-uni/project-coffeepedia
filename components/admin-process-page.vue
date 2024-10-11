@@ -12,14 +12,13 @@
       >
         <template v-slot:top>
           <v-toolbar color="white">
-            <v-toolbar-title><h4>Process Coffee Bean</h4> </v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer
-            ><v-btn
+            <v-toolbar-title class="d-flex"
+              ><h4>Process Coffee Bean</h4>
+            </v-toolbar-title>
+
+            <v-btn
+              class="d-none d-sm-flex mr-3"
               color="green"
-              dark
-              class="mb-2"
-              v-bind="props"
               variant="tonal"
               rounded="xl"
               @click="(tableIndex = index), (dialog = !dialog)"
@@ -27,38 +26,52 @@
               <v-icon icon="mdi-plus" color="green"></v-icon>
               Add Process
             </v-btn>
+
+            <v-btn
+              class="d-flex d-sm-none"
+              color="green"
+              variant="tonal"
+              rounded="xl"
+              @click="(tableIndex = index), (dialog = !dialog)"
+            >
+              <v-icon icon="mdi-plus" color="green"></v-icon>
+            </v-btn>
+
             <v-dialog v-model="dialog" max-width="500px">
-              <v-card>
-                <v-card-title>
-                  <span class="text-h5">{{ formTitle }}</span>
-                </v-card-title>
+              <v-card
+                ><v-container>
+                  <v-card-title>
+                    <span class="text-h5">{{ formTitle }}</span>
+                  </v-card-title>
 
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="editedItem.ProcessName"
-                          label="Process"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="editedItem.ProcessName"
+                            label="Process"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue-darken-1" variant="text" @click="close()">
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    color="blue-darken-1"
-                    variant="text"
-                    @click="save(tableIndex)"
-                  >
-                    Save
-                  </v-btn>
-                </v-card-actions>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="gray" variant="tonal" @click="close()">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      color="#6AC479"
+                      variant="elevated"
+                      class="font-weight-bold text-white"
+                      @click="save(tableIndex)"
+                    >
+                      Save
+                    </v-btn>
+                  </v-card-actions></v-container
+                >
               </v-card>
             </v-dialog>
           </v-toolbar>

@@ -10,16 +10,12 @@
     <LMarker
       v-for="(marker, index) in markers"
       :key="index"
-      :lat-lng="marker.latLng"
+      :lat-lng="[marker.latitude, marker.longtitude]"
       @click="selectMarker(marker)"
     >
       <LPopup>
         <div class="d-flex justify-center pb-3">
-          <img
-            height="200"
-            contain
-            src="https://static.vecteezy.com/system/resources/previews/004/141/669/large_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg"
-          />
+          <v-img contain :src="imagelocation" />
         </div>
 
         <div>
@@ -27,9 +23,11 @@
             {{ marker.farmName }} ({{ marker.locationName }})
           </h3>
           <p class="my-0">
-            Latitude: {{ marker.latLng[0] }}<br />
-            Longtitude: {{ marker.latLng[1] }} <br />
-            {{ marker.address }}
+            Latitude: {{ marker.latitude }}<br />
+            Longtitude: {{ marker.longtitude }} <br />
+            MASL: {{ marker.masl }} m.<br />
+            {{ marker.subdistrict }}, {{ marker.district }},
+            {{ marker.province }}, {{ marker.zipcode }}
           </p>
         </div>
       </LPopup>
@@ -40,29 +38,21 @@
 <script setup>
 import { ref } from "vue";
 import { onMounted } from "vue";
+import axios from "axios";
+import config from "../config.js";
+const api = config.LOCAL_API_URL;
+const apiKey = config.API_KEY;
+const apiHaders = { "ngrok-skip-browser-warning": "true", "api-key": apiKey };
 const zoom = ref(10);
+const imagelocation = ref(null);
 
 const markers = ref([
   {
     farmName: "Chiang Rai Clock Tower",
     locationName: "Doi Chang",
     latLng: [19.912, 99.826],
-    address: "Thasud, Muang Chiang Rai, Chiang Rai, 57100",
-    image: "",
-  },
-  {
-    farmName: "Wat Rong Khun",
-    locationName: "Doi Chang",
-    latLng: [19.826, 99.74],
-    address: " Thasud, Muang Chiang Rai, Chiang Rai, 57100",
-    image: "",
-  },
-  {
-    farmName: "Baan Dam Museum",
-    locationName: "Doi Chang",
-    latLng: [19.969, 99.759],
     masl: "",
-    address: " Thasud, Muang Chiang Rai, Chiang Rai, 57100",
+    address: "Thasud, Muang Chiang Rai, Chiang Rai, 57100",
     image: "",
   },
 ]);
@@ -73,11 +63,32 @@ const selectedMarker = ref({});
 
 // Function to handle marker selection
 const selectMarker = (marker) => {
+  imagelocation.value =
+    "https://static.vecteezy.com/system/resources/previews/004/141/669/large_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg";
+  getImageUrl(marker.image);
   selectedMarker.value = marker;
   dialog.value = true; // Open the dialog
 };
+const getAllLocation = async () => {
+  try {
+    const Response = await axios.get(api + "api/location", {
+      headers: apiHaders,
+    });
 
-onMounted(() => {});
+    if (Response.status == 200 && Response.data.response != null) {
+      markers.value = Response.data.response;
+    }
+  } catch (err) {
+    console.error("Error fetching location:", err);
+  }
+};
+const getImageUrl = async (uri) => {
+  if (!uri) return;
+  imagelocation.value = config.LOCAL_API_URL + uri;
+};
+onMounted(() => {
+  getAllLocation();
+});
 </script>
 
 <style scoped>

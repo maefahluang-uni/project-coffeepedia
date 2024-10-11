@@ -12,14 +12,12 @@
       >
         <template v-slot:top>
           <v-toolbar color="white">
-            <v-toolbar-title><h4>Roast Coffee Bean</h4> </v-toolbar-title>
-            <v-divider class="mx-4" inset vertical></v-divider>
-            <v-spacer></v-spacer
-            ><v-btn
+            <v-toolbar-title class="d-flex"
+              ><h4>Roast Coffee Bean</h4>
+            </v-toolbar-title>
+            <v-btn
               color="green"
-              dark
-              class="mb-2"
-              v-bind="props"
+              class="d-none d-sm-flex mr-3"
               variant="tonal"
               rounded="xl"
               @click="(tableIndex = index), (dialog = !dialog)"
@@ -27,38 +25,50 @@
               <v-icon icon="mdi-plus" color="green"></v-icon>
               Add Roast
             </v-btn>
+            <v-btn
+              color="green"
+              class="d-flex d-sm-none"
+              variant="tonal"
+              rounded="xl"
+              @click="(tableIndex = index), (dialog = !dialog)"
+            >
+              <v-icon icon="mdi-plus" color="green"></v-icon>
+            </v-btn>
             <v-dialog v-model="dialog" max-width="500px">
               <v-card>
-                <v-card-title>
-                  <span class="text-h5">{{ formTitle }}</span>
-                </v-card-title>
+                <v-container>
+                  <v-card-title>
+                    <span class="text-h5">{{ formTitle }}</span>
+                  </v-card-title>
 
-                <v-card-text>
-                  <v-container>
-                    <v-row>
-                      <v-col cols="12">
-                        <v-text-field
-                          v-model="editedItem.RoastName"
-                          label="Roast"
-                        ></v-text-field>
-                      </v-col>
-                    </v-row>
-                  </v-container>
-                </v-card-text>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="editedItem.RoastName"
+                            label="Roast"
+                          ></v-text-field>
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
 
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue-darken-1" variant="text" @click="close()">
-                    Cancel
-                  </v-btn>
-                  <v-btn
-                    color="blue-darken-1"
-                    variant="text"
-                    @click="save(index)"
-                  >
-                    Save
-                  </v-btn>
-                </v-card-actions>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="gray" variant="tonal" @click="close()">
+                      Cancel
+                    </v-btn>
+                    <v-btn
+                      color="#6AC479"
+                      variant="elevated"
+                      class="font-weight-bold text-white"
+                      @click="save(index)"
+                    >
+                      Save
+                    </v-btn>
+                  </v-card-actions></v-container
+                >
               </v-card>
             </v-dialog>
           </v-toolbar>
@@ -81,24 +91,23 @@
             <td>
               <div class="d-flex justify-start align-center">
                 <div v-if="item.iconLoading" class="pl-2">
-                <v-progress-circular
-                  size="small"
-                  :width="3"
-                  indeterminate
-                ></v-progress-circular>
+                  <v-progress-circular
+                    size="small"
+                    :width="3"
+                    indeterminate
+                  ></v-progress-circular>
+                </div>
+                <v-switch
+                  v-else
+                  v-model="item.IsActivate"
+                  false-value="0"
+                  true-value="1"
+                  color="success"
+                  hide-details
+                  class="d-inline-block align-center"
+                  @click="toggleRoast(item, index)"
+                ></v-switch>
               </div>
-              <v-switch
-                v-else
-                v-model="item.IsActivate"
-                false-value="0"
-                true-value="1"
-                color="success"
-                hide-details
-                class="d-inline-block align-center"
-                @click="toggleRoast(item, index)"
-              ></v-switch>
-              </div>
-              
             </td>
           </tr>
         </template>

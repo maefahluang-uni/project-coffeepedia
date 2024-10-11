@@ -86,7 +86,7 @@
                         @keyup="updateToggleState"
                       ></div>
                     </v-card>
-                    <v-card-actions class="mb-2">
+                    <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="gray" variant="tonal" @click="close">
                         Cancel

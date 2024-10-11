@@ -51,7 +51,7 @@
                       label="href (News source URL)*"
                       :rules="rules.requireInput('News source URL')"
                     ></v-text-field
-                    ><v-card-actions class="mb-2">
+                    ><v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="gray" variant="tonal" @click="close">
                         Cancel

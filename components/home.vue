@@ -72,6 +72,24 @@
     </v-card>
     <v-divider color="black" class="divider"></v-divider>
   </v-row>
+
+  <v-container class="d-flex mb-10" width="500">
+    <h3 class="font-weight-light text-center">
+      We are Coffeepedia, a passionate group of coffee enthusiasts and
+      researchers committed to uncovering the finest coffee bean sources in
+      Northern Thailand. Our mission is to connect you with the heart of
+      Thailand's coffee culture, from the lush, elevated farms to the hands that
+      carefully cultivate the beans. Through our extensive research and
+      collaboration with local farmers, we aim to provide not only high-quality
+      coffee but also a deeper understanding of the craft behind each cup.
+      <br />
+      Discover the coffee bean farms located in the northern highlands of
+      Thailand. From the misty peaks to the vibrant fields of Chiang Rai, each
+      location offers a unique coffee experience. We believe that the source
+      matters, and our map will guide you through the breathtaking regions where
+      some of the best coffee beans are grown.
+    </h3></v-container
+  >
 </template>
 <script>
 import axios from "axios";

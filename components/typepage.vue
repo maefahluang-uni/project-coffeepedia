@@ -469,7 +469,6 @@ export default {
   methods: {
     async getImageUrl(uri) {
       if (!uri) return ""; // Return empty string if buffer is null or undefined
-      console.log(config.LOCAL_API_URL + uri);
       return config.LOCAL_API_URL + uri;
     },
     async getTypes() {

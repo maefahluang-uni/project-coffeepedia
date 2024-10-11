@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-card class="pa-5">
-      <v-text-field label="Farm Name*" v-model="farmnamename" />
+      <v-text-field label="Farm Name*" v-model="farmname" />
       <v-text-field label="Location Name*" v-model="name" />
       <v-text-field label="Zipcode" v-model="zipcode" />
       <v-text-field label="MASL" v-model="masl" />
