@@ -136,7 +136,7 @@ export default {
         key: "title",
       },
       { title: "Image", key: "newsImageUrl", sortable: false },
-      { title: "href", key: "href" },
+      { title: "Link", key: "href" },
       { title: "Edit", key: "actions", sortable: false, align: "end" },
       { title: "Status", key: "actions2", sortable: false },
     ],

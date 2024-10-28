@@ -206,7 +206,7 @@
 
             <div v-for="(comment, index) in comments">
               <div class="d-flex mt-4 mb-2 justify-space-between align-center">
-                <div class="text-black font-weight-bold text-h6">
+                <div class="text-black ">
                   {{ comment.comment }}
                 </div>
                 <p class="text-grey">

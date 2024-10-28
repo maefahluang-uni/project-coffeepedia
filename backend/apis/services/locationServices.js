@@ -88,8 +88,7 @@ const postRequestLocation = async (req, data) => {
         !data.longtitude ||
         !data.province ||
         !data.district ||
-        !data.subdistrict ||
-        !data.image
+        !data.subdistrict
       ) {
         return JSON.stringify({
           status: 400,

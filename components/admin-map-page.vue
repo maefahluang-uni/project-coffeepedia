@@ -182,6 +182,7 @@
                         Cancel
                       </v-btn>
                       <v-btn
+                        :disabled="!valid || editedItem == defaultItem"
                         color="#6AC479"
                         variant="elevated"
                         class="font-weight-bold text-white"
@@ -292,6 +293,7 @@ const subDistricts = ref([]);
 
 const editedIndex = ref(-1);
 const editedItem = ref({
+  id: "",
   farmName: "",
   locationName: "",
   latitude: "",
@@ -305,6 +307,7 @@ const editedItem = ref({
   IsActivate: "1",
 });
 const defaultItem = ref({
+  id: "",
   farmName: "",
   locationName: "",
   latitude: "",
@@ -395,7 +398,7 @@ const close = () => {
 const save = async () => {
   if (valid.value) {
     if (editedIndex.value > -1) {
-      let imageUrl = editedItem.image;
+      let imageUrl = editedItem.value.image;
       if (inputImage.value) {
         try {
           const formData = new FormData();
@@ -440,15 +443,16 @@ const save = async () => {
             headers: apiHaders,
           }
         );
+        console.log(res.data.status);
         if (res.data.status == 200) {
           Object.assign(locations.value[editedIndex.value], sentItem);
+          close();
         }
-        close();
       } catch (err) {
         console.error("Error update location:", err);
       }
     } else {
-      let imageUrl = editedItem.image;
+      let imageUrl = editedItem.value.image;
       if (inputImage.value) {
         try {
           const formData = new FormData();
@@ -491,12 +495,14 @@ const save = async () => {
             headers: apiHaders,
           }
         );
+        console.log(res.data.status);
         if (res.data.status == 200) {
-          Object.assign(this.types[this.editedIndex], this.editedItem);
+          Object.assign(sentItem, { IsActivate: "1" });
+          locations.value.push(sentItem);
+          close();
         }
-        close();
       } catch (err) {
-        console.error("Error update location:", err);
+        console.error("Error insert location:", err);
       }
     }
   }

@@ -19,18 +19,9 @@ INSERT
 INTO 
 locations 
 ( 
-farmName, 
-locationName, 
-latitude, 
-longtitude, 
-masl, 
-province, 
-district, 
-subdistrict, 
-zipcode, 
-image
+farmName, locationName, latitude, longtitude, masl, province, district, subdistrict, zipcode, image
 ) 
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, NULL, ?)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
 const UPDATE_LOCATION = `
