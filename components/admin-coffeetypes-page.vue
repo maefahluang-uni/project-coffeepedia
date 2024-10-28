@@ -681,6 +681,7 @@ export default {
       this.dialog = false;
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem);
+        this.pictureFile = "";
         this.gasState = {
           ID: "",
           TypeCoffeeID: "",
