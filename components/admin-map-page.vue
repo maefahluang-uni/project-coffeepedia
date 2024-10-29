@@ -202,7 +202,7 @@
               <p class="news-title">{{ item.farmName }}</p>
             </td>
             <td>
-              <div class="d-flex align-center">
+              <div class="d-flex align-center justify-center">
                 <img
                   v-if="item.image"
                   height="100"
@@ -495,7 +495,6 @@ const save = async () => {
             headers: apiHaders,
           }
         );
-        console.log(res.data.status);
         if (res.data.status == 200) {
           Object.assign(sentItem, { IsActivate: "1" });
           locations.value.push(sentItem);

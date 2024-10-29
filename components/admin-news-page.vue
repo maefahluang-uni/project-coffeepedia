@@ -81,7 +81,9 @@
               </div>
             </td>
             <td>
-              <p>{{ item.href }}</p>
+              <a :href="item.href" target="_blank" :title="item.href">
+                {{ truncateUrl(item.href) }}
+              </a>
             </td>
             <td>
               <div class="d-flex justify-center">
@@ -323,6 +325,13 @@ export default {
 
       const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
       return formattedDateTime;
+    },
+    truncateUrl(url) {
+      // Show the first 15 characters and last 10 characters of the URL
+      const maxLength = 30;
+      return url.length > maxLength
+        ? url.slice(0, 20) + "..." + url.slice(-10)
+        : url;
     },
   },
 };

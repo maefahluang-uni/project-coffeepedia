@@ -106,45 +106,149 @@
           <p v-else>Showing All {{ items.length }} Results</p>
         </div>
       </template>
-      <template v-slot:default="{ items }">
-        <v-row class="px-2 mb-2">
-          <v-col
-            v-for="(item, index) in items"
-            :key="index"
-            class="d-flex justify-center"
-            cols="12"
-            sm="4"
+      <template v-slot:default="{ items }"
+        ><div class="d-flex justify-center mb-10">
+          <v-card
+            color="rgba(171, 109, 84)"
+            width="300"
+            class="elevation-4 mx-10"
+            rounded="xl"
           >
-            <v-card
-              variant="outlined"
-              rounded="xl"
-              color="rgba(185, 160, 130)"
-              @click="clickTypeCard(item.raw.ID, index)"
+            <v-card-title class="font-weight-bold text-white text-center mt-5"
+              >Light roast</v-card-title
             >
-              <div class="cardbgcolor text-center">
-                <div class="whitebg d-flex justify-center">
-                  <img
-                    v-if="item.raw.ImageDataFront"
-                    :src="apilink + item.raw.ImageDataFront"
-                    width="200"
-                    class="pa-5"
-                  /><v-icon v-else size="200" icon="mdi-image-remove"></v-icon>
+            <div v-for="(item, index) in items" :key="index">
+              <v-card
+                class="mx-5 my-5"
+                v-if="item.raw.RoastLevelID == '1'"
+                variant="outlined"
+                rounded="xl"
+                color="rgba(185, 160, 130)"
+                @click="clickTypeCard(item.raw.ID, index)"
+              >
+                <div class="cardbgcolor text-center">
+                  <div class="whitebg d-flex justify-center">
+                    <img
+                      v-if="item.raw.ImageDataFront"
+                      :src="apilink + item.raw.ImageDataFront"
+                      width="200"
+                      class="pa-5"
+                    /><v-icon
+                      v-else
+                      size="200"
+                      icon="mdi-image-remove"
+                    ></v-icon>
+                  </div>
+                  <div>
+                    <v-card-title class="font-weight-bold text-white">
+                      {{
+                        item.raw.ProcessName.charAt(0).toUpperCase() +
+                        item.raw.ProcessName.slice(1) +
+                        " " +
+                        item.raw.RoastName.charAt(0).toUpperCase() +
+                        item.raw.RoastName.slice(1)
+                      }}
+                    </v-card-title>
+                  </div>
                 </div>
-                <div>
-                  <v-card-title class="font-weight-bold text-brown">
-                    {{
-                      item.raw.ProcessName.charAt(0).toUpperCase() +
-                      item.raw.ProcessName.slice(1) +
-                      " " +
-                      item.raw.RoastName.charAt(0).toUpperCase() +
-                      item.raw.RoastName.slice(1)
-                    }}
-                  </v-card-title>
+              </v-card>
+            </div>
+          </v-card>
+
+          <v-card
+            color="rgba(156, 96, 90)"
+            width="300"
+            class="elevation-4 mx-10"
+            rounded="xl"
+          >
+            <v-card-title class="font-weight-bold text-white text-center mt-5"
+              >Medium roast</v-card-title
+            >
+            <div v-for="(item, index) in items" :key="index">
+              <v-card
+                class="mx-5 my-5"
+                v-if="item.raw.RoastLevelID == '2'"
+                variant="outlined"
+                rounded="xl"
+                color="rgba(185, 160, 130)"
+                @click="clickTypeCard(item.raw.ID, index)"
+              >
+                <div class="cardbgcolor text-center">
+                  <div class="whitebg d-flex justify-center">
+                    <img
+                      v-if="item.raw.ImageDataFront"
+                      :src="apilink + item.raw.ImageDataFront"
+                      width="200"
+                      class="pa-5"
+                    /><v-icon
+                      v-else
+                      size="200"
+                      icon="mdi-image-remove"
+                    ></v-icon>
+                  </div>
+                  <div>
+                    <v-card-title class="font-weight-bold text-white">
+                      {{
+                        item.raw.ProcessName.charAt(0).toUpperCase() +
+                        item.raw.ProcessName.slice(1) +
+                        " " +
+                        item.raw.RoastName.charAt(0).toUpperCase() +
+                        item.raw.RoastName.slice(1)
+                      }}
+                    </v-card-title>
+                  </div>
                 </div>
-              </div>
-            </v-card>
-          </v-col>
-        </v-row>
+              </v-card>
+            </div>
+          </v-card>
+
+          <v-card
+            color="rgba(94, 64, 61)"
+            width="300"
+            class="elevation-4 mx-10"
+            rounded="xl"
+          >
+            <v-card-title class="font-weight-bold text-white text-center mt-5"
+              >Dark roast</v-card-title
+            >
+            <div v-for="(item, index) in items" :key="index">
+              <v-card
+                class="mx-5 my-5"
+                v-if="item.raw.RoastLevelID == '3'"
+                variant="outlined"
+                rounded="xl"
+                color="rgba(185, 160, 130)"
+                @click="clickTypeCard(item.raw.ID, index)"
+              >
+                <div class="cardbgcolor text-center">
+                  <div class="whitebg d-flex justify-center">
+                    <img
+                      v-if="item.raw.ImageDataFront"
+                      :src="apilink + item.raw.ImageDataFront"
+                      width="200"
+                      class="pa-5"
+                    /><v-icon
+                      v-else
+                      size="200"
+                      icon="mdi-image-remove"
+                    ></v-icon>
+                  </div>
+                  <div>
+                    <v-card-title class="font-weight-bold text-white">
+                      {{
+                        item.raw.ProcessName.charAt(0).toUpperCase() +
+                        item.raw.ProcessName.slice(1) +
+                        " " +
+                        item.raw.RoastName.charAt(0).toUpperCase() +
+                        item.raw.RoastName.slice(1)
+                      }}
+                    </v-card-title>
+                  </div>
+                </div>
+              </v-card>
+            </div>
+          </v-card>
+        </div>
 
         <!--Provide coffee detail on this overlay-->
         <v-overlay v-model="overlay" class="align-top justify-center pt-10">

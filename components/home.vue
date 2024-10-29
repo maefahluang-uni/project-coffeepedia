@@ -165,7 +165,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style>
 .bg-repeat {
   background-image: url("../assets/welcomepic2.jpg");
   background-position: center;

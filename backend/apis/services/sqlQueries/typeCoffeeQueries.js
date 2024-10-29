@@ -2,7 +2,9 @@
 const GET_TYPES_COFFEE = `
 SELECT 
 type_coffee.ID,
+type_coffee.RoastLevelID,
 roast_level.RoastName,
+type_coffee.CoffeeProcessID,
 coffee_process.ProcessName,
 type_coffee.ImageDataFront
 FROM 
