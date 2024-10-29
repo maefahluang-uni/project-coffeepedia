@@ -2,7 +2,7 @@
   <v-card class="card-table pa-10 elevation-10">
     <v-form ref="contact">
       <div class="d-flex mb-4 align-center justify-space-between">
-        <v-card-title> Contact information </v-card-title>
+        <v-card-title class="font-weight-bold"> Contact information </v-card-title>
         <v-icon size="small" @click="toggleEditing()"> mdi-pencil </v-icon>
       </div>
       <v-text-field

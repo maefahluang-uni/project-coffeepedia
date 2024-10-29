@@ -121,6 +121,22 @@ const insertCommentIntoBlog = async (data) => {
     });
   }
 };
+
+const addViewBlog = async (id) => {
+  try {
+    let sql = blogQueries.UPDATE_VIEW_COUNT;
+    let result = await conn.awaitQuery(sql, id);
+    return JSON.stringify({ status: 200, error: null, response: result });
+  } catch (err) {
+    console.error("Error in addViewBlog function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
 const countBlogs = async () => {
   try {
     let sql = blogQueries.COUNT_BLOGS;
@@ -244,6 +260,7 @@ module.exports = {
   getBlogCommentsByID,
   getCommentCountToday,
   insertCommentIntoBlog,
+  addViewBlog,
   countBlogs,
   postRequestBlog,
 };

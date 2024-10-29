@@ -980,7 +980,7 @@ export default {
 </script>
 <style>
 .card-table {
-  width: 60vw;
+  width: 90vw;
 }
 .header-bold {
   font-weight: bold;
@@ -989,9 +989,9 @@ export default {
   font-size: 16px;
   font-weight: 800 !important;
 }
-@media (max-width: 960px) {
+@media (min-width: 1024px) {
   .card-table {
-    width: 90vw;
+    width: 60vw;
   }
 }
 </style>

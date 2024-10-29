@@ -15,7 +15,7 @@
     >
       <LPopup>
         <div class="d-flex justify-center pb-3">
-          <v-img contain :src="imagelocation" />
+          <v-img contain :src="imagelocation" width="300" />
         </div>
 
         <div>
@@ -25,7 +25,7 @@
           <p class="my-0">
             Latitude: {{ marker.latitude }}<br />
             Longtitude: {{ marker.longtitude }} <br />
-            MASL: {{ marker.masl }} m.<br />
+            MASL: {{ checkMASL(marker.masl) }} m.<br />
             {{ marker.subdistrict }}, {{ marker.district }},
             {{ marker.province }}, {{ marker.zipcode }}
           </p>
@@ -76,6 +76,13 @@ const getAllLocation = async () => {
 const getImageUrl = async (uri) => {
   if (!uri) return;
   imagelocation.value = config.LOCAL_API_URL + uri;
+};
+
+const checkMASL = (masl) => {
+  if (!masl || masl == "0" || masl == 0) {
+    return "0";
+  }
+  return masl;
 };
 onMounted(() => {
   getAllLocation();

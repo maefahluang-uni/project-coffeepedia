@@ -48,7 +48,7 @@
                     ><v-text-field
                       class="mb-2"
                       v-model="editedItem.href"
-                      label="href (News source URL)*"
+                      label="Link to news source*"
                       :rules="rules.requireInput('News source URL')"
                     ></v-text-field
                     ><v-card-actions>
@@ -80,7 +80,9 @@
                 <img v-else :src="item.newsImageUrl" width="100" contain />
               </div>
             </td>
-            <td>{{ item.href }}</td>
+            <td>
+              <p>{{ item.href }}</p>
+            </td>
             <td>
               <div class="d-flex justify-center">
                 <v-icon size="small" @click="editItem(item)">

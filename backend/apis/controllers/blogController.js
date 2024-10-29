@@ -21,6 +21,10 @@ const insertCommentIntoBlog = async (req, res) => {
   const insertedComment = await service.insertCommentIntoBlog(req.body);
   res.send(insertedComment);
 };
+const addViewBlog = async (req, res) => {
+  const addedView = await service.addViewBlog(req.params.id);
+  res.send(addedView);
+};
 const countBlogs = async (req, res) => {
   const countblogs = await service.countBlogs();
   res.send(countblogs);
@@ -35,6 +39,7 @@ module.exports = {
   getBlogCommentsByID,
   getCommentCountToday,
   insertCommentIntoBlog,
+  addViewBlog,
   countBlogs,
   postRequestBlog,
 };

@@ -58,6 +58,15 @@ WHERE
 blog.ID = ?;
 `;
 
+const UPDATE_VIEW_COUNT = `
+UPDATE
+blog
+SET
+viewCount = viewCount + 1
+WHERE
+blog.ID = ?;
+`;
+
 const COMMENT_COUNT_TODAY = `
 SELECT 
 COUNT(*) 
@@ -118,6 +127,7 @@ module.exports = {
   GET_BLOG_COMMENTS_BY_ID,
   INSERT_COMMENT_INTO_BLOG,
   UPDATE_COMMENT_COUNT,
+  UPDATE_VIEW_COUNT,
   COMMENT_COUNT_TODAY,
   COUNT_BLOGS,
   INSERT_NEW_BLOG,

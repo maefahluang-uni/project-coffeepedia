@@ -206,7 +206,7 @@
 
             <div v-for="(comment, index) in comments">
               <div class="d-flex mt-4 mb-2 justify-space-between align-center">
-                <div class="text-black ">
+                <div class="text-black">
                   {{ comment.comment }}
                 </div>
                 <p class="text-grey">
@@ -417,7 +417,17 @@ export default {
       }
       return `${url}`;
     },
+    async addView(id) {
+      try {
+        const response = await axios.get(api + "api/blogs/view/" + id, {
+          headers: apiHaders,
+        });
+      } catch (error) {
+        console.error("Error add view blog ID:", blog.ID, "\nError:", error);
+      }
+    },
     showDetail(blog) {
+      this.addView(blog.ID);
       this.getComments(blog.ID);
       this.overlay = true;
       this.selectblog = blog;
