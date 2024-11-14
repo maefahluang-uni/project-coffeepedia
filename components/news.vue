@@ -42,7 +42,7 @@
             <div
               class="text-grey text-end blog-subtitle text-decoration-underline mb-2 mx-5"
             >
-              read more
+              READ MORE
             </div>
           </v-card>
         </div>

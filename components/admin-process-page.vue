@@ -244,7 +244,7 @@ export default {
     },
 
     editItem(item, index) {
-      this.editedIndex = this.tables[index].data.indexOf(item);
+      this.editedIndex = index;
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },

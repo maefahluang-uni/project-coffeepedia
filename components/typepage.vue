@@ -268,10 +268,10 @@
                   <v-card max-width="250" flat>
                     <div class="font-weight-bold text-brown text-h4">
                       {{
-                        types[selectedIndex].ProcessName.charAt(
+                        items[selectedIndex].raw.ProcessName.charAt(
                           0
                         ).toUpperCase() +
-                        types[selectedIndex].ProcessName.slice(1) +
+                        items[selectedIndex].raw.ProcessName.slice(1) +
                         " process"
                       }}
                     </div>
@@ -281,8 +281,10 @@
                     ></v-divider>
                     <div class="font-weight-bold text-black">
                       {{
-                        types[selectedIndex].RoastName.charAt(0).toUpperCase() +
-                        types[selectedIndex].RoastName.slice(1) +
+                        items[selectedIndex].raw.RoastName.charAt(
+                          0
+                        ).toUpperCase() +
+                        items[selectedIndex].raw.RoastName.slice(1) +
                         " roasted"
                       }}
                     </div>
@@ -538,7 +540,7 @@ export default {
     testimage: "",
     overlay: false,
     loading: true,
-    itemsPerPage: 9,
+    itemsPerPage: 20,
     length: 3,
     onboarding: 1,
     showarrow: true,
