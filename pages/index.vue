@@ -6,7 +6,7 @@
       <v-tab class="font-weight-bold" @click="this.$router.push('/map')"
         >Map</v-tab
       >
-      <v-tab :value="2" class="font-weight-bold">Types coffee bean</v-tab>
+      <v-tab :value="2" class="font-weight-bold">Type coffee bean</v-tab>
       <v-tab :value="3" class="font-weight-bold">Blog</v-tab>
       <v-tab :value="4" class="font-weight-bold">News</v-tab>
       <v-tab :value="5" class="font-weight-bold">Contact</v-tab>

@@ -6,7 +6,7 @@
         >Dashboard</v-tab
       >
       <v-tab :value="2" class="font-weight-bold" @click="closeExpand()"
-        >Type coffee beans</v-tab
+        >Type coffee bean</v-tab
       >
 
       <v-btn
