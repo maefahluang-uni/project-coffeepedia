@@ -471,9 +471,9 @@ export default {
       IsActivate: "1",
     },
     rules: {
-      requireInput: (fieldName, editedIndex, pictureFile) => [
+      requireInput: (fieldName, editedIndex, PictureFile) => [
         (value) => {
-          if (fieldName == "Image" && editedIndex > -1 && pictureFile == "")
+          if (fieldName == "Image" && editedIndex > -1 && PictureFile == "")
             return true;
           if (value) return true;
 
@@ -528,6 +528,14 @@ export default {
     },
     dialogDelete(val) {
       val || this.closeDelete();
+    },
+    types(val) {
+      this.types = val;
+    },
+    pictureFile(val) {
+      if (val && !val[0].type.includes("image")) {
+        this.pictureFile = "";
+      }
     },
   },
 
@@ -969,11 +977,6 @@ export default {
     getRoastName(id) {
       const roastItem = this.roast.find((item) => item.ID === id);
       return roastItem ? roastItem.RoastName : null;
-    },
-  },
-  watch: {
-    types(val) {
-      this.types = val;
     },
   },
 };

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 14, 2024 at 06:13 PM
+-- Generation Time: Nov 19, 2024 at 04:23 AM
 -- Server version: 5.7.24
 -- PHP Version: 8.0.1
 
@@ -66,7 +66,7 @@ CREATE TABLE `blog` (
 --
 
 INSERT INTO `blog` (`ID`, `title`, `date`, `viewCount`, `commentCount`, `IsActivate`, `content`, `imageFile`, `imageURL`) VALUES
-(1, 'The difference between Arabica and Robusta coffee', '2024-10-15 05:29:00', 116, 2, '1', '<p>Arabica and Robusta are the two kinds of coffee beans used in commercial coffee production. \n          The main differences between them are their taste and where they are grown. When it comes to their difference in caffeine level, \n          Robusta beans contain twice the level of caffeine than Arabica beans. Arabica beans have a milder, more aromatic taste while Robusta beans hold a stronger, more acquired flavor. \n          Arabica beans are flat and oval in shape while Robusta beans have a more obvious round shape. \n          When they are still on their plant, the beans can easily be told apart by their difference in colour as Arabica beans are a darker shade of green then Robusta beans.</p>\n          \n          <p>Arabica beans are cultivated in Central and South America due to the subtropical climates as they can only be grown in places with higher climates. Robusta beans on the other hand, \n          are cultivated in Central and West Africa and South East Asia, as they require places with little rainfall and lower altitudes to grow. Over 70% of the coffee grown around the world is \n          Arabica and is generally known as the higher quality bean. Robusta coffee is characterised by its woody and earthy flavours. You most likely won\'t see a 100% Robusta blend on the market, \n          as Robusta is naturally higher in caffeine and is to strong to drink. However, there are many high quality blends of Robusta available on the market, which provide great flavours once \n          mixed with Arabica beans.</p>\n          \n            <h2>Arabica Beans</h2>\n              <li>Grown at high altitude above 800m</li>\n              <li>Grown in places with higher climates</li>\n              <li>Mild, well balanced in flavour</li>\n              <li>More expensive coffee bean</li>\n              <li>Naturally lower in caffeine</li>\n               <h2>Robusta Beans</h2>\n              <li>Commonly used in instant coffee</li>\n              <li>Grown at lower altitudes between 200m-800m</li>\n              <li>Grown in places with lower climates</li>\n              <li>More astringent and bitter in flavour</li>\n              <li> Has twice the amount of caffeine than Arabica beans<br></li>', NULL, 'https://suzuki-coffee.com/wp-content/uploads/2016/09/arabica-robusta-beans.jpg'),
+(1, 'The difference between Arabica and Robusta coffee', '2024-10-15 05:29:00', 117, 2, '1', '<p>Arabica and Robusta are the two kinds of coffee beans used in commercial coffee production. \n          The main differences between them are their taste and where they are grown. When it comes to their difference in caffeine level, \n          Robusta beans contain twice the level of caffeine than Arabica beans. Arabica beans have a milder, more aromatic taste while Robusta beans hold a stronger, more acquired flavor. \n          Arabica beans are flat and oval in shape while Robusta beans have a more obvious round shape. \n          When they are still on their plant, the beans can easily be told apart by their difference in colour as Arabica beans are a darker shade of green then Robusta beans.</p>\n          \n          <p>Arabica beans are cultivated in Central and South America due to the subtropical climates as they can only be grown in places with higher climates. Robusta beans on the other hand, \n          are cultivated in Central and West Africa and South East Asia, as they require places with little rainfall and lower altitudes to grow. Over 70% of the coffee grown around the world is \n          Arabica and is generally known as the higher quality bean. Robusta coffee is characterised by its woody and earthy flavours. You most likely won\'t see a 100% Robusta blend on the market, \n          as Robusta is naturally higher in caffeine and is to strong to drink. However, there are many high quality blends of Robusta available on the market, which provide great flavours once \n          mixed with Arabica beans.</p>\n          \n            <h2>Arabica Beans</h2>\n              <li>Grown at high altitude above 800m</li>\n              <li>Grown in places with higher climates</li>\n              <li>Mild, well balanced in flavour</li>\n              <li>More expensive coffee bean</li>\n              <li>Naturally lower in caffeine</li>\n               <h2>Robusta Beans</h2>\n              <li>Commonly used in instant coffee</li>\n              <li>Grown at lower altitudes between 200m-800m</li>\n              <li>Grown in places with lower climates</li>\n              <li>More astringent and bitter in flavour</li>\n              <li> Has twice the amount of caffeine than Arabica beans<br></li>', NULL, 'https://suzuki-coffee.com/wp-content/uploads/2016/09/arabica-robusta-beans.jpg'),
 (2, 'The most popular types of coffee beans that people drink', '2024-10-11 05:30:55', 89, 1, '1', 'The most popular types of coffee beans that people drink. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', NULL, 'https://cafely.com/cdn/shop/articles/Coffea_Arabica.jpg?v=1718340298'),
 (3, '5 coffee farms that are most worth visiting in the northern region', '2024-10-11 05:34:44', 92, 0, '1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', NULL, 'https://cdn.prod.website-files.com/6063345cc13db992ffe13a50/6707a26b4b367f17ddddcd37_61bb010ff578b443a31da26e_2.jpeg');
 
@@ -177,7 +177,8 @@ CREATE TABLE `gas_state` (
 INSERT INTO `gas_state` (`ID`, `TypeID`, `Gas`, `WhenTempurature`) VALUES
 (3, 1, 10, 185),
 (5, 1, 5, 195),
-(8, 2, 10, 180);
+(9, 2, 10, 180),
+(10, 2, 5, 200);
 
 -- --------------------------------------------------------
 
@@ -275,7 +276,9 @@ CREATE TABLE `site_visits` (
 INSERT INTO `site_visits` (`id`, `visit_date`, `visit_count`) VALUES
 (5, '2024-10-11', 1),
 (6, '2024-10-29', 2),
-(7, '2024-11-05', 1);
+(7, '2024-11-05', 1),
+(8, '2024-11-16', 1),
+(9, '2024-11-19', 2);
 
 -- --------------------------------------------------------
 
@@ -302,7 +305,7 @@ CREATE TABLE `type_coffee` (
 
 INSERT INTO `type_coffee` (`ID`, `RoastLevelID`, `CoffeeProcessID`, `CommonName`, `Tempurature`, `CrackState`, `Flavor`, `MoreDetail`, `IsActivate`, `ImageDataFront`) VALUES
 (1, 1, 1, 'Cinnamon Roast, Half City', '123-432', 1, 'Light-bodied and somewhat sour, grassy', 'Suitable for brewing Filter', '1', 'image/roasted_coffee/dry_light_front_1.png'),
-(2, 2, 1, 'Full City, Regular', '215-218', 2, 'A bit sweeter than light roast, full body balanced by acid snap, aroma, and complexity.', 'Suitable for brewing Filter and Espresso.', '1', 'image/roasted_coffee/dry_medium_front_1.png'),
+(2, 2, 1, 'Full City, Regular', '215-218', 2, 'A bit sweeter than light roast, full body balanced by acid snap, aroma, and complexity.', 'Suitable for brewing Filter and Espresso.', '1', 'image/roasted_coffee/1731752719318_12.png'),
 (3, 3, 1, 'Italian Espresso, Viennese', '123-432', 3, 'Somewhat spicy; complexity is traded for a rich chocolaty body. aroma is exchanged for sweetness', 'Slightly shiny. Suitable for brewing with Espresso machines and making coffee with milk', '1', 'image/roasted_coffee/drydark14.png'),
 (4, 1, 2, 'Cinnamon Roast, Half City', '123-215', 1, 'Light-bodied and somewhat sour, grassy, and snappy', 'Suitable for brewing Filter', '1', 'image/roasted_coffee/1730148633363_2.png'),
 (5, 2, 2, 'Full City, Regular', '215-218', 2, 'A bit sweeter than light roast, full body balanced by acid snap, aroma, and complexity.', 'Suitable for brewing Filter and Espresso.', '1', 'image/roasted_coffee/1730148689962_1.png'),
@@ -467,7 +470,7 @@ ALTER TABLE `drink_suggest`
 -- AUTO_INCREMENT for table `gas_state`
 --
 ALTER TABLE `gas_state`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `locations`
@@ -491,7 +494,7 @@ ALTER TABLE `roast_level`
 -- AUTO_INCREMENT for table `site_visits`
 --
 ALTER TABLE `site_visits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `type_coffee`
