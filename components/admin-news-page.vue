@@ -9,7 +9,7 @@
         :loading="news.length == 0"
         ><template v-slot:loading>
           <v-skeleton-loader
-            type="table-row-divider@6"
+            type="table-row-divider@5"
           ></v-skeleton-loader> </template
         ><template v-slot:top>
           <v-toolbar color="white">

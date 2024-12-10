@@ -9,7 +9,9 @@
         :headers="table.headers"
         :items="table.data"
         :sort-by="[{ key: table.headers[0].title }]"
-      >
+        ><template v-slot:loading>
+          <v-skeleton-loader type="table-row-divider@3"></v-skeleton-loader>
+        </template>
         <template v-slot:top>
           <v-toolbar color="white">
             <v-toolbar-title class="d-flex"

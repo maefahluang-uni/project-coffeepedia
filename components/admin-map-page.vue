@@ -31,7 +31,12 @@
               v-model="dialog"
               max-width="700px"
               @click:outside="close()"
-              ><v-form ref="form" v-model="valid" lazy-validation>
+              ><v-form
+                ref="form"
+                v-model="valid"
+                lazy-validation
+                @submit.prevent
+              >
                 <v-card>
                   <v-container>
                     <v-card-title>
@@ -182,7 +187,7 @@
                         Cancel
                       </v-btn>
                       <v-btn
-                        :disabled="!valid || editedItem == defaultItem"
+                        type="submit"
                         color="#6AC479"
                         variant="elevated"
                         class="font-weight-bold text-white"
@@ -331,9 +336,10 @@ const header = ref([
     title: "Address",
     key: "address",
   },
-  { title: "Edit", key: "actions", sortable: false },
+  { title: "Edit", align: "end", key: "actions", sortable: false },
   {
     title: "Status",
+    align: "start",
     key: "actions2",
     sortable: false,
   },
@@ -552,7 +558,7 @@ const getAllLocation = async () => {
     });
     locations.value = res.data.response;
   } catch (err) {
-    console.error("Error fetching all locations:", error);
+    console.error("Error fetching all locations:", err);
   }
 };
 onMounted(async () => {

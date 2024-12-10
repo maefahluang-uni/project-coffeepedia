@@ -119,6 +119,7 @@
             >
             <div v-for="(item, index) in items" :key="index">
               <v-card
+                max-height="258"
                 class="mx-5 my-5"
                 v-if="item.raw.RoastLevelID == '1'"
                 variant="outlined"
@@ -166,6 +167,7 @@
             >
             <div v-for="(item, index) in items" :key="index">
               <v-card
+                max-height="258"
                 class="mx-5 my-5"
                 v-if="item.raw.RoastLevelID == '2'"
                 variant="outlined"
@@ -213,6 +215,7 @@
             >
             <div v-for="(item, index) in items" :key="index">
               <v-card
+                max-height="258"
                 class="mx-5 my-5"
                 v-if="item.raw.RoastLevelID == '3'"
                 variant="outlined"

@@ -44,6 +44,9 @@
         <v-tab :value="5" class="font-weight-bold" @click="openExpandTab()"
           >Location</v-tab
         >
+        <v-tab :value="6" class="font-weight-bold" @click="openExpandTab()"
+          >Score categories</v-tab
+        >
       </v-tabs>
     </v-card>
   </v-expand-transition>
@@ -71,7 +74,12 @@
           ><admin-process-page />
         </v-window-item>
         <v-window-item disabled :value="4"><admin-roast-page /> </v-window-item>
-        <v-window-item disabled :value="5"><admin-map-page /> </v-window-item>
+        <v-window-item disabled :value="5" :key="'admin-map-page-' + reloadKey"
+          ><admin-map-page />
+        </v-window-item>
+        <v-window-item disabled :value="6"
+          ><admin-scores-page />
+        </v-window-item>
       </v-window> </v-card
   ></v-expand-transition>
 </template>
@@ -129,6 +137,17 @@ export default defineComponent({
       if (newTab === 2) {
         // Adjust condition based on your tab values
         this.reloadComponent();
+      }
+    },
+    expandTab(newTab) {
+      if (newTab === 5) {
+        // Adjust condition based on your tab values
+        this.reloadComponent();
+      }
+    },
+    reloadKey(newKey) {
+      if (newKey > 1) {
+        this.reloadKey = 0;
       }
     },
   },
