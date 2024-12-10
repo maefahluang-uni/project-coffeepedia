@@ -1,0 +1,1 @@
+<template>Varieties page</template>

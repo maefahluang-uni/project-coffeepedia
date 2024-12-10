@@ -7,6 +7,7 @@ const imagesRouter = require("./imageRoute");
 const authencationRouter = require("./authencationRoute");
 const siteVisitRouter = require("./siteVisitRoute");
 const locationRouter = require("./locationRoute");
+const scoresRouter = require("./scoresRoute");
 const router = express.Router();
 
 router.use("/contact", contactRouter);
@@ -16,6 +17,7 @@ router.use("/blogs", blogsRouter);
 router.use("/images", imagesRouter);
 router.use("/login", authencationRouter);
 router.use("/visithandler", siteVisitRouter);
-router.use("/location", locationRouter)
+router.use("/location", locationRouter);
+router.use("/scores", scoresRouter);
 
 module.exports = router;

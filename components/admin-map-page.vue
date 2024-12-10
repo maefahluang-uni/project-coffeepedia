@@ -207,7 +207,7 @@
               <p class="news-title">{{ item.farmName }}</p>
             </td>
             <td>
-              <div class="d-flex align-center justify-center">
+              <div class="d-flex align-center justify-start">
                 <img
                   v-if="item.image"
                   height="100"
@@ -449,7 +449,6 @@ const save = async () => {
             headers: apiHaders,
           }
         );
-        console.log(res.data.status);
         if (res.data.status == 200) {
           Object.assign(locations.value[editedIndex.value], sentItem);
           close();
@@ -539,7 +538,7 @@ const toggleLocation = async (item, index) => {
       locations.value[index].iconLoading = false;
     }
   } catch (err) {
-    console.error("Error changeLocationActivate:", error);
+    console.error("Error changeLocationActivate:", err);
   }
 };
 

@@ -1,120 +1,131 @@
 <template>
   <div class="d-flex justify-center">
-    <v-card class="my-10 elevation-10">
-      <v-data-table :headers="headerCatagories" :items="catagories">
-        <template v-slot:top>
-          <v-toolbar color="white">
-            <v-toolbar-title class="d-flex">
-              <h4>Categories</h4>
-            </v-toolbar-title>
-            <v-btn
-              class="d-none d-sm-flex mr-3"
-              color="green"
-              variant="tonal"
-              rounded="xl"
-              @click="addItem(1)"
-            >
-              <v-icon icon="mdi-plus" color="green"></v-icon>
-              Add Category
-            </v-btn>
-            <v-btn
-              class="d-flex d-sm-none"
-              color="green"
-              variant="tonal"
-              rounded="xl"
-              @click="addItem(1)"
-              ><v-icon icon="mdi-plus" color="green"></v-icon
-            ></v-btn>
-            <v-dialog
-              v-model="dialog1"
-              max-width="700px"
-              @click:outside="close()"
-            >
-              <v-form ref="form" v-model="valid" lazy-validation @submit.prevent
-                ><v-card
-                  ><v-container>
-                    <v-card-title>
-                      <span class="text-h5">Score category</span>
-                    </v-card-title>
-                    <v-card-text
-                      ><v-text-field
-                        class="pr-7"
-                        v-model="editedItem.name"
-                        label="Category Name*"
-                        :rules="catagoryNameRule"
-                        required
-                      ></v-text-field> </v-card-text
-                    ><v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="gray" variant="tonal" @click="close()">
-                        Cancel
-                      </v-btn>
-                      <v-btn
-                        color="#6AC479"
-                        variant="elevated"
-                        class="font-weight-bold text-white"
-                        type="submit"
-                        @click="save(1)"
-                      >
-                        Save
-                      </v-btn>
-                    </v-card-actions>
-                  </v-container></v-card
-                ></v-form
-              >
-            </v-dialog>
-          </v-toolbar>
-        </template>
-        <template v-slot:item="{ item, index }"
-          ><tr :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
-            <td>
-              <p class="news-title">{{ item.name }}</p>
-            </td>
-            <td>
-              <div class="d-flex justify-end align-center">
-                <v-icon size="small" @click="editItem(1, item, index)">
-                  mdi-pencil
-                </v-icon>
-              </div>
-            </td>
-            <td>
-              <div class="d-flex justify-start align-center">
-                <v-progress-circular
-                  v-if="item.iconLoading"
-                  size="small"
-                  :width="3"
-                  indeterminate
-                ></v-progress-circular>
-                <v-switch
-                  v-else
-                  v-model="item.IsActivate"
-                  false-value="0"
-                  true-value="1"
-                  color="success"
-                  hide-details
-                  class="d-inline-block"
-                  @click="toggleItem(1, item, index)"
-                ></v-switch>
-              </div>
-            </td>
-            <td>
-              <div class="d-flex justify-center align-center">
-                <v-icon size="large" @click="showScoreTable(item)">
-                  mdi-chevron-right
-                </v-icon>
-              </div>
-            </td>
-          </tr></template
+    <div>
+      <v-card class="my-10 elevation-10">
+        <v-data-table
+          :headers="headercategories"
+          :items="categories"
+          :items-per-page="-1"
         >
-      </v-data-table></v-card
-    >
-
+          <template v-slot:top>
+            <v-toolbar color="white">
+              <v-toolbar-title class="d-flex">
+                <h4>Categories</h4>
+              </v-toolbar-title>
+              <v-btn
+                class="d-none d-sm-flex mr-3"
+                color="green"
+                variant="tonal"
+                rounded="xl"
+                @click="addItem(1)"
+              >
+                <v-icon icon="mdi-plus" color="green"></v-icon>
+                Add Category
+              </v-btn>
+              <v-btn
+                class="d-flex d-sm-none"
+                color="green"
+                variant="tonal"
+                rounded="xl"
+                @click="addItem(1)"
+                ><v-icon icon="mdi-plus" color="green"></v-icon
+              ></v-btn>
+              <v-dialog
+                v-model="dialog1"
+                max-width="700px"
+                @click:outside="close()"
+              >
+                <v-form
+                  ref="form"
+                  v-model="valid"
+                  lazy-validation
+                  @submit.prevent
+                  ><v-card
+                    ><v-container>
+                      <v-card-title>
+                        <span class="text-h5">Score category</span>
+                      </v-card-title>
+                      <v-card-text
+                        ><v-text-field
+                          class="pr-7"
+                          v-model="editedItem.name"
+                          label="Category Name*"
+                          :rules="categoryNamerule"
+                          required
+                        ></v-text-field> </v-card-text
+                      ><v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="gray" variant="tonal" @click="close()">
+                          Cancel
+                        </v-btn>
+                        <v-btn
+                          color="#6AC479"
+                          variant="elevated"
+                          class="font-weight-bold text-white"
+                          type="submit"
+                          @click="save(1)"
+                        >
+                          Save
+                        </v-btn>
+                      </v-card-actions>
+                    </v-container></v-card
+                  ></v-form
+                >
+              </v-dialog>
+            </v-toolbar>
+          </template>
+          <template v-slot:item="{ item, index }"
+            ><tr :class="index % 2 === 0 ? 'even-row' : 'odd-row'">
+              <td>
+                <p class="news-title">{{ item.name }}</p>
+              </td>
+              <td>
+                <div class="d-flex justify-end align-center">
+                  <v-icon size="small" @click="editItem(1, item, index)">
+                    mdi-pencil
+                  </v-icon>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex justify-center align-center">
+                  <v-progress-circular
+                    v-if="item.iconLoading"
+                    size="small"
+                    :width="3"
+                    indeterminate
+                  ></v-progress-circular>
+                  <v-switch
+                    v-else
+                    v-model="item.IsActivate"
+                    false-value="0"
+                    true-value="1"
+                    color="success"
+                    hide-details
+                    @click="toggleItem(1, item, index)"
+                  ></v-switch>
+                </div>
+              </td>
+              <td>
+                <div class="d-flex justify-center align-center">
+                  <v-icon size="large" @click="showScoreTable(item)">
+                    mdi-chevron-right
+                  </v-icon>
+                </div>
+              </td>
+            </tr></template
+          ><template v-slot:bottom v-if="true"></template> </v-data-table
+      ></v-card>
+    </div>
     <v-card v-if="showTable2" class="ml-10 my-10 elevation-10">
-      <v-data-table :headers="headerScores" :items="scoresToShow">
+      <v-data-table
+        :headers="headerScores"
+        :items="scores"
+        :items-per-page="-1"
+      >
         <template v-slot:top>
           <v-toolbar color="white">
-            <v-toolbar-title class="d-flex">
-              <h4>Scores of {{ selectCatagory.name }}</h4>
+            <v-toolbar-title class="pr-4">
+              <h4>Scores of {{ selectCategory.name }}</h4>
             </v-toolbar-title>
             <v-btn
               class="d-none d-sm-flex mr-3"
@@ -156,9 +167,7 @@
                       ><v-text-field
                         class="pr-7"
                         v-model="editedItem.unit"
-                        label="Unit*"
-                        :rules="unitRule"
-                        required
+                        label="Unit"
                       ></v-text-field></v-card-text
                     ><v-card-actions>
                       <v-spacer></v-spacer>
@@ -210,12 +219,11 @@
                   true-value="1"
                   color="success"
                   hide-details
-                  class="d-inline-block"
                   @click="toggleItem(2, item, index)"
                 ></v-switch>
               </div>
-            </td></tr
-        ></template> </v-data-table
+            </td></tr></template
+        ><template v-slot:bottom v-if="true"></template> </v-data-table
     ></v-card>
   </div>
 </template>
@@ -234,7 +242,7 @@ const dialog2 = ref(false);
 const form = ref(null);
 const valid = ref(false);
 
-const selectCatagory = ref(null);
+const selectCategory = ref(null);
 const editedIndex = ref(-1);
 const editedItem = ref({
   ID: 0,
@@ -249,8 +257,8 @@ const defaultItem = ref({
   IsActivate: "1",
 });
 
-const headerCatagories = ref([
-  { title: "Catagory Name", align: "start", key: "name" },
+const headercategories = ref([
+  { title: "Category Name", align: "start", key: "name" },
 
   { title: "Edit", align: "end", key: "actions", sortable: false },
   {
@@ -266,8 +274,7 @@ const headerCatagories = ref([
     sortable: false,
   },
 ]);
-const catagoryIndex = ref([0]);
-const catagories = ref([]);
+const categories = ref([]);
 
 const headerScores = ref([
   { title: "Score Name", align: "start", key: "name" },
@@ -280,26 +287,28 @@ const headerScores = ref([
     sortable: false,
   },
 ]);
-const scoreIndex = ref([0]);
 const scores = ref([]);
-const scoresToShow = ref([]);
 
-const catagoryNameRule = [(v) => !!v || "Catagory name is required"];
+const categoryNamerule = [(v) => !!v || "Category name is required"];
 const scoreNameRule = [(v) => !!v || "Score name is required"];
-const unitRule = [(v) => !!v || "Unit is required"];
 
-const showScoreTable = (selectedCatagory) => {
-  if (selectCatagory.value && selectCatagory.value.ID == selectedCatagory.ID) {
-    return;
-  }
-  selectCatagory.value = selectedCatagory;
-  scoresToShow.value = [];
+const showScoreTable = async (selectedCategory) => {
+  selectCategory.value = selectedCategory;
   showTable2.value = true;
-  scores.value.forEach((element) => {
-    if (element.catagoryID == selectedCatagory.ID) {
-      scoresToShow.value.push(element);
-    }
-  });
+  try {
+    const res = await axios.get(
+      api + "api/scores/lists/" + selectedCategory.ID,
+      {
+        headers: apiHaders,
+      }
+    );
+    res.data.response.forEach((element) => {
+      Object.assign(element, { iconLoading: false });
+    });
+    scores.value = res.data.response;
+  } catch (err) {
+    console.error("Error fetching all category:", err);
+  }
 };
 const addItem = (table) => {
   editedIndex.value = -1;
@@ -335,23 +344,48 @@ const close = () => {
 };
 
 const save = async (table) => {
-  console.log("cate index", catagoryIndex.value[0]);
   if (table == 1 && valid.value) {
     if (editedIndex.value > -1) {
       const sentItem = {
         ID: editedItem.value.ID,
         name: editedItem.value.name,
-        IsActivate: "1",
       };
-      Object.assign(catagories.value[editedIndex.value], sentItem);
+      try {
+        const res = await axios.post(
+          api + "api/scores/post_request_category?edit=true",
+          sentItem,
+          {
+            headers: apiHaders,
+          }
+        );
+        if (res.data.status == 200) {
+          Object.assign(categories.value[editedIndex.value], sentItem);
+          close();
+        }
+      } catch (err) {
+        console.error("Error update category:", err);
+      }
     } else {
       const sentItem = {
-        ID: catagoryIndex.value[0],
         name: editedItem.value.name,
-        IsActivate: "1",
       };
-      catagories.value.push(sentItem);
-      catagoryIndex.value[0] = catagoryIndex.value[0] + 1;
+      try {
+        const res = await axios.post(
+          api + "api/scores/post_request_category?insert=true",
+          sentItem,
+          {
+            headers: apiHaders,
+          }
+        );
+        if (res.data.status == 200) {
+          Object.assign(sentItem, { ID: res.data.response.insertId });
+          Object.assign(sentItem, { IsActivate: "1" });
+          categories.value.push(sentItem);
+          close();
+        }
+      } catch (err) {
+        console.error("Error insert category:", err);
+      }
     }
     close();
   }
@@ -361,21 +395,45 @@ const save = async (table) => {
         ID: editedItem.value.ID,
         name: editedItem.value.name,
         unit: editedItem.value.unit,
-        IsActivate: "1",
       };
-      Object.assign(scores.value[editedIndex.value], sentItem);
-      Object.assign(scoresToShow.value[editedIndex.value], sentItem);
+      try {
+        const res = await axios.post(
+          api + "api/scores/post_request_list?edit=true",
+          sentItem,
+          {
+            headers: apiHaders,
+          }
+        );
+        if (res.data.status == 200) {
+          Object.assign(scores.value[editedIndex.value], sentItem);
+          close();
+        }
+      } catch (err) {
+        console.error("Error update score list:", err);
+      }
     } else {
       const sentItem = {
-        ID: scoreIndex.value[0],
-        catagoryID: selectCatagory.value.ID,
+        categoryID: selectCategory.value.ID,
         name: editedItem.value.name,
         unit: editedItem.value.unit,
-        IsActivate: "1",
       };
-      scores.value.push(sentItem);
-      scoresToShow.value.push(sentItem);
-      scoreIndex.value[0] = scoreIndex.value[0] + 1;
+      try {
+        const res = await axios.post(
+          api + "api/scores/post_request_list?insert=true",
+          sentItem,
+          {
+            headers: apiHaders,
+          }
+        );
+        if (res.data.status == 200) {
+          Object.assign(sentItem, { ID: res.data.response.insertId });
+          Object.assign(sentItem, { IsActivate: "1" });
+          scores.value.push(sentItem);
+          close();
+        }
+      } catch (err) {
+        console.error("Error insert score list:", err);
+      }
     }
     close();
   }
@@ -387,12 +445,73 @@ const checkUnit = (unit) => {
   return "(" + unit + ")";
 };
 
-const toggleItem = async (table, item, index) => {};
+const toggleItem = async (table, item, index) => {
+  if (table == 1) {
+    let isactivateNumChange =
+      categories.value[index].IsActivate === "1" ? "0" : "1";
+    categories.value[index].iconLoading = true;
+    const sentItem = {
+      ID: item.ID,
+      IsActivate: isactivateNumChange,
+    };
+    try {
+      const res = await axios.post(
+        api + "api/scores/post_request_category?edit=true",
+        sentItem,
+        {
+          headers: apiHaders,
+        }
+      );
+      if (res.data.status == 200) {
+        categories.value[index].IsActivate = isactivateNumChange;
+        categories.value[index].iconLoading = false;
+      }
+    } catch (err) {
+      console.error("Error toggle item:", err);
+    }
+  }
+  if (table == 2) {
+    let isactivateNumChange =
+      scores.value[index].IsActivate === "1" ? "0" : "1";
+    scores.value[index].iconLoading = true;
+    const sentItem = {
+      ID: item.ID,
+      IsActivate: isactivateNumChange,
+    };
+    try {
+      const res = await axios.post(
+        api + "api/scores/post_request_list?edit=true",
+        sentItem,
+        {
+          headers: apiHaders,
+        }
+      );
+      if (res.data.status == 200) {
+        scores.value[index].IsActivate = isactivateNumChange;
+        scores.value[index].iconLoading = false;
+      }
+    } catch (err) {
+      console.error("Error toggle item:", err);
+    }
+  }
+};
 
-const getAllCatagory = async () => {};
+const getAllCategory = async () => {
+  try {
+    const res = await axios.get(api + "api/scores/categories", {
+      headers: apiHaders,
+    });
+    res.data.response.forEach((element) => {
+      Object.assign(element, { iconLoading: false });
+    });
+    categories.value = res.data.response;
+  } catch (err) {
+    console.error("Error fetching all category:", err);
+  }
+};
 
 onMounted(async () => {
-  getAllCatagory();
+  getAllCategory();
 });
 
 watch(showTable2, async (newValue) => {});

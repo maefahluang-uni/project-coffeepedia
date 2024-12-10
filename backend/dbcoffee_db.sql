@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Nov 19, 2024 at 04:23 AM
+-- Generation Time: Dec 10, 2024 at 01:33 PM
 -- Server version: 5.7.24
 -- PHP Version: 8.0.1
 
@@ -260,13 +260,95 @@ INSERT INTO `roast_level` (`ID`, `RoastName`, `IsActivate`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `score_categories`
+--
+
+CREATE TABLE `score_categories` (
+  `ID` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `IsActivate` varchar(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `score_categories`
+--
+
+INSERT INTO `score_categories` (`ID`, `name`, `IsActivate`) VALUES
+(1, 'Cupping Scores', '1'),
+(2, 'Physical and Chemical Properties', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `score_lists`
+--
+
+CREATE TABLE `score_lists` (
+  `ID` int(11) NOT NULL,
+  `CategoryID` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `unit` varchar(255) DEFAULT NULL,
+  `IsActivate` varchar(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `score_lists`
+--
+
+INSERT INTO `score_lists` (`ID`, `CategoryID`, `name`, `unit`, `IsActivate`) VALUES
+(1, 1, 'Fragrance/Aroma', NULL, '1'),
+(2, 1, 'Flavor', NULL, '1'),
+(3, 1, 'Aftertaste', NULL, '1'),
+(4, 1, 'Acidity', NULL, '1'),
+(5, 1, 'Body', NULL, '1'),
+(6, 1, 'Balance', NULL, '1'),
+(7, 1, 'Sweetness', NULL, '1'),
+(8, 1, 'Clean Cup', NULL, '1'),
+(9, 1, 'Uniformity', NULL, '1'),
+(10, 1, 'Overall', NULL, '1'),
+(11, 2, 'Total titratable acidity', NULL, '1'),
+(12, 2, 'Cafeine', NULL, '1'),
+(13, 2, 'Aliphatic acids', NULL, '1'),
+(14, 2, 'Protein', '%', '1'),
+(15, 2, 'Density', 'g/mL', '1'),
+(16, 2, 'Moisture content', '% d.b.', '1'),
+(17, 2, 'pH', NULL, '1'),
+(18, 2, 'Sucrose', 'mg/g', '1'),
+(19, 2, 'L*', NULL, '1'),
+(20, 2, 'a*', NULL, '1'),
+(21, 2, 'b*', NULL, '1'),
+(22, 2, 'Fat', '%', '1'),
+(23, 2, 'Trigonelline', 'mg/g', '1'),
+(24, 2, 'Caffeine', 'mg/g', '1'),
+(25, 2, 'Chlorogenic Acid', 'mg/g', '1'),
+(26, 2, 'Chlorogenic acids', NULL, '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `score_varieties`
+--
+
+CREATE TABLE `score_varieties` (
+  `ID` int(11) NOT NULL,
+  `RoastLevelID` int(11) NOT NULL,
+  `CoffeeProcessID` int(11) NOT NULL,
+  `cup_score` varchar(255) DEFAULT NULL,
+  `date` date NOT NULL,
+  `characteristics` text,
+  `score_value` json DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `site_visits`
 --
 
 CREATE TABLE `site_visits` (
   `id` int(11) NOT NULL,
   `visit_date` date NOT NULL,
-  `visit_count` int(11) NOT NULL DEFAULT '1'
+  `visit_count` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -278,7 +360,10 @@ INSERT INTO `site_visits` (`id`, `visit_date`, `visit_count`) VALUES
 (6, '2024-10-29', 2),
 (7, '2024-11-05', 1),
 (8, '2024-11-16', 1),
-(9, '2024-11-19', 2);
+(9, '2024-11-19', 2),
+(10, '2024-12-02', 1),
+(11, '2024-12-03', 1),
+(12, '2024-12-10', 1);
 
 -- --------------------------------------------------------
 
@@ -405,6 +490,27 @@ ALTER TABLE `roast_level`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `score_categories`
+--
+ALTER TABLE `score_categories`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `score_lists`
+--
+ALTER TABLE `score_lists`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_CategoryID` (`CategoryID`);
+
+--
+-- Indexes for table `score_varieties`
+--
+ALTER TABLE `score_varieties`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `FK_RoastLevelID_varieties` (`RoastLevelID`) USING BTREE,
+  ADD KEY `FK_CoffeeProcessID_varieties` (`CoffeeProcessID`);
+
+--
 -- Indexes for table `site_visits`
 --
 ALTER TABLE `site_visits`
@@ -491,10 +597,28 @@ ALTER TABLE `roast_level`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `score_categories`
+--
+ALTER TABLE `score_categories`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `score_lists`
+--
+ALTER TABLE `score_lists`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+
+--
+-- AUTO_INCREMENT for table `score_varieties`
+--
+ALTER TABLE `score_varieties`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `site_visits`
 --
 ALTER TABLE `site_visits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `type_coffee`
@@ -529,6 +653,19 @@ ALTER TABLE `drink_suggest`
 --
 ALTER TABLE `gas_state`
   ADD CONSTRAINT `FK_GasStateTypeCoffeeID` FOREIGN KEY (`TypeID`) REFERENCES `type_coffee` (`ID`);
+
+--
+-- Constraints for table `score_lists`
+--
+ALTER TABLE `score_lists`
+  ADD CONSTRAINT `FK_CategoryID` FOREIGN KEY (`CategoryID`) REFERENCES `score_categories` (`ID`);
+
+--
+-- Constraints for table `score_varieties`
+--
+ALTER TABLE `score_varieties`
+  ADD CONSTRAINT `score_varieties_ibfk_1` FOREIGN KEY (`RoastLevelID`) REFERENCES `roast_level` (`ID`),
+  ADD CONSTRAINT `score_varieties_ibfk_2` FOREIGN KEY (`CoffeeProcessID`) REFERENCES `coffee_process` (`ID`);
 
 --
 -- Constraints for table `type_coffee`

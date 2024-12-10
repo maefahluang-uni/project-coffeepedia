@@ -30,36 +30,52 @@
             {{ marker.longtitude.toFixed(2) }}, MASL:
             {{ checkMASL(marker.masl) }} m.
           </p>
-          <div class="pb-3 d-flex justify-center">
+          <div class="mb-3 d-flex justify-center">
             <v-img
               class="rounded-xl"
               cover
               :src="imagelocation"
-              max-height="300"
+              max-height="275"
             />
           </div>
-          <v-row class="justify-space-evenly px-5 my-2">
+          <div class="d-flex flex-wrap justify-space-evenly">
             <v-card
               max-width="270"
               v-for="category in categories"
               :key="categories.ID"
-              class="pa-3 border-md rounded-lg"
+              class="pa-3 ml-1 mb-1 border-md rounded-lg flex-fill"
               ><h3>{{ category.name }}</h3>
               <v-divider class="mt-3" :thickness="3" />
-              <div v-for="score in score_value">
-                <p
-                  v-if="
-                    category.ID == score.catagoryID &&
-                    score.locationID == marker.id
-                  "
-                >
-                  {{ score.name }}
-                  <span v-if="category.ID == 2">({{ score.unit }})</span>:
-                  {{ score.value }}
+              <div v-for="score in scores" :key="scores.ID">
+                <p v-if="category.ID == score.CategoryID" class="my-1">
+                  <span class="font-weight-bold">{{ score.name }}</span>
+                  <span v-if="category.ID == 2"
+                    >&nbsp;{{ checkUnit(score.unit) }}</span
+                  >
+                  {{ checkValue(score.value) }}
                 </p>
               </div>
             </v-card>
-          </v-row>
+          </div>
+          <!--<div class="d-flex flex-wrap justify-space-evenly">
+            <div v-for="category in categories" :key="categories.ID">
+              <v-card
+                max-width="270"
+                class="pa-3 ml-1 mb-1 border-md rounded-lg"
+                ><h3>{{ category.name }}</h3>
+                <v-divider class="mt-3" :thickness="3" />
+                <div v-for="score in scores" :key="scores.ID">
+                  <p v-if="category.ID == score.CategoryID" class="my-1">
+                    <span class="font-weight-bold">{{ score.name }}</span>
+                    <span v-if="category.ID == 2"
+                      >&nbsp;{{ checkUnit(score.unit) }}</span
+                    >
+                    {{ checkValue(score.value) }}
+                  </p>
+                </div>
+              </v-card>
+            </div>
+          </div>-->
         </v-card>
       </LPopup>
     </LMarker>
@@ -83,175 +99,54 @@ const markers = ref([]);
 const dialog = ref(false);
 const selectedMarker = ref({});
 
-const categories = ref([
-  {
-    ID: 1,
-    name: "Cupping Scores",
-    IsActivate: "1",
-  },
-  {
-    ID: 2,
-    name: "Physical and Chemical Properties",
-    IsActivate: "1",
-  },
-]);
+const categories = ref([]);
 
 const score_lists = ref([
   {
     ID: 1,
-    catagoryID: 1,
+    CategoryID: 1,
     name: "Fragrance/Aroma",
     unit: "",
     IsActivate: "1",
   },
   {
     ID: 2,
-    catagoryID: 1,
+    CategoryID: 1,
     name: "Flavor",
     unit: "",
     IsActivate: "1",
   },
   {
     ID: 3,
-    catagoryID: 1,
+    CategoryID: 1,
     name: "Aftertaste",
     unit: "",
     IsActivate: "1",
   },
   {
     ID: 4,
-    catagoryID: 2,
+    CategoryID: 2,
     name: "Protein",
     unit: "%",
     IsActivate: "1",
   },
   {
     ID: 5,
-    catagoryID: 2,
+    CategoryID: 2,
     name: "Density",
     unit: "g/mL",
     IsActivate: "1",
   },
   {
     ID: 6,
-    catagoryID: 2,
+    CategoryID: 2,
     name: "Moisture content",
     unit: "% d.b.",
     IsActivate: "1",
   },
 ]);
 
-const score_value = ref([
-  {
-    ID: 1,
-    locationID: 2,
-    catagoryID: 1,
-    scoreID: 1,
-    name: "Fragrance/Aroma",
-    unit: "",
-    value: "-",
-  },
-  {
-    ID: 2,
-    locationID: 2,
-    catagoryID: 1,
-    scoreID: 2,
-    name: "Flavor",
-    unit: "",
-    value: "-",
-  },
-  {
-    ID: 3,
-    locationID: 2,
-    catagoryID: 1,
-    scoreID: 3,
-    name: "Aftertaste",
-    unit: "",
-    value: "-",
-  },
-  {
-    ID: 4,
-    locationID: 2,
-    catagoryID: 2,
-    scoreID: 4,
-    name: "Protein",
-    unit: "%",
-    value: "13.02",
-  },
-  {
-    ID: 5,
-    locationID: 2,
-    catagoryID: 2,
-    scoreID: 5,
-    name: "Density",
-    unit: "g/mL",
-    value: "1.14",
-  },
-  {
-    ID: 6,
-    locationID: 2,
-    catagoryID: 2,
-    scoreID: 6,
-    name: "Moisture content",
-    unit: "% d.b.",
-    value: "11.58",
-  },
-  {
-    ID: 7,
-    locationID: 4,
-    catagoryID: 1,
-    scoreID: 1,
-    name: "Fragrance/Aroma",
-    unit: "",
-    value: "-",
-  },
-  {
-    ID: 8,
-    locationID: 4,
-    catagoryID: 1,
-    scoreID: 2,
-    name: "Flavor",
-    unit: "",
-    value: "Light-bodied and somewhat sour, grassy",
-  },
-  {
-    ID: 9,
-    locationID: 4,
-    catagoryID: 1,
-    scoreID: 3,
-    name: "Aftertaste",
-    unit: "",
-    value: "-",
-  },
-  {
-    ID: 10,
-    locationID: 4,
-    catagoryID: 2,
-    scoreID: 4,
-    name: "Protein",
-    unit: "%",
-    value: "13.23",
-  },
-  {
-    ID: 11,
-    locationID: 4,
-    catagoryID: 2,
-    scoreID: 5,
-    name: "Density",
-    unit: "g/mL",
-    value: "1.15",
-  },
-  {
-    ID: 12,
-    locationID: 4,
-    catagoryID: 2,
-    scoreID: 6,
-    name: "Moisture content",
-    unit: "% d.b.",
-    value: "8.18",
-  },
-]);
-
+const scores = ref([]);
 // Function to handle marker selection
 const selectMarker = (marker) => {
   imagelocation.value =
@@ -278,14 +173,52 @@ const getImageUrl = async (uri) => {
   imagelocation.value = config.LOCAL_API_URL + uri;
 };
 
+const getScores = async () => {
+  try {
+    const res = await axios.get(api + "api/scores/lists_map", {
+      headers: apiHaders,
+    });
+    if (res.status == 200 && res.data.response != null) {
+      scores.value = res.data.response;
+    }
+  } catch (err) {
+    console.error("Error fetching category:", err);
+  }
+};
+const getCategories = async () => {
+  try {
+    const res = await axios.get(api + "api/scores/categories_map", {
+      headers: apiHaders,
+    });
+    if (res.status == 200 && res.data.response != null) {
+      categories.value = res.data.response;
+      getScores();
+    }
+  } catch (err) {
+    console.error("Error fetching category:", err);
+  }
+};
 const checkMASL = (masl) => {
   if (!masl || masl == "0" || masl == 0) {
     return "0";
   }
   return masl;
 };
+const checkUnit = (unit) => {
+  if (unit == "-" || !unit) {
+    return "";
+  }
+  return "(" + unit + ")";
+};
+const checkValue = (value) => {
+  if (value == "-" || !value) {
+    return "-";
+  }
+  return value;
+};
 onMounted(() => {
   getAllLocation();
+  getCategories();
 });
 </script>
 
