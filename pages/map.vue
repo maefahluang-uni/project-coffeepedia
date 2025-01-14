@@ -100,53 +100,8 @@ const dialog = ref(false);
 const selectedMarker = ref({});
 
 const categories = ref([]);
-
-const score_lists = ref([
-  {
-    ID: 1,
-    CategoryID: 1,
-    name: "Fragrance/Aroma",
-    unit: "",
-    IsActivate: "1",
-  },
-  {
-    ID: 2,
-    CategoryID: 1,
-    name: "Flavor",
-    unit: "",
-    IsActivate: "1",
-  },
-  {
-    ID: 3,
-    CategoryID: 1,
-    name: "Aftertaste",
-    unit: "",
-    IsActivate: "1",
-  },
-  {
-    ID: 4,
-    CategoryID: 2,
-    name: "Protein",
-    unit: "%",
-    IsActivate: "1",
-  },
-  {
-    ID: 5,
-    CategoryID: 2,
-    name: "Density",
-    unit: "g/mL",
-    IsActivate: "1",
-  },
-  {
-    ID: 6,
-    CategoryID: 2,
-    name: "Moisture content",
-    unit: "% d.b.",
-    IsActivate: "1",
-  },
-]);
-
 const scores = ref([]);
+
 // Function to handle marker selection
 const selectMarker = (marker) => {
   imagelocation.value =

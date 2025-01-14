@@ -90,6 +90,63 @@ WHERE
 score_lists.ID = ?
 `;
 
+const GET_ALL_COFFEE_VARIETIES = `
+SELECT
+*
+FROM
+coffee_varieties
+`;
+
+const GET_ALL_COFFEE_VARIETIES_GUEST = `
+SELECT 
+* 
+FROM 
+coffee_varieties
+WHERE
+IsActivate = '1'
+`;
+
+const INSERT_NEW_COFFEE_VARIETY = `
+INSERT 
+INTO 
+coffee_varieties
+( 
+LocationID,
+CoffeeProcessID,
+code
+) 
+VALUES (?,?,?)
+`;
+
+const UPDATE_COFFEE_VARIETY = `
+UPDATE
+coffee_varieties
+SET
+LocationID = ?,
+CoffeeProcessID = ?,
+code = ?
+WHERE
+coffee_varieties.ID = ?
+`;
+
+const GET_ALL_COFFEE_VARIETIY_SCORES_BY_ID = `
+SELECT 
+* 
+FROM 
+coffee_variety_scores
+WHERE
+coffee_variety_scores.CoffeeVarietyID = ?
+`;
+
+const GET_ALL_COFFEE_VARIETIY_SCORES_GUEST = `
+SELECT 
+* 
+FROM 
+coffee_variety_scores
+WHERE
+IsActivate = '1'
+`;
+
 module.exports = {
   GET_ALL_SCORE_CATEGORIES,
   GET_ALL_SCORE_CATEGORIES_GUEST,
@@ -101,4 +158,10 @@ module.exports = {
   UPDATE_LIST,
   UPDATE_CATEGORY_ACTIVATE,
   UPDATE_LIST_ACTIVATE,
+  GET_ALL_COFFEE_VARIETIES,
+  GET_ALL_COFFEE_VARIETIES_GUEST,
+  GET_ALL_COFFEE_VARIETIY_SCORES_BY_ID,
+  GET_ALL_COFFEE_VARIETIY_SCORES_GUEST,
+  INSERT_NEW_COFFEE_VARIETY,
+  UPDATE_COFFEE_VARIETY,
 };

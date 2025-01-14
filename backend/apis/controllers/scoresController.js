@@ -4,6 +4,16 @@ const getAllCategory = async (req, res) => {
   const response = await service.getCategories();
   res.send(response);
 };
+
+const getAllVarieties = async (req, res) => {
+  const response = await service.getVarieties();
+  res.send(response);
+};
+const getAllVarietyScores = async (req, res) => {
+  const response = await service.getVarietyScores(req.params.id);
+  res.send(response);
+};
+
 const getAllCategoryGuest = async (req, res) => {
   const response = await service.getCategoriesGuest();
   res.send(response);
@@ -36,4 +46,6 @@ module.exports = {
   postRequestScoreList,
   getAllCategoryGuest,
   getAllListGuest,
+  getAllVarieties,
+  getAllVarietyScores,
 };

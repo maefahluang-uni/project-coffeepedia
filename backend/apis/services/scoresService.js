@@ -45,6 +45,38 @@ const getCategories = async () => {
     });
   }
 };
+
+const getVarieties = async () => {
+  try {
+    let sql = scoresQuery.GET_ALL_COFFEE_VARIETIES;
+
+    let results = await conn.awaitQuery(sql);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getVarieties function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+const getVarietyScores = async (ID) => {
+  try {
+    let sql = scoresQuery.GET_ALL_COFFEE_VARIETIY_SCORES_BY_ID;
+
+    let results = await conn.awaitQuery(sql,[ID]);
+    return JSON.stringify({ status: 200, error: null, response: results });
+  } catch (err) {
+    console.error("Error in getVarietyScores function:", err);
+    return JSON.stringify({
+      status: 500,
+      error: "Internal Server Error",
+      response: null,
+    });
+  }
+};
+
 const getCategoriesGuest = async () => {
   try {
     let sql = scoresQuery.GET_ALL_SCORE_CATEGORIES_GUEST;
@@ -279,4 +311,6 @@ module.exports = {
   postRequestScoreList,
   getCategoriesGuest,
   getScoreListsGuest,
+  getVarieties,
+  getVarietyScores,
 };

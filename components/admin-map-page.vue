@@ -3,8 +3,8 @@
     <v-card class="my-10 card-table elevation-10"
       ><v-data-table :headers="header" :items="locations"
         ><template v-slot:top>
-          <v-toolbar color="white"
-            ><v-toolbar-title class="d-flex">
+          <v-toolbar color="white">
+          <v-toolbar-title class="d-flex">
               <h4>Manage Location</h4>
             </v-toolbar-title>
 

@@ -47,7 +47,6 @@
                       </v-card-title>
                       <v-card-text
                         ><v-text-field
-                          class="pr-7"
                           v-model="editedItem.name"
                           label="Category Name*"
                           :rules="categoryNamerule"
